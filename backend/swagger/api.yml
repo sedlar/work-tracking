@@ -1,0 +1,136 @@
+openapi: "3.0.2"
+info:
+  version: 1.0.0
+  title: Work tracking
+  description: A service to track work
+
+servers:
+- url: /v1
+
+security:
+  - basicAuth: []
+
+paths:
+  /projects/{projectId}:
+    get:
+      description: |
+        Get info about project
+      operationId: get_project
+      parameters:
+        - in: path
+          name: projectId
+          description: Id of the project
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Project
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ProjectResponse'
+        '400':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects:
+    get:
+      description: |
+        Get projects
+      operationId: get_projects
+      parameters:
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Project
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ProjectsResponse'
+        '400':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    ProjectResponse:
+      type: object
+      required:
+        - project
+      properties:
+        project:
+          $ref: '#/components/schemas/Project'
+
+    ProjectsResponse:
+      type: object
+      required:
+        - projects
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+
+    Id:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+
+    NewProject:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: 'Work tracking'
+          maxLength: 100
+
+    Project:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/NewProject'
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+  parameters:
+    offset:
+        in: query
+        name: offset
+        description: Offset of first returned project
+        schema:
+          type: integer
+          default: 0
+    limit:
+        in: query
+        name: limit
+        description: Limit on number of returned projects
+        schema:
+          type: integer
+          default: 10
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
