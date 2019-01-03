@@ -5,7 +5,7 @@ info:
   description: A service to track work
 
 servers:
-- url: /v1
+  - url: /v1
 
 security:
   - basicAuth: []
@@ -17,26 +17,53 @@ paths:
         Get info about project
       operationId: get_project
       parameters:
-        - in: path
-          name: projectId
-          description: Id of the project
-          required: true
-          schema:
-            type: integer
+        - $ref: '#/components/parameters/projectId'
       responses:
         '200':
           description: Project
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/ProjectResponse'
-        '400':
+                $ref: '#/components/schemas/ProjectStatsResponse'
+        '404':
           description: Project doesn't exist
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    put:
+      description: |
+        Update project
+      operationId: put_project
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        description: Project to put
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        '200':
+          description: Project was updated
 
+    delete:
+      description: |
+        Delete project
+      operationId: delete_project
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      responses:
+        '200':
+          description: Project was deleted
+
+        '404':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /projects:
     get:
       description: |
@@ -51,7 +78,32 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/ProjectsResponse'
+                $ref: '#/components/schemas/ProjectsResponse'
+        '400':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      description: |
+        Create project
+      operationId: post_project
+      requestBody:
+        description: Project to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        '200':
+          description: Project was created, its ID is returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
         '400':
           description: Project doesn't exist
           content:
@@ -61,13 +113,63 @@ paths:
 
 components:
   schemas:
-    ProjectResponse:
+    ProjectStatsResponse:
       type: object
       required:
         - project
       properties:
         project:
-          $ref: '#/components/schemas/Project'
+          $ref: '#/components/schemas/ProjectWithStats'
+
+    ProjectStats:
+      type: object
+      properties:
+        progress:
+          type: number
+          description: Whatever this is
+        bilance_duration:
+          type: number
+          description: burned time - estimated time in hours
+        bilance_cost:
+          $ref: "#/components/schemas/Money"
+        issues:
+          type: array
+          items:
+            type: string
+            description: "TODO: Define issue"
+            example: "TODO: Define issue"
+        desigs:
+          type: array
+          items:
+            type: string
+            description: "TODO: Define design"
+            example: "TODO: Define design"
+        meetings:
+          type: array
+          items:
+            type: string
+            description: "TODO: Define meeting"
+            example: "TODO: Define meeting"
+        expenditures:
+          type: array
+          items:
+            type: string
+            description: "TODO: Define expenditures"
+            example: "TODO: Define expenditures"
+        deliverables:
+          type: array
+          items:
+            type: string
+            description: "TODO: Define deliverables"
+            example: "TODO: Define deliverables"
+
+    ProjectRequest:
+      type: object
+      required:
+        - project
+      properties:
+        project:
+          $ref: '#/components/schemas/NewProject'
 
     ProjectsResponse:
       type: object
@@ -85,22 +187,98 @@ components:
         - id
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
+          description: Object id
 
     NewProject:
       type: object
       required:
         - name
+        - status
+        - date_opened
+        - primary_color
+        - secondary_color
       properties:
         name:
           type: string
           example: 'Work tracking'
           maxLength: 100
+        status:
+          type: string
+          enum:
+            - pending
+            - open
+            - completed
+            - archived
+          description: Project status
+        date_opened:
+          type: string
+          format: date
+          description: Date of opening project
+        date_closed:
+          type: string
+          format: date
+          description: Date of closing project
+        deadline:
+          type: string
+          format: date
+          description: Deadline of the project
+        hour_rate:
+          $ref: "#/components/schemas/Money"
+        description:
+          type: string
+          description: Description of project
+          default: ""
+        goals_and_metrics:
+          type: string
+          description: Goals and metrics
+          default: ""
+        limitations_and_restrictions:
+          type: string
+          description: Limitations_and_descriptions
+          default: ""
+        files:
+          type: array
+          items:
+            type: string
+            format: uri
+        primary-color:
+          $ref: "#/components/schemas/Color"
+        secondary-color:
+          $ref: "#/components/schemas/Color"
+
+    Money:
+      type: object
+      required:
+        - currency
+        - amount
+      properties:
+        currency:
+          type: string
+          enum:
+            - CZK
+            - EUR
+            - USD
+        amount:
+          type: number
+          default: 0
+
+    Color:
+      type: string
+      pattern: "^#[0-9a-f]{6}$"
+      example: "#343434"
 
     Project:
       allOf:
         - $ref: '#/components/schemas/Id'
         - $ref: '#/components/schemas/NewProject'
+
+    ProjectWithStats:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/NewProject'
+        - $ref: '#/components/schemas/ProjectStats'
 
     Error:
       type: object
@@ -115,20 +293,28 @@ components:
           type: string
 
   parameters:
+    projectId:
+      in: path
+      name: projectId
+      description: Id of the project
+      required: true
+      schema:
+        type: string
+        format: uuid
     offset:
-        in: query
-        name: offset
-        description: Offset of first returned project
-        schema:
-          type: integer
-          default: 0
+      in: query
+      name: offset
+      description: Offset of first returned object
+      schema:
+        type: integer
+        default: 0
     limit:
-        in: query
-        name: limit
-        description: Limit on number of returned projects
-        schema:
-          type: integer
-          default: 10
+      in: query
+      name: limit
+      description: Limit on number of returned objects
+      schema:
+        type: integer
+        default: 10
 
   securitySchemes:
     basicAuth:
