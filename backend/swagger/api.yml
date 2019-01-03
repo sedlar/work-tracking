@@ -11,13 +11,13 @@ security:
   - basicAuth: []
 
 paths:
-  /projects/{projectId}:
+  /projects/{projectUuid}:
     get:
       description: |
         Get info about project
       operationId: get_project
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/projectUuid'
       responses:
         '200':
           description: Project
@@ -36,7 +36,7 @@ paths:
         Update project
       operationId: put_project
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/projectUuid'
       requestBody:
         description: Project to put
         required: true
@@ -53,7 +53,7 @@ paths:
         Delete project
       operationId: delete_project
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/projectUuid'
       responses:
         '200':
           description: Project was deleted
@@ -103,7 +103,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/Uuid'
         '400':
           description: Project doesn't exist
           content:
@@ -181,15 +181,15 @@ components:
           items:
             $ref: '#/components/schemas/Project'
 
-    Id:
+    Uuid:
       type: object
       required:
-        - id
+        - uuid
       properties:
-        id:
+        uuid:
           type: string
           format: uuid
-          description: Object id
+          description: Object uuid
 
     NewProject:
       type: object
@@ -271,12 +271,12 @@ components:
 
     Project:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/Uuid'
         - $ref: '#/components/schemas/NewProject'
 
     ProjectWithStats:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/Uuid'
         - $ref: '#/components/schemas/NewProject'
         - $ref: '#/components/schemas/ProjectStats'
 
@@ -293,9 +293,9 @@ components:
           type: string
 
   parameters:
-    projectId:
+    projectUuid:
       in: path
-      name: projectId
+      name: projectUuid
       description: Id of the project
       required: true
       schema:
