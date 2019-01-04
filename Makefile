@@ -9,3 +9,6 @@ down:
 
 test:
 	docker-compose run --rm work-tracking pytest tests -v
+
+test-coverage:
+	docker-compose run --rm work-tracking pytest tests -v --cov=wt --cov-report term-missing
