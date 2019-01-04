@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  work-tracking:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    image: tm/work-tracking
+    volumes:
+      - ./backend/src/wt:/app/wt
+      - ./backend/tests:/app/tests
+    environment:
+      - PYTHONPATH=$PYTHONPATH:/app:/app/debug_egg/debug.egg
+    command: [
+      "python3", "/app/wt/app.py"
+    ]
