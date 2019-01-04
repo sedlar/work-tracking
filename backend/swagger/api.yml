@@ -11,13 +11,13 @@ security:
   - basicAuth: []
 
 paths:
-  /projects/{projectUuid}:
+  /projects/{projectId}:
     get:
       description: |
         Get info about project
       operationId: get_project
       parameters:
-        - $ref: '#/components/parameters/projectUuid'
+        - $ref: '#/components/parameters/projectId'
       responses:
         '200':
           description: Project
@@ -36,7 +36,7 @@ paths:
         Update project
       operationId: put_project
       parameters:
-        - $ref: '#/components/parameters/projectUuid'
+        - $ref: '#/components/parameters/projectId'
       requestBody:
         description: Project to put
         required: true
@@ -53,7 +53,7 @@ paths:
         Delete project
       operationId: delete_project
       parameters:
-        - $ref: '#/components/parameters/projectUuid'
+        - $ref: '#/components/parameters/projectId'
       responses:
         '200':
           description: Project was deleted
@@ -103,7 +103,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Uuid'
+                $ref: '#/components/schemas/Id'
         '400':
           description: Project doesn't exist
           content:
@@ -111,8 +111,475 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /projects/{projectId}/deliverables:
+    get:
+      description: |
+        Get project deliverables
+      operationId: get_project_deliverables
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDeliverablesResponse'
+        '404':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: |
+        Create new deliverable
+      operationId: post_deliverable
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        description: Deliverable to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliverableRequest'
+      responses:
+        '200':
+          description: Deliverable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '404':
+          description: Deliverable doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{projectId}/issues:
+    get:
+      description: |
+        Get issues of project
+      operationId: get_project_issues
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIssuesResponse'
+        '404':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: |
+        Create new issue
+      operationId: post_issue
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+      requestBody:
+        description: Issue to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueRequest'
+      responses:
+        '200':
+          description: Issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '404':
+          description: Issue doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{projectId}/designs:
+    get:
+      description: |
+        Get project designs
+      operationId: get_project_designs
+      deprecated: True
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDesignsResponse'
+        '404':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{projectId}/meetings:
+    get:
+      description: |
+        Get project meetings
+      operationId: get_project_meetings
+      deprecated: True
+      parameters:
+        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMeetingsResponse'
+        '404':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /deliverables/{deliverableId}:
+    get:
+      description: |
+        Get info about deliverable
+      operationId: get_deliverable
+      parameters:
+        - $ref: '#/components/parameters/deliverableId'
+      responses:
+        '200':
+          description: Deliverable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverableStatsResponse'
+        '404':
+          description: Deliverable doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: |
+        Update deliverable
+      operationId: put_deliverable
+      parameters:
+        - $ref: '#/components/parameters/deliverableId'
+      requestBody:
+        description: Deliverable to put
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliverableRequest'
+      responses:
+        '200':
+          description: Deliverable was updated
+
+    delete:
+      description: |
+        Delete deliverable
+      operationId: delete_deliverable
+      parameters:
+        - $ref: '#/components/parameters/deliverableId'
+      responses:
+        '200':
+          description: Deliverable was deleted
+
+        '404':
+          description: Deliverable doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /issues/{issueId}:
+    get:
+      description: |
+        Get info about issue
+      operationId: get_issue
+      parameters:
+        - $ref: '#/components/parameters/issueId'
+      responses:
+        '200':
+          description: Issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueStatsResponse'
+        '404':
+          description: Issue doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: |
+        Update deliverable
+      operationId: put_issue
+      parameters:
+        - $ref: '#/components/parameters/issueId'
+      requestBody:
+        description: Issue to put
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueRequest'
+      responses:
+        '200':
+          description: Issue was updated
+
+    delete:
+      description: |
+        Delete issue
+      operationId: delete_issue
+      parameters:
+        - $ref: '#/components/parameters/issueId'
+      responses:
+        '200':
+          description: Issue was deleted
+
+        '404':
+          description: Issue doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /issues/{issueId}/timesheets:
+    get:
+      description: |
+        Get timesheets of issue
+      operationId: get_issue_timesheets
+      parameters:
+        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimesheetsResponse'
+        '404':
+          description: Issue doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: |
+        Add new timesheet to issue
+      operationId: post_issue_timesheet
+      parameters:
+        - $ref: '#/components/parameters/issueId'
+      requestBody:
+        description: Issue to put
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimesheetRequest'
+      responses:
+        '200':
+          description: Issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '404':
+          description: Issue doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /issues/{issueId}/expenditures:
+    get:
+      description: |
+        Get expenditures of issue
+      operationId: get_issue_expenditures
+      parameters:
+        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpendituresResponse'
+        '404':
+          description: Issue doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      description: |
+        Add new expenditure to issue
+      operationId: post_issue_expenditure
+      parameters:
+        - $ref: '#/components/parameters/issueId'
+      requestBody:
+        description: Issue to put
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenditureRequest'
+      responses:
+        '200':
+          description: Expenditure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '404':
+          description: Expenditure doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /timesheets/{timesheetId}:
+    delete:
+      description: |
+        Delete timesheet
+      operationId: delete_timesheet
+      parameters:
+        - $ref: '#/components/parameters/timesheetId'
+      responses:
+        '200':
+          description: Timesheet was deleted
+
+        '404':
+          description: Timesheet doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /expenditures/{expenditureId}:
+    delete:
+      description: |
+        Delete expenditure
+      operationId: delete_expenditure
+      parameters:
+        - $ref: '#/components/parameters/expenditureId'
+      responses:
+        '200':
+          description: Expenditure was deleted
+
+        '404':
+          description: Expenditure doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /links/{objectId}/{otherObjectId}:
+    put:
+      description: |
+        Create link between two objects (symmetric)
+      operationId: put_link
+      parameters:
+        - $ref: '#/components/parameters/objectId'
+        - $ref: '#/components/parameters/otherObjectId'
+      responses:
+        '200':
+          description: Link was created
+
+    delete:
+      description: |
+        Delete link between objects (symetric)
+      operationId: delete_link
+      parameters:
+        - $ref: '#/components/parameters/objectId'
+        - $ref: '#/components/parameters/otherObjectId'
+      responses:
+        '200':
+          description: Link was deleted
+
+        '404':
+          description: Link doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    ProjectIssuesResponse:
+      type: object
+      required:
+        - issues
+      properties:
+        issues:
+          type: array
+          items:
+            $ref: "#/components/schemas/Issue"
+
+    ProjectDesignsResponse:
+      type: object
+      required:
+        - designs
+      properties:
+        desigs:
+          type: array
+          items:
+            type: string
+            description: "TODO: Define design"
+            example: "TODO: Define design"
+
+    ProjectMeetingsResponse:
+      type: object
+      required:
+        - meetings
+      properties:
+        meetings:
+          type: array
+          items:
+            type: string
+            description: "TODO: Define meeting"
+            example: "TODO: Define meeting"
+
+    ProjectDeliverablesResponse:
+      type: object
+      required:
+        - deliverables
+      properties:
+        deliverables:
+          type: object
+          required:
+            - deliverables
+          properties:
+            deliverables:
+              type: array
+              items:
+                $ref: "#/components/schemas/Deliverable"
+
     ProjectStatsResponse:
       type: object
       required:
@@ -121,8 +588,47 @@ components:
         project:
           $ref: '#/components/schemas/ProjectWithStats'
 
-    ProjectStats:
+    DeliverableStatsResponse:
       type: object
+      required:
+        - deliverable
+      properties:
+        deliverable:
+          $ref: '#/components/schemas/DeliverableWithStats'
+
+    IssueStatsResponse:
+      type: object
+      required:
+        - issue
+      properties:
+        issue:
+          $ref: '#/components/schemas/IssueWithStats'
+
+    TimesheetsResponse:
+      type: object
+      required:
+        - timesheets
+      properties:
+        timesheets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Timesheet'
+
+    ExpendituresResponse:
+      type: object
+      required:
+        - expenditures
+      properties:
+        expenditures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Expenditure'
+    Stats:
+      type: object
+      required:
+        - progress
+        - bilance_duration
+        - bilance_cost
       properties:
         progress:
           type: number
@@ -132,36 +638,6 @@ components:
           description: burned time - estimated time in hours
         bilance_cost:
           $ref: "#/components/schemas/Money"
-        issues:
-          type: array
-          items:
-            type: string
-            description: "TODO: Define issue"
-            example: "TODO: Define issue"
-        desigs:
-          type: array
-          items:
-            type: string
-            description: "TODO: Define design"
-            example: "TODO: Define design"
-        meetings:
-          type: array
-          items:
-            type: string
-            description: "TODO: Define meeting"
-            example: "TODO: Define meeting"
-        expenditures:
-          type: array
-          items:
-            type: string
-            description: "TODO: Define expenditures"
-            example: "TODO: Define expenditures"
-        deliverables:
-          type: array
-          items:
-            type: string
-            description: "TODO: Define deliverables"
-            example: "TODO: Define deliverables"
 
     ProjectRequest:
       type: object
@@ -170,6 +646,38 @@ components:
       properties:
         project:
           $ref: '#/components/schemas/NewProject'
+
+    DeliverableRequest:
+      type: object
+      required:
+        - project
+      properties:
+        project:
+          $ref: '#/components/schemas/NewDeliverable'
+
+    IssueRequest:
+      type: object
+      required:
+        - issue
+      properties:
+        issue:
+          $ref: '#/components/schemas/NewIssue'
+
+    TimesheetRequest:
+      type: object
+      required:
+        - issue
+      properties:
+        issue:
+          $ref: '#/components/schemas/NewTimesheet'
+
+    ExpenditureRequest:
+      type: object
+      required:
+        - issue
+      properties:
+        issue:
+          $ref: '#/components/schemas/NewExpenditure'
 
     ProjectsResponse:
       type: object
@@ -181,15 +689,15 @@ components:
           items:
             $ref: '#/components/schemas/Project'
 
-    Uuid:
+    Id:
       type: object
       required:
-        - uuid
+        - id
       properties:
-        uuid:
+        id:
           type: string
           format: uuid
-          description: Object uuid
+          description: Object id
 
     NewProject:
       type: object
@@ -197,8 +705,12 @@ components:
         - name
         - status
         - date_opened
+        - description
+        - goals_and_metrics
+        - limitations_and_restrictions
         - primary_color
         - secondary_color
+        - files
       properties:
         name:
           type: string
@@ -229,24 +741,201 @@ components:
         description:
           type: string
           description: Description of project
-          default: ""
         goals_and_metrics:
           type: string
           description: Goals and metrics
-          default: ""
         limitations_and_restrictions:
           type: string
           description: Limitations_and_descriptions
-          default: ""
         files:
+          $ref: "#/components/schemas/Files"
+        primary_color:
+          $ref: "#/components/schemas/Color"
+        secondary_color:
+          $ref: "#/components/schemas/Color"
+
+    Files:
+      type: array
+      items:
+        type: string
+        format: uri
+
+    NewDeliverable:
+      type: object
+      required:
+        - name
+        - status
+        - date_opened
+        - description
+      properties:
+        name:
+          type: string
+          example: 'First deliverable'
+          maxLength: 100
+        status:
+          type: string
+          enum:
+            - pending
+            - open
+            - completed
+            - archived
+          description: Deliverable status
+        date_opened:
+          type: string
+          format: date
+          description: Date of opening deliverable
+        date_closed:
+          type: string
+          format: date
+          description: Date of closing deliverable
+        deadline:
+          type: string
+          format: date
+          description: Deadline of the deliverable
+        description:
+          type: string
+          description: Description of deliverable
+        hour_rate:
+          $ref: "#/components/schemas/Money"
+        estimated_duration:
+          type: number
+          description: Estimated duration in hours
+
+    NewIssue:
+      type: object
+      required:
+        - name
+        - status
+        - date_opened
+        - description
+      properties:
+        name:
+          type: string
+          example: 'First issue'
+          maxLength: 100
+        status:
+          type: string
+          enum:
+            - new
+            - open
+            - review
+            - waiting
+            - done
+            - invalid
+            - duplicate
+            - wontfix
+            - archived
+          description: Issue status
+        priority:
+          type: string
+          enum:
+            - blocker
+            - critical
+            - major
+            - minor
+            - trivial
+          description: Issue priority
+        date_opened:
+          type: string
+          format: date
+          description: Date of opening deliverable
+        date_closed:
+          type: string
+          format: date
+          description: Date of closing deliverable
+        deadline:
+          type: string
+          format: date
+          description: Deadline of the deliverable
+        description:
+          type: string
+          description: Description of deliverable
+        files:
+          $ref: "#/components/schemas/Files"
+        external_id:
+          type: string
+          maxLength: 200
+          description: External id
+        external_type:
+          type: string
+          maxLength: 200
+          description: External type
+        tags:
           type: array
           items:
             type: string
-            format: uri
-        primary-color:
-          $ref: "#/components/schemas/Color"
-        secondary-color:
-          $ref: "#/components/schemas/Color"
+            description: Tag
+            maxLength: 50
+
+    NewTimesheet:
+      type: object
+      required:
+        - name
+        - date_opened
+        - duration
+      properties:
+        name:
+          type: string
+          example: 'Timesheet'
+          maxLength: 100
+        date_opened:
+          type: string
+          format: date-time
+          description: Date of opening timesheet
+        duration:
+          type: number
+          description: Duration in hours
+
+    NewExpenditure:
+      type: object
+      required:
+        - name
+        - date_opened
+        - files
+        - description
+        - status
+        - type
+      properties:
+        name:
+          type: string
+          example: 'Expenditure'
+          maxLength: 100
+        date_opened:
+          type: string
+          format: date-time
+          description: Date of opening expenditure
+        date_closed:
+          type: string
+          format: date
+          description: Date of closing expenditure
+        deadline:
+          type: string
+          format: date
+          description: Deadline of the expenditure
+        status:
+          type: string
+          enum:
+            - submitted
+            - approved
+            - reimbudes
+          description: Expenditure status
+        type:
+          type: string
+          enum:
+            - hosting
+            - code
+            - artwork
+            - stock
+            - photos
+            - freelance
+            - room
+            - transport
+            - other
+        description:
+          type: string
+          description: Description of deliverable
+        files:
+          $ref: "#/components/schemas/Files"
 
     Money:
       type: object
@@ -263,7 +952,6 @@ components:
         amount:
           type: number
           default: 0
-
     Color:
       type: string
       pattern: "^#[0-9a-f]{6}$"
@@ -271,14 +959,46 @@ components:
 
     Project:
       allOf:
-        - $ref: '#/components/schemas/Uuid'
+        - $ref: '#/components/schemas/Id'
         - $ref: '#/components/schemas/NewProject'
 
     ProjectWithStats:
       allOf:
-        - $ref: '#/components/schemas/Uuid'
+        - $ref: '#/components/schemas/Id'
         - $ref: '#/components/schemas/NewProject'
-        - $ref: '#/components/schemas/ProjectStats'
+        - $ref: '#/components/schemas/Stats'
+
+    Deliverable:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/NewDeliverable'
+
+    Issue:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/NewIssue'
+
+    Timesheet:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/NewTimesheet'
+
+    Expenditure:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/NewExpenditure'
+
+    DeliverableWithStats:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/NewDeliverable'
+        - $ref: '#/components/schemas/Stats'
+
+    IssueWithStats:
+      allOf:
+        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/NewIssue'
+        - $ref: '#/components/schemas/Stats'
 
     Error:
       type: object
@@ -293,10 +1013,58 @@ components:
           type: string
 
   parameters:
-    projectUuid:
+    projectId:
       in: path
-      name: projectUuid
+      name: projectId
       description: Id of the project
+      required: true
+      schema:
+        type: string
+        format: uuid
+    deliverableId:
+      in: path
+      name: deliverableId
+      description: Id of the deliverable
+      required: true
+      schema:
+        type: string
+        format: uuid
+    issueId:
+      in: path
+      name: issueId
+      description: Id of the issue
+      required: true
+      schema:
+        type: string
+        format: uuid
+    timesheetId:
+      in: path
+      name: timesheetId
+      description: Id of the timesheet
+      required: true
+      schema:
+        type: string
+        format: uuid
+    expenditureId:
+      in: path
+      name: expenditureId
+      description: Id of the expenditure
+      required: true
+      schema:
+        type: string
+        format: uuid
+    objectId:
+      in: path
+      name: objectId
+      description: Id of the object
+      required: true
+      schema:
+        type: string
+        format: uuid
+    otherObjectId:
+      in: path
+      name: otherObjectId
+      description: Id of the object
       required: true
       schema:
         type: string
