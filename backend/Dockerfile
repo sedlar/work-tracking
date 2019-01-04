@@ -10,6 +10,7 @@ RUN pip install -r requirements-dev.txt
 ENV PYTHONPATH /app
 COPY ./src /app
 COPY ./tests /app/tests
+COPY ./.pylintrc /app
 
 EXPOSE 8000
 CMD ["python", "/app/wt/app.py"]

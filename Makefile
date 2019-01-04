@@ -12,3 +12,6 @@ test:
 
 test-coverage:
 	docker-compose run --rm work-tracking pytest tests -v --cov=wt --cov-report term-missing
+
+pylint:
+	docker-compose run --rm work-tracking pylint /app/wt
