@@ -33,7 +33,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       description: |
-        Update project
+        Update project (not create)
       operationId: put_project
       parameters:
         - $ref: '#/components/parameters/projectId'
@@ -47,7 +47,20 @@ paths:
       responses:
         '200':
           description: Project was updated
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
+        '404':
+          description: Project doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       description: |
         Delete project
@@ -57,7 +70,8 @@ paths:
       responses:
         '200':
           description: Project was deleted
-
+        '401':
+          description: Authorization needed
         '404':
           description: Project doesn't exist
           content:
@@ -79,7 +93,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectsResponse'
-        '400':
+        '401':
+          description: Authorization needed
+        '404':
           description: Project doesn't exist
           content:
             application/json:
@@ -88,7 +104,7 @@ paths:
 
     post:
       description: |
-        Create project
+        Create new project
       operationId: post_project
       requestBody:
         description: Project to create
@@ -98,13 +114,21 @@ paths:
             schema:
               $ref: '#/components/schemas/ProjectRequest'
       responses:
-        '200':
+        '201':
           description: Project was created, its ID is returned
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Id'
         '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
+        '404':
           description: Project doesn't exist
           content:
             application/json:
@@ -127,6 +151,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectDeliverablesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Project doesn't exist
           content:
@@ -135,7 +167,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       description: |
-        Create new deliverable
+        Create new deliverable under given project
       operationId: post_deliverable
       parameters:
         - $ref: '#/components/parameters/projectId'
@@ -147,12 +179,20 @@ paths:
             schema:
               $ref: '#/components/schemas/DeliverableRequest'
       responses:
-        '200':
+        '201':
           description: Deliverable
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Deliverable doesn't exist
           content:
@@ -176,6 +216,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectIssuesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Project doesn't exist
           content:
@@ -184,7 +232,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       description: |
-        Create new issue
+        Create new issue under given project
       operationId: post_issue
       parameters:
         - $ref: '#/components/parameters/projectId'
@@ -196,12 +244,20 @@ paths:
             schema:
               $ref: '#/components/schemas/IssueRequest'
       responses:
-        '200':
+        '201':
           description: Issue
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Issue doesn't exist
           content:
@@ -226,6 +282,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectDesignsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Project doesn't exist
           content:
@@ -250,6 +314,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectMeetingsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Project doesn't exist
           content:
@@ -271,6 +343,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeliverableStatsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Deliverable doesn't exist
           content:
@@ -279,7 +359,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       description: |
-        Update deliverable
+        Update deliverable (not create)
       operationId: put_deliverable
       parameters:
         - $ref: '#/components/parameters/deliverableId'
@@ -293,7 +373,20 @@ paths:
       responses:
         '200':
           description: Deliverable was updated
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
+        '404':
+          description: Deliverable doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       description: |
         Delete deliverable
@@ -303,7 +396,14 @@ paths:
       responses:
         '200':
           description: Deliverable was deleted
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Deliverable doesn't exist
           content:
@@ -325,6 +425,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IssueStatsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Issue doesn't exist
           content:
@@ -333,7 +441,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       description: |
-        Update deliverable
+        Update issue (not create)
       operationId: put_issue
       parameters:
         - $ref: '#/components/parameters/issueId'
@@ -347,7 +455,20 @@ paths:
       responses:
         '200':
           description: Issue was updated
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
+        '404':
+          description: Issue doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       description: |
         Delete issue
@@ -357,7 +478,14 @@ paths:
       responses:
         '200':
           description: Issue was deleted
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Issue doesn't exist
           content:
@@ -381,6 +509,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TimesheetsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Issue doesn't exist
           content:
@@ -401,12 +537,20 @@ paths:
             schema:
               $ref: '#/components/schemas/TimesheetRequest'
       responses:
-        '200':
+        '201':
           description: Issue
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Issue doesn't exist
           content:
@@ -430,6 +574,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExpendituresResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Issue doesn't exist
           content:
@@ -451,12 +603,20 @@ paths:
             schema:
               $ref: '#/components/schemas/ExpenditureRequest'
       responses:
-        '200':
+        '201':
           description: Expenditure
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Expenditure doesn't exist
           content:
@@ -474,7 +634,14 @@ paths:
       responses:
         '200':
           description: Timesheet was deleted
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Timesheet doesn't exist
           content:
@@ -492,7 +659,14 @@ paths:
       responses:
         '200':
           description: Expenditure was deleted
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Expenditure doesn't exist
           content:
@@ -509,8 +683,16 @@ paths:
         - $ref: '#/components/parameters/objectId'
         - $ref: '#/components/parameters/otherObjectId'
       responses:
-        '200':
+        '201':
           description: Link was created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
 
     delete:
       description: |
@@ -522,13 +704,21 @@ paths:
       responses:
         '200':
           description: Link was deleted
-
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
         '404':
           description: Link doesn't exist
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     ProjectIssuesResponse:
