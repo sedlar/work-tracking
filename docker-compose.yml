@@ -29,7 +29,7 @@ services:
       - POSTGRES_PASSWORD=$DB_PASSWD
       - POSTGRES_DB=$DB_SCHEMA
     ports:
-      - 5432:5432
+      - 54320:5432
     volumes:
       - db-data:/var/lib/postgresql/data
 
