@@ -1,10 +1,10 @@
-from wt.provider.db.provider import metadata
 from sqlalchemy import Table, Column, Integer, String, Binary
 
+from wt.provider.db.provider import METADATA
 
-auth_table = Table(
+AUTH_TABLE = Table(
     "auth",
-    metadata,
+    METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
     Column("user", String(64), unique=True),
     Column("password", Binary(256)),
@@ -13,8 +13,7 @@ auth_table = Table(
 
 class DbAuthModel():
     def create_user(self):
-        return
-
+        pass
 
     def authorize_user(self, username, password):
         pass

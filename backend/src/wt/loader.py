@@ -12,7 +12,7 @@ def prepare_db(db_url):
 
 
 def load_components(db_url):
-    engine = prepare_db(db_url)
+    prepare_db(db_url)
 
     DbProjectModel()
     DbAuthModel()
