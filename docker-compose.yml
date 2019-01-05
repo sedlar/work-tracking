@@ -11,6 +11,8 @@ services:
       - ./backend/tests:/app/tests
     environment:
       - PYTHONPATH=$PYTHONPATH:/app:/app/debug_egg/debug.egg
+    ports:
+      - 8080:8080
     command: [
       "python3", "/app/wt/app.py"
     ]

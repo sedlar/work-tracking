@@ -9,6 +9,7 @@ RUN pip install -r requirements.txt
 RUN pip install -r requirements-dev.txt
 ENV PYTHONPATH /app
 COPY ./src /app
+COPY ./swagger /app/swagger
 COPY ./tests /app/tests
 COPY ./.pylintrc /app
 
