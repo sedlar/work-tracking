@@ -985,11 +985,6 @@ components:
         description:
           type: string
           description: Description of deliverable
-        hour_rate:
-          $ref: "#/components/schemas/Money"
-        estimated_duration:
-          type: number
-          description: Estimated duration in hours
 
     NewIssue:
       type: object
