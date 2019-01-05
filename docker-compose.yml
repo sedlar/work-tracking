@@ -9,10 +9,29 @@ services:
     volumes:
       - ./backend/src/wt:/app/wt
       - ./backend/tests:/app/tests
+      - ./backend/alembic:/app/alembic
+      - ./tools/wait-for-it/wait-for-it.sh:/app/wait-for-it.sh
     environment:
       - PYTHONPATH=$PYTHONPATH:/app:/app/debug_egg/debug.egg
+      - DB_URL=postgresql://postgres:$DB_PASSWD@db/$DB_SCHEMA
     ports:
       - 8080:8080
+    depends_on:
+      - db
     command: [
+      "/app/wait-for-it.sh", "db:5432", "--",
       "python3", "/app/wt/app.py"
     ]
+
+  db:
+    image: postgres:11.1
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASSWD
+      - POSTGRES_DB=$DB_SCHEMA
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:

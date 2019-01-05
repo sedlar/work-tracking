@@ -1,2 +1,6 @@
 Flask==1.0.2
 connexion[swagger-ui]==2.2.0
+alembic==1.0.5
+SQLAlchemy==1.2.15
+psycopg2-binary==2.7.6.1
+typing==3.6.6

@@ -12,6 +12,8 @@ COPY ./src /app
 COPY ./swagger /app/swagger
 COPY ./tests /app/tests
 COPY ./.pylintrc /app
+COPY ./alembic.ini /app
+COPY ./alembic /app/alembic
 
 EXPOSE 8000
 CMD ["python", "/app/wt/app.py"]

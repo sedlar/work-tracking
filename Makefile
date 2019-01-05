@@ -1,3 +1,5 @@
+MESSAGE=""
+
 build:
 	docker-compose build
 
@@ -15,3 +17,9 @@ test-coverage:
 
 pylint:
 	docker-compose run --rm work-tracking pylint /app/wt
+
+migration:
+	docker-compose run --rm -w '/app' work-tracking alembic revision --autogenerate -m $(MESSAGE)
+
+migrate:
+	docker-compose run --rm -w '/app' work-tracking alembic upgrade head
