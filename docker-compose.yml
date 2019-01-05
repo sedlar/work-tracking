@@ -14,13 +14,14 @@ services:
     environment:
       - PYTHONPATH=$PYTHONPATH:/app:/app/debug_egg/debug.egg
       - DB_URL=postgresql://postgres:$DB_PASSWD@db/$DB_SCHEMA
+      - REMOTE_DEBUGGER=$REMOTE_DEBUGGER
     ports:
       - 8080:8080
     depends_on:
       - db
     command: [
       "/app/wait-for-it.sh", "db:5432", "--",
-      "python3", "/app/wt/app.py"
+      "python3", "/app/wt/app.py", "run-server"
     ]
 
   db:

@@ -1,3 +1,7 @@
+from flask_injector import inject
+
+
+@inject
 def get_project():
     return "NOT IMPLEMENTED", 500
 

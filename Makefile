@@ -1,10 +1,11 @@
 MESSAGE=""
+REMOTE_DEBUGGER=""
 
 build:
 	docker-compose build
 
 up:
-	docker-compose up
+	REMOTE_DEBUGGER=$(REMOTE_DEBUGGER) docker-compose up
 
 down:
 	docker-compose down

@@ -1,6 +1,13 @@
 class User:
-    def __init__(self, username):
+    def __init__(self, username, hashed_password):
+        """
+
+        Args:
+            username (str):
+            hashed_password (bytes):
+        """
         self.username = username
+        self.hashed_password = hashed_password
 
 
 class BoundUser(User):
@@ -11,4 +18,4 @@ class BoundUser(User):
             user (User):
         """
         self.ident = id_
-        super().__init__(user.username)
+        super().__init__(user.username, user.hashed_password)

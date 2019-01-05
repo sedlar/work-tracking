@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 
+from wt.auth import AuthModel
 from wt.provider.db.models.auth import DbAuthModel
-from wt.provider.db.models.projects import DbProjectModel
 
 
 def prepare_db(db_url):
@@ -11,8 +11,10 @@ def prepare_db(db_url):
     return engine
 
 
-def load_components(db_url):
-    prepare_db(db_url)
+def configure_with_db_url(db_url):
+    def configure(binder):
+        engine = prepare_db(db_url)
+        auth_model = DbAuthModel(engine)
+        binder.bind(AuthModel, auth_model)
 
-    DbProjectModel()
-    DbAuthModel()
+    return configure
