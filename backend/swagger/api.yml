@@ -109,7 +109,7 @@ paths:
       operationId: http_api.projects.get_project_deliverables
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
-        - $ref: '#/components/parameters/queryObjectId'
+        - $ref: '#/components/parameters/queryRelatedObjectId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -175,7 +175,7 @@ paths:
       operationId: http_api.projects.get_project_issues
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
-        - $ref: '#/components/parameters/queryObjectId'
+        - $ref: '#/components/parameters/queryRelatedObjectId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -1189,9 +1189,9 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/ObjectId"
-    queryObjectId:
+    queryRelatedObjectId:
       in: query
-      name: object_id
+      name: related_object_id
       description: Filter by related objects
       required: false
       schema:
