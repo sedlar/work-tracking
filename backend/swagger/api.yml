@@ -1082,12 +1082,12 @@ components:
 
     Deliverable:
       allOf:
-        - $ref: '#/components/schemas/ObjectId'
+        - $ref: '#/components/schemas/ObjectIdObject'
         - $ref: '#/components/schemas/NewDeliverable'
 
     Issue:
       allOf:
-        - $ref: '#/components/schemas/ObjectId'
+        - $ref: '#/components/schemas/ObjectIdObject'
         - $ref: '#/components/schemas/NewIssue'
 
     Timesheet:
@@ -1102,13 +1102,13 @@ components:
 
     DeliverableWithStats:
       allOf:
-        - $ref: '#/components/schemas/ObjectId'
+        - $ref: '#/components/schemas/ObjectIdObject'
         - $ref: '#/components/schemas/NewDeliverable'
         - $ref: '#/components/schemas/Stats'
 
     IssueWithStats:
       allOf:
-        - $ref: '#/components/schemas/ObjectId'
+        - $ref: '#/components/schemas/ObjectIdObject'
         - $ref: '#/components/schemas/NewIssue'
         - $ref: '#/components/schemas/Stats'
 
