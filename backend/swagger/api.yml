@@ -17,7 +17,7 @@ paths:
         Get info about project
       operationId: http_api.projects.get_project
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/pathProjectId'
       responses:
         '200':
           description: Project
@@ -36,7 +36,7 @@ paths:
         Create or update project
       operationId: http_api.projects.put_project
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/pathProjectId'
       requestBody:
         description: Project to put
         required: true
@@ -66,7 +66,7 @@ paths:
         Delete project
       operationId: http_api.projects.delete_project
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/pathProjectId'
       responses:
         '200':
           description: Project was deleted
@@ -108,7 +108,8 @@ paths:
         Get project deliverables
       operationId: http_api.projects.get_project_deliverables
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/pathProjectId'
+        - $ref: '#/components/parameters/queryObjectId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -137,7 +138,7 @@ paths:
         Create new deliverable under given project
       operationId: http_api.projects.post_deliverable
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/pathProjectId'
       requestBody:
         description: Deliverable to create
         required: true
@@ -173,7 +174,8 @@ paths:
         Get issues of project
       operationId: http_api.projects.get_project_issues
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/pathProjectId'
+        - $ref: '#/components/parameters/queryObjectId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -202,7 +204,7 @@ paths:
         Create new issue under given project
       operationId: http_api.projects.post_issue
       parameters:
-        - $ref: '#/components/parameters/projectId'
+        - $ref: '#/components/parameters/pathProjectId'
       requestBody:
         description: Issue to create
         required: true
@@ -238,7 +240,7 @@ paths:
         Get info about deliverable
       operationId: http_api.deliverables.get_deliverable
       parameters:
-        - $ref: '#/components/parameters/deliverableId'
+        - $ref: '#/components/parameters/pathDeliverableId'
       responses:
         '200':
           description: Deliverable
@@ -265,7 +267,7 @@ paths:
         Update deliverable (not create)
       operationId: http_api.deliverables.put_deliverable
       parameters:
-        - $ref: '#/components/parameters/deliverableId'
+        - $ref: '#/components/parameters/pathDeliverableId'
       requestBody:
         description: Deliverable to put
         required: true
@@ -295,7 +297,7 @@ paths:
         Delete deliverable
       operationId: http_api.deliverables.delete_deliverable
       parameters:
-        - $ref: '#/components/parameters/deliverableId'
+        - $ref: '#/components/parameters/pathDeliverableId'
       responses:
         '200':
           description: Deliverable was deleted
@@ -320,7 +322,7 @@ paths:
         Get info about issue
       operationId: http_api.issues.get_issue
       parameters:
-        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/pathIssueId'
       responses:
         '200':
           description: Issue
@@ -347,7 +349,7 @@ paths:
         Update issue (not create)
       operationId: http_api.issues.put_issue
       parameters:
-        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/pathIssueId'
       requestBody:
         description: Issue to put
         required: true
@@ -377,7 +379,7 @@ paths:
         Delete issue
       operationId: http_api.issues.delete_issue
       parameters:
-        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/pathIssueId'
       responses:
         '200':
           description: Issue was deleted
@@ -402,7 +404,7 @@ paths:
         Get timesheets of issue
       operationId: http_api.issues.get_issue_timesheets
       parameters:
-        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/pathIssueId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -431,7 +433,7 @@ paths:
         Add new timesheet to issue
       operationId: http_api.issues.post_issue_timesheet
       parameters:
-        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/pathIssueId'
       requestBody:
         description: Issue to put
         required: true
@@ -467,7 +469,7 @@ paths:
         Get expenditures of issue
       operationId: http_api.issues.get_issue_expenditures
       parameters:
-        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/pathIssueId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -497,7 +499,7 @@ paths:
         Add new expenditure to issue
       operationId: http_api.issues.post_issue_expenditure
       parameters:
-        - $ref: '#/components/parameters/issueId'
+        - $ref: '#/components/parameters/pathIssueId'
       requestBody:
         description: Issue to put
         required: true
@@ -533,7 +535,7 @@ paths:
         Delete timesheet
       operationId: http_api.timesheets.delete_timesheet
       parameters:
-        - $ref: '#/components/parameters/timesheetId'
+        - $ref: '#/components/parameters/pathTimesheetId'
       responses:
         '200':
           description: Timesheet was deleted
@@ -558,7 +560,7 @@ paths:
         Delete expenditure
       operationId: http_api.expenditures.delete_expenditure
       parameters:
-        - $ref: '#/components/parameters/expenditureId'
+        - $ref: '#/components/parameters/pathExpenditureId'
       responses:
         '200':
           description: Expenditure was deleted
@@ -583,8 +585,8 @@ paths:
         Create link between two objects (symmetric)
       operationId: http_api.links.put_link
       parameters:
-        - $ref: '#/components/parameters/objectId'
-        - $ref: '#/components/parameters/otherObjectId'
+        - $ref: '#/components/parameters/pathObjectId'
+        - $ref: '#/components/parameters/pathOtherObjectId'
       responses:
         '201':
           description: Link was created
@@ -602,8 +604,8 @@ paths:
         Delete link between objects (symetric)
       operationId: http_api.links.delete_link
       parameters:
-        - $ref: '#/components/parameters/objectId'
-        - $ref: '#/components/parameters/otherObjectId'
+        - $ref: '#/components/parameters/pathObjectId'
+        - $ref: '#/components/parameters/pathOtherObjectId'
       responses:
         '200':
           description: Link was deleted
@@ -1138,57 +1140,62 @@ components:
           type: string
 
   parameters:
-    projectId:
+    pathProjectId:
       in: path
       name: project_id
       description: Project id in format ^[A-Z]{3-5}$
       required: true
       schema:
         $ref: "#/components/schemas/ProjectId"
-    deliverableId:
+    pathDeliverableId:
       in: path
       name: deliverable_id
       description: Id of the deliverable ^[A-Z]{3-5}-[0-9]{1-9}$
       required: true
       schema:
         $ref: "#/components/schemas/ObjectId"
-    issueId:
+    pathIssueId:
       in: path
       name: issue_id
       description: Id of the issue ^[A-Z]{3-5}-[0-9]{1-9}$
       required: true
       schema:
         $ref: "#/components/schemas/ObjectId"
-    timesheetId:
+    pathTimesheetId:
       in: path
       name: timesheet_id
       description: Id of the timesheet
       required: true
       schema:
         $ref: "#/components/schemas/SimpleId"
-    expenditureId:
+    pathExpenditureId:
       in: path
       name: expenditure_id
       description: Id of the expenditure
       required: true
       schema:
         $ref: "#/components/schemas/SimpleId"
-    objectId:
+    pathObjectId:
       in: path
       name: object_id
       description: Id of the object
       required: true
       schema:
-        type: string
-        format: uuid
-    otherObjectId:
+        $ref: "#/components/schemas/ObjectId"
+    pathOtherObjectId:
       in: path
       name: other_object_id
       description: Id of the object
       required: true
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/ObjectId"
+    queryObjectId:
+      in: query
+      name: object_id
+      description: Filter by related objects
+      required: false
+      schema:
+        $ref: "#/components/schemas/ObjectId"
     offset:
       in: query
       name: offset
