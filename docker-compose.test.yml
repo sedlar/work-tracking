@@ -16,8 +16,9 @@ services:
       - 8080:8080
     depends_on:
       - db-test
-    entrypoint: [
-      "/app/wait-for-it.sh", "db-test:5432", "--",
+    command: [
+      "/app/wait-for-it.sh", "db:5432", "--",
+      "python3", "/app/wt/app.py", "run-server"
     ]
 
   db-test:
