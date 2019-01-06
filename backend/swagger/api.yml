@@ -11,7 +11,7 @@ security:
   - basicAuth: []
 
 paths:
-  /projects/{project_id}:
+  /projects/{projectId}:
     get:
       description: |
         Get info about project
@@ -135,7 +135,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /projects/{project_id}/deliverables:
+  /projects/{projectId}/deliverables:
     get:
       description: |
         Get project deliverables
@@ -200,7 +200,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /projects/{project_id}/issues:
+  /projects/{projectId}/issues:
     get:
       description: |
         Get issues of project
@@ -265,7 +265,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /deliverables/{deliverable_id}:
+  /deliverables/{deliverableId}:
     get:
       description: |
         Get info about deliverable
@@ -347,7 +347,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /issues/{issue_id}:
+  /issues/{issueId}:
     get:
       description: |
         Get info about issue
@@ -429,7 +429,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /issues/{issue_id}/timesheets:
+  /issues/{issueId}/timesheets:
     get:
       description: |
         Get timesheets of issue
@@ -494,7 +494,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /issues/{issue_id}/expenditures:
+  /issues/{issueId}/expenditures:
     get:
       description: |
         Get expenditures of issue
@@ -560,7 +560,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /timesheets/{timesheet_id}:
+  /timesheets/{timesheetId}:
     delete:
       description: |
         Delete timesheet
@@ -585,7 +585,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /expenditures/{expenditure_id}:
+  /expenditures/{expenditureId}:
     delete:
       description: |
         Delete expenditure
@@ -610,7 +610,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /links/{object_id}/{other_object_id}:
+  /links/{objectId}/{otherObjectId}:
     put:
       description: |
         Create link between two objects (symmetric)
@@ -1136,7 +1136,7 @@ components:
   parameters:
     projectId:
       in: path
-      name: project_id
+      name: projectId
       description: Id of the project
       required: true
       schema:
@@ -1144,7 +1144,7 @@ components:
         format: uuid
     deliverableId:
       in: path
-      name: deliverable_id
+      name: deliverableId
       description: Id of the deliverable
       required: true
       schema:
@@ -1152,7 +1152,7 @@ components:
         format: uuid
     issueId:
       in: path
-      name: issue_id
+      name: issueId
       description: Id of the issue
       required: true
       schema:
@@ -1160,7 +1160,7 @@ components:
         format: uuid
     timesheetId:
       in: path
-      name: timesheet_id
+      name: timesheetId
       description: Id of the timesheet
       required: true
       schema:
@@ -1168,7 +1168,7 @@ components:
         format: uuid
     expenditureId:
       in: path
-      name: expenditure_id
+      name: expenditureId
       description: Id of the expenditure
       required: true
       schema:
@@ -1176,7 +1176,7 @@ components:
         format: uuid
     objectId:
       in: path
-      name: object_id
+      name: objectId
       description: Id of the object
       required: true
       schema:
@@ -1184,7 +1184,7 @@ components:
         format: uuid
     otherObjectId:
       in: path
-      name: other_object_id
+      name: otherObjectId
       description: Id of the object
       required: true
       schema:
