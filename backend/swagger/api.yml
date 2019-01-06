@@ -1135,14 +1135,14 @@ components:
 
     ProjectId:
       type: string
-      description: Project id in format "^[A-Z]{3-5}$"
-      pattern: "^[A-Z]{3-5}$"
+      description: Project id in format "^[A-Z]{3,5}$"
+      pattern: "^[A-Z]{3,5}$"
 
     ObjectId:
       type: string
       description: |
-        Object id in format "^[A-Z]{3-5}-[0-9]{1-9}$"
-      pattern: "^[A-Z]{3-5}-[0-9]{1-9}$"
+        Object id in format "^[A-Z]{3,5}-[0-9]{1,9}$"
+      pattern: "^[A-Z]{3,5}-[0-9]{1,9}$"
 
     SimpleId:
       type: integer
@@ -1171,14 +1171,14 @@ components:
     pathDeliverableId:
       in: path
       name: deliverable_id
-      description: Id of the deliverable ^[A-Z]{3-5}-[0-9]{1-9}$
+      description: Id of the deliverable ^[A-Z]{3-5}-[0-9]{1,9}$
       required: true
       schema:
         $ref: "#/components/schemas/ObjectId"
     pathIssueId:
       in: path
       name: issue_id
-      description: Id of the issue ^[A-Z]{3-5}-[0-9]{1-9}$
+      description: Id of the issue ^[A-Z]{3-5}-[0-9]{1,9}$
       required: true
       schema:
         $ref: "#/components/schemas/ObjectId"
