@@ -1,9 +1,9 @@
 from typing import Optional
 
-from wt.auth._obj import BoundUser
+from wt.user._obj import BoundUser
 
 
-class AuthModel:
+class UserModel:
     def create_user(self, username: str, hashed_password: bytes) -> BoundUser:
         raise NotImplementedError()
 

@@ -1,7 +1,15 @@
 from sqlalchemy import create_engine
 
-from wt.auth import AuthModel
-from wt.provider.db.models.auth import DbAuthModel
+from wt.user import UserModel
+from wt.provider.db.models.user import DbUserModel
+
+
+def configure_with_engine(engine):
+    def configure(binder):
+        user_model = DbUserModel(engine)
+        binder.bind(UserModel, user_model)
+
+    return configure
 
 
 def prepare_db(db_url):
@@ -9,12 +17,3 @@ def prepare_db(db_url):
         db_url, isolation_level='SERIALIZABLE'
     )
     return engine
-
-
-def configure_with_db_url(db_url):
-    def configure(binder):
-        engine = prepare_db(db_url)
-        auth_model = DbAuthModel(engine)
-        binder.bind(AuthModel, auth_model)
-
-    return configure

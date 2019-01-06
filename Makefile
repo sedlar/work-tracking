@@ -10,14 +10,17 @@ up:
 down:
 	docker-compose down
 
-test:
-	docker-compose run --rm work-tracking pytest tests -v
+down-test:
+	docker-compose -f docker-compose.test.yml down
 
-test-coverage:
-	docker-compose run --rm work-tracking pytest tests -v --cov=wt --cov-report term-missing
+test: build
+	REMOTE_DEBUGGER=$(REMOTE_DEBUGGER) docker-compose -f docker-compose.test.yml run --rm work-tracking-test pytest tests -v
 
-pylint:
-	docker-compose run --rm work-tracking pylint /app/wt
+test-coverage: build
+	REMOTE_DEBUGGER=$(REMOTE_DEBUGGER) docker-compose -f docker-compose.test.yml run --rm work-tracking-test pytest tests -v --cov=wt --cov-report term-missing
+
+pylint: build
+	docker-compose -f docker-compose.test.yml run --rm work-tracking-test pylint /app/wt
 
 migration:
 	docker-compose run --rm -w '/app' work-tracking alembic revision --autogenerate -m $(MESSAGE)

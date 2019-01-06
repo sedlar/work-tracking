@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  work-tracking-test:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    image: tm/work-tracking
+    volumes:
+      - ./tools/wait-for-it/wait-for-it.sh:/app/wait-for-it.sh
+    environment:
+      - PYTHONPATH=$PYTHONPATH:/app:/app/debug_egg/debug.egg
+      - DB_URL=postgresql://postgres:$DB_PASSWD@db-test/$DB_SCHEMA
+      - REMOTE_DEBUGGER=$REMOTE_DEBUGGER
+    ports:
+      - 8080:8080
+    depends_on:
+      - db-test
+    entrypoint: [
+      "/app/wait-for-it.sh", "db-test:5432", "--",
+    ]
+
+  db-test:
+    image: postgres:11.1
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASSWD
+      - POSTGRES_DB=$DB_SCHEMA

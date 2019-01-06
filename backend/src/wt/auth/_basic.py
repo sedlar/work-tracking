@@ -1,12 +1,15 @@
+import os
+
 from wt.auth._manage import authenticate
-from wt.auth._model import AuthModel
-from wt.global_injector import INJECTOR
 
 
-# FIXME: @inject doesn't work here. Fix it and remove global injector completely
 def basic_auth(username, password, **_):
-    auth_model = INJECTOR.get(AuthModel)
-    user = authenticate(auth_model, username, password)
+    # FIXME: @inject doesn't work here. Inject model instead initialize it
+    from wt.loader import prepare_db
+    from wt.provider.db.models.user import DbUserModel
+    db_url = os.environ.get("DB_URL")
+    user_model = DbUserModel(prepare_db(db_url))
+    user = authenticate(user_model, username, password)
     if user:
         return {"sub": user}
     return None

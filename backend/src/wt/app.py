@@ -5,10 +5,8 @@ import sys
 import connexion
 from flask_injector import FlaskInjector
 
-from wt.auth import add_user
-from wt.loader import prepare_db, configure_with_db_url
-from wt.provider.db.models.auth import DbAuthModel
-from wt.global_injector import INJECTOR
+from wt.commands.add_user import command_add_user
+from wt.loader import configure_with_engine, prepare_db
 
 
 def setup_debugger_from_env():
@@ -29,20 +27,22 @@ def main(argv):
     args = parser.parse_args(argv)
 
     db_url = os.environ.get("DB_URL")
+    engine = prepare_db(db_url)
 
     if args.command == "run-server":
-        app = connexion.App(__name__, specification_dir="/app/swagger")
-        app.add_api('api.yml', strict_validation=True, validate_responses=True)
-        FlaskInjector(app=app.app, modules=[configure_with_db_url(db_url)], injector=INJECTOR)
+        app = create_app(engine)
         app.run(port=args.listen_port)
     elif args.command == "add-user":
-        add_user(
-            auth_model=DbAuthModel(prepare_db(db_url)),
-            username=args.username,
-            password=args.password
-        )
+        command_add_user(engine, args.username, args.password)
     else:
         raise ValueError("Unknown command")
+
+
+def create_app(engine):
+    app = connexion.App(__name__, specification_dir="/app/swagger")
+    app.add_api('api.yml', strict_validation=True, validate_responses=True)
+    FlaskInjector(app=app.app, modules=[configure_with_engine(engine)])
+    return app
 
 
 def get_arg_parser():

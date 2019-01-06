@@ -14,6 +14,7 @@ COPY ./tests /app/tests
 COPY ./.pylintrc /app
 COPY ./alembic.ini /app
 COPY ./alembic /app/alembic
+COPY ./.coveragerc /app
 
 EXPOSE 8000
 CMD ["python", "/app/wt/app.py"]
