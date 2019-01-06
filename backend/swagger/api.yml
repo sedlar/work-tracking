@@ -830,8 +830,6 @@ components:
         limitations_and_restrictions:
           type: string
           description: Limitations_and_descriptions
-        links:
-          $ref: "#/components/schemas/Links"
         files:
           $ref: "#/components/schemas/Files"
         primary_color:
@@ -928,6 +926,17 @@ components:
             - wontfix
             - archived
           description: Issue status
+          default: new
+        type:
+          type: string
+          enum:
+            - task
+            - improvement
+            - feature
+            - bug
+            - education
+          description: Issue type
+          default: task
         priority:
           type: string
           enum:
@@ -937,6 +946,7 @@ components:
             - minor
             - trivial
           description: Issue priority
+          default: minor
         date_opened:
           type: string
           format: date
@@ -954,10 +964,8 @@ components:
           description: Description of deliverable
         files:
           $ref: "#/components/schemas/Files"
-        external_id:
-          type: string
-          maxLength: 200
-          description: External id
+        links:
+          $ref: "#/components/schemas/Links"
         external_type:
           type: string
           maxLength: 200
