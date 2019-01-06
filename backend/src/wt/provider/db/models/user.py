@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import Table, Column, Integer, String, Binary, insert, select
+from sqlalchemy import Table, Column, Integer, String, LargeBinary, insert, select
 from zope.sqlalchemy import mark_changed
 
 from wt.provider.db.provider import METADATA, DbModel
@@ -11,7 +11,7 @@ USER_TABLE = Table(
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
     Column("username", String(64), unique=True),
-    Column("password", Binary(256)),
+    Column("password", LargeBinary(256)),
 )
 
 
