@@ -398,13 +398,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /issues/{issue_id}/timesheets:
+  /timesheets:
     get:
       description: |
-        Get timesheets of issue
+        Get timesheets of object
       operationId: http_api.issues.get_issue_timesheets
       parameters:
-        - $ref: '#/components/parameters/pathIssueId'
+        - $ref: '#/components/parameters/queryObjectId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -430,10 +430,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       description: |
-        Add new timesheet to issue
+        Add new timesheet to object
       operationId: http_api.issues.post_issue_timesheet
-      parameters:
-        - $ref: '#/components/parameters/pathIssueId'
       requestBody:
         description: Issue to put
         required: true
@@ -463,13 +461,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /issues/{issue_id}/expenditures:
+  /timesheets/{timesheet_id}:
+    delete:
+      description: |
+        Delete timesheet
+      operationId: http_api.timesheets.delete_timesheet
+      parameters:
+        - $ref: '#/components/parameters/pathTimesheetId'
+      responses:
+        '200':
+          description: Timesheet was deleted
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
+        '404':
+          description: Timesheet doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /expenditures:
     get:
       description: |
-        Get expenditures of issue
+        Get expenditures of object
       operationId: http_api.issues.get_issue_expenditures
       parameters:
-        - $ref: '#/components/parameters/pathIssueId'
+        - $ref: '#/components/parameters/queryObjectId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -496,7 +519,7 @@ paths:
 
     post:
       description: |
-        Add new expenditure to issue
+        Add new expenditure to object
       operationId: http_api.issues.post_issue_expenditure
       parameters:
         - $ref: '#/components/parameters/pathIssueId'
@@ -524,31 +547,6 @@ paths:
           description: Authorization needed
         '404':
           description: Expenditure doesn't exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /timesheets/{timesheet_id}:
-    delete:
-      description: |
-        Delete timesheet
-      operationId: http_api.timesheets.delete_timesheet
-      parameters:
-        - $ref: '#/components/parameters/pathTimesheetId'
-      responses:
-        '200':
-          description: Timesheet was deleted
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '401':
-          description: Authorization needed
-        '404':
-          description: Timesheet doesn't exist
           content:
             application/json:
               schema:
@@ -979,7 +977,7 @@ components:
             description: Tag
             maxLength: 50
 
-    NewTimesheet:
+    BaseTimesheet:
       type: object
       required:
         - name
@@ -998,7 +996,25 @@ components:
           type: number
           description: Duration in hours
 
+    NewTimesheet:
+      allOf:
+        - $ref: "#/components/schemas/ParentObjectId"
+        - $ref: "#/components/schemas/BaseTimesheet"
+
     NewExpenditure:
+      allOf:
+        - $ref: "#/components/schemas/ParentObjectId"
+        - $ref: "#/components/schemas/BaseExpenditure"
+
+    ParentObjectId:
+      type: object
+      required:
+        - parent_id
+      properties:
+        parent_id:
+          $ref: "#/components/schemas/ObjectId"
+
+    BaseExpenditure:
       type: object
       required:
         - name
@@ -1093,12 +1109,12 @@ components:
     Timesheet:
       allOf:
         - $ref: '#/components/schemas/SimpleId'
-        - $ref: '#/components/schemas/NewTimesheet'
+        - $ref: '#/components/schemas/BaseTimesheet'
 
     Expenditure:
       allOf:
         - $ref: '#/components/schemas/SimpleId'
-        - $ref: '#/components/schemas/NewExpenditure'
+        - $ref: '#/components/schemas/BaseExpenditure'
 
     DeliverableWithStats:
       allOf:
@@ -1192,8 +1208,15 @@ components:
     queryRelatedObjectId:
       in: query
       name: related_object_id
-      description: Filter by related objects
+      description: Filter by related object id
       required: false
+      schema:
+        $ref: "#/components/schemas/ObjectId"
+    queryObjectId:
+      in: query
+      name: object_id
+      description: Filter by object
+      required: true
       schema:
         $ref: "#/components/schemas/ObjectId"
     offset:
