@@ -33,7 +33,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       description: |
-        Update project (not create)
+        Create or update project
       operationId: http_api.projects.put_project
       parameters:
         - $ref: '#/components/parameters/projectId'
