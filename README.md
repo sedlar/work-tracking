@@ -13,7 +13,7 @@ make up
 
 Add user
 ```bash
-docker-compose run --rm work-tracking python /app/wt/app.py add-user --username=username --assword=password
+docker-compose run --rm work-tracking python /app/wt/app.py add-user --username=username --password=password
 ```
 
 swagger specification is available on url http://localhost:8080/v1/ui

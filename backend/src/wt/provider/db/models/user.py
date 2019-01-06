@@ -6,7 +6,7 @@ from wt.user import UserModel, BoundUser, User
 from wt.provider.db.provider import METADATA
 
 USER_TABLE = Table(
-    "auth",
+    "users",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
     Column("username", String(64), unique=True),

@@ -27,3 +27,6 @@ migration:
 
 migrate:
 	docker-compose run --rm -w '/app' work-tracking alembic upgrade head
+
+default-user:
+	docker-compose run --rm work-tracking python /app/wt/app.py add-user --username=username --password=password
