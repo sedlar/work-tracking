@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/sedlar/work-tracking.svg?branch=master)](https://travis-ci.com/sedlar/work-tracking)
+
 # Backend for work tracking tool
 
 Build
