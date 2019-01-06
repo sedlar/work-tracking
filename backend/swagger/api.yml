@@ -959,6 +959,11 @@ components:
           type: string
           format: date
           description: Deadline of the deliverable
+        estimated_duration:
+          type: number
+          description: Estimated duration in hours
+        hour_rate:
+          $ref: "#/components/schemas/Money"
         description:
           type: string
           description: Description of deliverable
