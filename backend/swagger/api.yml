@@ -102,39 +102,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-    post:
-      description: |
-        Create new project
-      operationId: http_api.projects.post_project
-      requestBody:
-        description: Project to create
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectRequest'
-      responses:
-        '201':
-          description: Project was created, its ID is returned
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Id'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '401':
-          description: Authorization needed
-        '404':
-          description: Project doesn't exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
   /projects/{project_id}/deliverables:
     get:
       description: |
@@ -184,7 +151,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/ObjectIdObject'
         '400':
           description: Bad request
           content:
@@ -249,7 +216,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/ObjectIdObject'
         '400':
           description: Bad request
           content:
@@ -478,7 +445,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/SimpleIdObject'
         '400':
           description: Bad request
           content:
@@ -544,7 +511,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/SimpleIdObject'
         '400':
           description: Bad request
           content:
@@ -666,30 +633,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Issue"
-
-    ProjectDesignsResponse:
-      type: object
-      required:
-        - designs
-      properties:
-        designs:
-          type: array
-          items:
-            type: string
-            description: "TODO: Define design"
-            example: "TODO: Define design"
-
-    ProjectMeetingsResponse:
-      type: object
-      required:
-        - meetings
-      properties:
-        meetings:
-          type: array
-          items:
-            type: string
-            description: "TODO: Define meeting"
-            example: "TODO: Define meeting"
 
     ProjectDeliverablesResponse:
       type: object
@@ -815,15 +758,29 @@ components:
           items:
             $ref: '#/components/schemas/Project'
 
-    Id:
+    ProjectIdObject:
       type: object
       required:
         - id
       properties:
         id:
-          type: string
-          format: uuid
-          description: Object id
+          $ref: '#/components/schemas/ProjectId'
+
+    ObjectIdObject:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/ObjectId'
+
+    SimpleIdObject:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/SimpleId'
 
     NewProject:
       type: object
@@ -1080,46 +1037,61 @@ components:
 
     Project:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ProjectIdObject'
         - $ref: '#/components/schemas/NewProject'
 
     ProjectWithStats:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ProjectIdObject'
         - $ref: '#/components/schemas/NewProject'
         - $ref: '#/components/schemas/Stats'
 
     Deliverable:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ObjectId'
         - $ref: '#/components/schemas/NewDeliverable'
 
     Issue:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ObjectId'
         - $ref: '#/components/schemas/NewIssue'
 
     Timesheet:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/SimpleId'
         - $ref: '#/components/schemas/NewTimesheet'
 
     Expenditure:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/SimpleId'
         - $ref: '#/components/schemas/NewExpenditure'
 
     DeliverableWithStats:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ObjectId'
         - $ref: '#/components/schemas/NewDeliverable'
         - $ref: '#/components/schemas/Stats'
 
     IssueWithStats:
       allOf:
-        - $ref: '#/components/schemas/Id'
+        - $ref: '#/components/schemas/ObjectId'
         - $ref: '#/components/schemas/NewIssue'
         - $ref: '#/components/schemas/Stats'
+
+    ProjectId:
+      type: string
+      description: Project id in format "^[A-Z]{3-5}$"
+      pattern: "^[A-Z]{3-5}$"
+
+    ObjectId:
+      type: string
+      description: |
+        Object id in format "^[A-Z]{3-5}-[0-9]{1-9}$"
+      pattern: "^[A-Z]{3-5}-[0-9]{1-9}$"
+
+    SimpleId:
+      type: integer
+      format: int32
 
     Error:
       type: object
@@ -1137,43 +1109,38 @@ components:
     projectId:
       in: path
       name: project_id
-      description: Id of the project
+      description: Project id in format ^[A-Z]{3-5}$
       required: true
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/ProjectId"
     deliverableId:
       in: path
       name: deliverable_id
-      description: Id of the deliverable
+      description: Id of the deliverable ^[A-Z]{3-5}-[0-9]{1-9}$
       required: true
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/ObjectId"
     issueId:
       in: path
       name: issue_id
-      description: Id of the issue
+      description: Id of the issue ^[A-Z]{3-5}-[0-9]{1-9}$
       required: true
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/ObjectId"
     timesheetId:
       in: path
       name: timesheet_id
       description: Id of the timesheet
       required: true
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/SimpleId"
     expenditureId:
       in: path
       name: expenditure_id
       description: Id of the expenditure
       required: true
       schema:
-        type: string
-        format: uuid
+        $ref: "#/components/schemas/SimpleId"
     objectId:
       in: path
       name: object_id
