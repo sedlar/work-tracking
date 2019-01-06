@@ -1,10 +1,11 @@
 import os
 
+import transaction
 from pytest import fixture
 from sqlalchemy import create_engine
 
 from wt.app import create_app, setup_debugger_from_env
-from wt.provider.db import METADATA
+from wt.provider.db import METADATA, session_maker_factory
 from wt.provider.db.models.user import DbUserModel
 from wt.user import add_user
 
@@ -16,16 +17,22 @@ HASHED_PASSWORD = b"password"
 @fixture(scope='session')
 def engine():
     return create_engine(
-        os.environ.get("DB_URL")
+        os.environ.get("DB_URL"), echo=True
     )
+
+
+@fixture(scope='session')
+def session(engine):
+    return session_maker_factory(engine)
 
 
 @fixture
 def user(user_model):
-    return add_user(user_model=user_model, username=USERNAME, password=PASSWORD)
+    with transaction.manager:
+        return add_user(user_model=user_model, username=USERNAME, password=PASSWORD)
 
 
-@fixture(autouse=True)
+@fixture(scope="function", autouse=True)
 def init_db(engine):
     METADATA.drop_all(engine)
     METADATA.create_all(engine)
@@ -42,6 +49,6 @@ def debugger():
 
 
 @fixture(scope="session")
-def user_model(engine):
-    user_model = DbUserModel(engine=engine)
+def user_model(session):
+    user_model = DbUserModel(session)
     return user_model
