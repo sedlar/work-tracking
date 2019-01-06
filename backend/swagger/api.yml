@@ -830,6 +830,8 @@ components:
         limitations_and_restrictions:
           type: string
           description: Limitations_and_descriptions
+        links:
+          $ref: "#/components/schemas/Links"
         files:
           $ref: "#/components/schemas/Files"
         primary_color:
@@ -842,6 +844,28 @@ components:
       items:
         type: string
         format: uri
+        maxLength: 2048
+
+    Links:
+      type: array
+      items:
+        type: object
+        required:
+          - title
+          - description
+          - link
+        properties:
+          title:
+            type: string
+            maxLength: 128
+            description: Title of the linked page
+          description:
+            type: string
+            maxLength: 4096
+            description: Descrition of the linked page
+          link:
+            format: uri
+            maxLength: 2048
 
     NewDeliverable:
       type: object
