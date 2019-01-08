@@ -10,7 +10,6 @@ RUN pip install -r requirements-dev.txt
 ENV PYTHONPATH /app
 COPY ./src /app
 COPY ./swagger /app/swagger
-COPY ./tests /app/tests
 COPY ./.pylintrc /app
 COPY ./alembic.ini /app
 COPY ./alembic /app/alembic

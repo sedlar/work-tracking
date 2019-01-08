@@ -15,7 +15,7 @@ paths:
     get:
       description: |
         Get info about project
-      operationId: http_api.projects.get_project
+      operationId: wt.http_api.projects.get_project
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
       responses:
@@ -34,7 +34,7 @@ paths:
     put:
       description: |
         Create or update project
-      operationId: http_api.projects.put_project
+      operationId: wt.http_api.projects.put_project
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
       requestBody:
@@ -64,7 +64,7 @@ paths:
     delete:
       description: |
         Delete project
-      operationId: http_api.projects.delete_project
+      operationId: wt.http_api.projects.delete_project
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
       responses:
@@ -82,7 +82,7 @@ paths:
     get:
       description: |
         Get projects
-      operationId: http_api.projects.get_projects
+      operationId: wt.http_api.projects.get_projects
       parameters:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
@@ -106,7 +106,7 @@ paths:
     get:
       description: |
         Get project deliverables
-      operationId: http_api.projects.get_project_deliverables
+      operationId: wt.http_api.projects.get_project_deliverables
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
         - $ref: '#/components/parameters/queryRelatedObjectId'
@@ -136,7 +136,7 @@ paths:
     post:
       description: |
         Create new deliverable under given project
-      operationId: http_api.projects.post_deliverable
+      operationId: wt.http_api.projects.post_deliverable
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
       requestBody:
@@ -172,7 +172,7 @@ paths:
     get:
       description: |
         Get issues of project
-      operationId: http_api.projects.get_project_issues
+      operationId: wt.http_api.projects.get_project_issues
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
         - $ref: '#/components/parameters/queryRelatedObjectId'
@@ -202,7 +202,7 @@ paths:
     post:
       description: |
         Create new issue under given project
-      operationId: http_api.projects.post_issue
+      operationId: wt.http_api.projects.post_issue
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
       requestBody:
@@ -238,7 +238,7 @@ paths:
     get:
       description: |
         Get info about deliverable
-      operationId: http_api.deliverables.get_deliverable
+      operationId: wt.http_api.deliverables.get_deliverable
       parameters:
         - $ref: '#/components/parameters/pathDeliverableId'
       responses:
@@ -265,7 +265,7 @@ paths:
     put:
       description: |
         Update deliverable (not create)
-      operationId: http_api.deliverables.put_deliverable
+      operationId: wt.http_api.deliverables.put_deliverable
       parameters:
         - $ref: '#/components/parameters/pathDeliverableId'
       requestBody:
@@ -295,7 +295,7 @@ paths:
     delete:
       description: |
         Delete deliverable
-      operationId: http_api.deliverables.delete_deliverable
+      operationId: wt.http_api.deliverables.delete_deliverable
       parameters:
         - $ref: '#/components/parameters/pathDeliverableId'
       responses:
@@ -320,7 +320,7 @@ paths:
     get:
       description: |
         Get info about issue
-      operationId: http_api.issues.get_issue
+      operationId: wt.http_api.issues.get_issue
       parameters:
         - $ref: '#/components/parameters/pathIssueId'
       responses:
@@ -347,7 +347,7 @@ paths:
     put:
       description: |
         Update issue (not create)
-      operationId: http_api.issues.put_issue
+      operationId: wt.http_api.issues.put_issue
       parameters:
         - $ref: '#/components/parameters/pathIssueId'
       requestBody:
@@ -377,7 +377,7 @@ paths:
     delete:
       description: |
         Delete issue
-      operationId: http_api.issues.delete_issue
+      operationId: wt.http_api.issues.delete_issue
       parameters:
         - $ref: '#/components/parameters/pathIssueId'
       responses:
@@ -402,7 +402,7 @@ paths:
     get:
       description: |
         Get timesheets of object
-      operationId: http_api.issues.get_issue_timesheets
+      operationId: wt.http_api.issues.get_issue_timesheets
       parameters:
         - $ref: '#/components/parameters/queryObjectId'
         - $ref: '#/components/parameters/offset'
@@ -431,7 +431,7 @@ paths:
     post:
       description: |
         Add new timesheet to object
-      operationId: http_api.issues.post_issue_timesheet
+      operationId: wt.http_api.issues.post_issue_timesheet
       requestBody:
         description: Issue to put
         required: true
@@ -465,7 +465,7 @@ paths:
     delete:
       description: |
         Delete timesheet
-      operationId: http_api.timesheets.delete_timesheet
+      operationId: wt.http_api.timesheets.delete_timesheet
       parameters:
         - $ref: '#/components/parameters/pathTimesheetId'
       responses:
@@ -490,7 +490,7 @@ paths:
     get:
       description: |
         Get expenditures of object
-      operationId: http_api.issues.get_issue_expenditures
+      operationId: wt.http_api.issues.get_issue_expenditures
       parameters:
         - $ref: '#/components/parameters/queryObjectId'
         - $ref: '#/components/parameters/offset'
@@ -520,7 +520,7 @@ paths:
     post:
       description: |
         Add new expenditure to object
-      operationId: http_api.issues.post_issue_expenditure
+      operationId: wt.http_api.issues.post_issue_expenditure
       parameters:
         - $ref: '#/components/parameters/pathIssueId'
       requestBody:
@@ -556,7 +556,7 @@ paths:
     delete:
       description: |
         Delete expenditure
-      operationId: http_api.expenditures.delete_expenditure
+      operationId: wt.http_api.expenditures.delete_expenditure
       parameters:
         - $ref: '#/components/parameters/pathExpenditureId'
       responses:
@@ -581,7 +581,7 @@ paths:
     put:
       description: |
         Create link between two objects (symmetric)
-      operationId: http_api.links.put_link
+      operationId: wt.http_api.links.put_link
       parameters:
         - $ref: '#/components/parameters/pathObjectId'
         - $ref: '#/components/parameters/pathOtherObjectId'
@@ -600,7 +600,7 @@ paths:
     delete:
       description: |
         Delete link between objects (symetric)
-      operationId: http_api.links.delete_link
+      operationId: wt.http_api.links.delete_link
       parameters:
         - $ref: '#/components/parameters/pathObjectId'
         - $ref: '#/components/parameters/pathOtherObjectId'
@@ -655,7 +655,9 @@ components:
         - project
       properties:
         project:
-          $ref: '#/components/schemas/ProjectWithStats'
+          $ref: '#/components/schemas/Project'
+        stats:
+          $ref: '#/components/schemas/Stats'
 
     DeliverableStatsResponse:
       type: object
@@ -794,11 +796,12 @@ components:
         - primary_color
         - secondary_color
         - files
+        - hour_rate
       properties:
         name:
           type: string
           example: 'Work tracking'
-          maxLength: 100
+          maxLength: 128
         status:
           type: string
           enum:
@@ -810,15 +813,18 @@ components:
         date_opened:
           type: string
           format: date
+          example: "2002-10-02T15:00:00.05Z"
           description: Date of opening project
         date_closed:
           type: string
           format: date
           description: Date of closing project
+          example: "2002-10-02T15:00:00.05Z"
         deadline:
           type: string
           format: date
           description: Deadline of the project
+          example: "2002-10-02T15:00:00.05Z"
         hour_rate:
           $ref: "#/components/schemas/Money"
         description:
@@ -889,14 +895,17 @@ components:
           type: string
           format: date
           description: Date of opening deliverable
+          example: "2002-10-02T15:00:00.05Z"
         date_closed:
           type: string
           format: date
           description: Date of closing deliverable
+          example: "2002-10-02T15:00:00.05Z"
         deadline:
           type: string
           format: date
           description: Deadline of the deliverable
+          example: "2002-10-02T15:00:00.05Z"
         description:
           type: string
           description: Description of deliverable
@@ -951,14 +960,17 @@ components:
           type: string
           format: date
           description: Date of opening deliverable
+          example: "2002-10-02T15:00:00.05Z"
         date_closed:
           type: string
           format: date
           description: Date of closing deliverable
+          example: "2002-10-02T15:00:00.05Z"
         deadline:
           type: string
           format: date
           description: Deadline of the deliverable
+          example: "2002-10-02T15:00:00.05Z"
         estimated_duration:
           type: number
           description: Estimated duration in hours
@@ -997,6 +1009,7 @@ components:
           type: string
           format: date-time
           description: Date of opening timesheet
+          example: "2002-10-02T15:00:00.05Z"
         duration:
           type: number
           description: Duration in hours
@@ -1037,14 +1050,17 @@ components:
           type: string
           format: date-time
           description: Date of opening expenditure
+          example: "2002-10-02T15:00:00.05Z"
         date_closed:
           type: string
           format: date
           description: Date of closing expenditure
+          example: "2002-10-02T15:00:00.05Z"
         deadline:
           type: string
           format: date
           description: Deadline of the expenditure
+          example: "2002-10-02T15:00:00.05Z"
         status:
           type: string
           enum:
@@ -1078,13 +1094,15 @@ components:
       properties:
         currency:
           type: string
+          description: Currency of the money
           enum:
             - CZK
             - EUR
             - USD
         amount:
           type: number
-          default: 0
+          description: Amount of the money
+
     Color:
       type: string
       pattern: "^#[0-9a-f]{6}$"
@@ -1094,12 +1112,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/ProjectIdObject'
         - $ref: '#/components/schemas/NewProject'
-
-    ProjectWithStats:
-      allOf:
-        - $ref: '#/components/schemas/ProjectIdObject'
-        - $ref: '#/components/schemas/NewProject'
-        - $ref: '#/components/schemas/Stats'
 
     Deliverable:
       allOf:
@@ -1155,10 +1167,12 @@ components:
         - message
       properties:
         code:
-          type: integer
-          format: int32
+          type: string
+          enum:
+            - project_does_not_exist
         message:
           type: string
+          description: Human readable error message
 
   parameters:
     pathProjectId:
@@ -1243,4 +1257,4 @@ components:
     basicAuth:
       type: http
       scheme: basic
-      x-basicInfoFunc: auth.basic_auth
+      x-basicInfoFunc: wt.auth.basic_auth

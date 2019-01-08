@@ -8,7 +8,7 @@ services:
     image: tm/work-tracking
     volumes:
       - ./backend/src/wt:/app/wt
-      - ./backend/tests:/app/tests
+      - ./backend/src/tests:/app/tests
       - ./backend/alembic:/app/alembic
       - ./tools/wait-for-it/wait-for-it.sh:/app/wait-for-it.sh
     environment:
