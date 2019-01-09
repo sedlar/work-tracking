@@ -1,4 +1,4 @@
-from wt.provider.db.utils import get_enum_length
+from wt.provider.db._utils import get_enum_length
 from enum import Enum
 
 

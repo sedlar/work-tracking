@@ -1,9 +1,11 @@
-from tests.integration.factories.objs import create_project, create_money
-from wt.common import Money, Currency
-from wt.projects import ProjectStatus, ProjectDoesNotExist
 from datetime import datetime
 from decimal import Decimal
+
 import pytest
+
+from tests.integration.factories.objs import create_project, create_money
+from wt.common import Currency
+from wt.projects import ProjectStatus, ProjectDoesNotExist
 
 
 def test_create_project(projects_model):

@@ -882,7 +882,7 @@ components:
         name:
           type: string
           example: 'First deliverable'
-          maxLength: 100
+          maxLength: 128
         status:
           type: string
           enum:

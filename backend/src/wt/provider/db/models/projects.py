@@ -1,24 +1,22 @@
 from copy import deepcopy
+from datetime import datetime
 from typing import List
 
 from sqlalchemy import Table, Column, select, delete, String, DateTime, DECIMAL
-from sqlalchemy.dialects.postgresql import insert
 from zope.sqlalchemy import mark_changed
 
+from wt.common import Money, Currency
 from wt.files import FilesModel, File
 from wt.projects import ProjectsModel, Project, ProjectStatus, ProjectDoesNotExist
 from wt.provider.db import DbModel
+from wt.provider.db._columns import PROJECT_ID_COLUMN_TYPE
+from wt.provider.db._utils import get_enum_length, insert_or_update
 from wt.provider.db.provider import METADATA
-from wt.provider.db.utils import get_enum_length
-from wt.common import Money, Currency
-
-COLOR_COLUMN_TYPE = String(7)
-
 
 PROJECTS_TABLE = Table(
     "projects",
     METADATA,
-    Column("project_id", String(5), primary_key=True),
+    Column("project_id", PROJECT_ID_COLUMN_TYPE, primary_key=True),
     Column("name", String(128), nullable=False),
     Column("status", String(get_enum_length(ProjectStatus)), nullable=False),
     Column("date_opened", DateTime(), nullable=False),
@@ -31,6 +29,7 @@ PROJECTS_TABLE = Table(
     Column("goals_and_metrics", String(), nullable=False),
     Column("primary_color", String(7), nullable=False),
     Column("secondary_color", String(7), nullable=False),
+    Column("created_on", DateTime(), nullable=False),
 )
 
 
@@ -56,12 +55,15 @@ class DbProjectsModel(ProjectsModel, DbModel):
         }
         insert_data = deepcopy(update_data)
         insert_data["project_id"] = project.project_id
-        query = insert(PROJECTS_TABLE).values(*[insert_data])
-        query = query.on_conflict_do_update(
-            index_elements=[PROJECTS_TABLE.c.project_id],
-            set_=update_data
+        insert_data["created_on"] = datetime.now()
+        self._session.execute(
+            insert_or_update(
+                PROJECTS_TABLE,
+                insert_data,
+                update_data,
+                [PROJECTS_TABLE.c.project_id]
+            )
         )
-        self._session.execute(query)
         mark_changed(self._session)
 
         self._files_model.set_object_files(project.project_id, project.files)

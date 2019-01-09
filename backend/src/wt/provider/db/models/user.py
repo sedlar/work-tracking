@@ -10,8 +10,8 @@ USER_TABLE = Table(
     "users",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("username", String(64), unique=True),
-    Column("password", LargeBinary(256)),
+    Column("username", String(64), unique=True, nullable=False),
+    Column("password", LargeBinary(256), nullable=False),
 )
 
 

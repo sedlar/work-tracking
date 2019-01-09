@@ -8,7 +8,9 @@ from wt.app import create_app, setup_debugger_from_env
 from wt.provider.db import METADATA, session_maker_factory
 from wt.provider.db.models.files import DbFilesModel
 from wt.provider.db.models.projects import DbProjectsModel
+from wt.provider.db.models.deliverables import DbDeliverablesModel
 from wt.provider.db.models.user import DbUserModel
+from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.projects import ProjectsApi
 from wt.user import add_user
 
@@ -20,7 +22,7 @@ HASHED_PASSWORD = b"password"
 @fixture(scope='session')
 def engine():
     return create_engine(
-        os.environ.get("DB_URL")
+        os.environ.get("DB_URL"), isolation_level="SERIALIZABLE"
     )
 
 
@@ -73,6 +75,21 @@ def files_model(session):
 @fixture(scope="session")
 def projects_model(session, files_model):
     return DbProjectsModel(session, files_model)
+
+
+@fixture(scope="session")
+def deliverables_model(session, files_model):
+    return DbDeliverablesModel(session)
+
+
+@fixture(scope="session")
+def ids_counter_model(session):
+    return DbIdsCounterModel(session)
+
+
+@fixture(scope="session")
+def objects_tracker_model(session):
+    return DbObjectsTrackerModel(session)
 
 
 @fixture(scope="session")

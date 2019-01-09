@@ -1,4 +1,6 @@
 from wt.projects import Project, ProjectStatus
+from wt.objects.deliverables import BoundDeliverable, DeliverableStatus, Deliverable
+from wt.objects.ids import ObjectId
 from datetime import datetime
 from wt.files import File
 from decimal import Decimal
@@ -46,4 +48,26 @@ def create_money(amount: Decimal=Decimal("600.50"), currency: Currency=Currency.
     return Money(
         amount=amount,
         currency=currency,
+    )
+
+
+def create_deliverable(
+        object_id="PRJ-1",
+        name="Dummy project",
+        status=DeliverableStatus.open,
+        description="Description",
+        date_opened=datetime(year=2019, month=1, day=1, hour=10, minute=30, second=5),
+        date_closed=datetime(year=2019, month=1, day=2, hour=10, minute=30, second=5),
+        deadline=datetime(year=2019, month=1, day=3, hour=10, minute=30, second=5),
+):
+    return BoundDeliverable(
+        object_id=ObjectId(object_id),
+        deliverable=Deliverable(
+            name=name,
+            status=status,
+            description=description,
+            date_opened=date_opened,
+            date_closed=date_closed,
+            deadline=deadline,
+        )
     )

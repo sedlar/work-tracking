@@ -1,4 +1,5 @@
 from typing import List
+from datetime import datetime
 
 from sqlalchemy import (
     Table,
@@ -10,19 +11,21 @@ from sqlalchemy import (
     and_,
     delete,
     insert,
+    DateTime,
 )
 from zope.sqlalchemy import mark_changed
 
 from wt.files import File, FilesModel
 from wt.provider.db import METADATA, DbModel
-from wt.provider.db.models.ids import ID_COLUMN_TYPE
+from wt.provider.db._columns import ID_COLUMN_TYPE
 
 FILES_TABLE = Table(
     "files",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("parent_id", ID_COLUMN_TYPE),
-    Column("uri", String(64)),
+    Column("parent_id", ID_COLUMN_TYPE, nullable=False),
+    Column("uri", String(64), index=True, nullable=False),
+    Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "uri")
 )
 
@@ -56,11 +59,13 @@ class DbFilesModel(FilesModel, DbModel):
         mark_changed(self._session)
 
     def _add_files(self, object_id, added_uris):
+        now = datetime.now()
         add_query = insert(FILES_TABLE).values(
             [
                 {
                     "parent_id": object_id,
-                    "uri": uri
+                    "uri": uri,
+                    "created_on": now,
                 }
                 for uri
                 in added_uris

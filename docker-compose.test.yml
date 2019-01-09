@@ -5,7 +5,7 @@ services:
     build:
       context: ./backend
       dockerfile: ./Dockerfile
-    image: tm/work-tracking
+    image: work-tracking
     volumes:
       - ./tools/wait-for-it/wait-for-it.sh:/app/wait-for-it.sh
     environment:
