@@ -14,9 +14,8 @@ from wt.objects.deliverables import (
 )
 from wt.objects.ids import ObjectId
 from wt.provider.db import METADATA, DbModel
-from wt.provider.db._utils import get_enum_length, insert_or_update
 from wt.provider.db._columns import PROJECT_ID_COLUMN_REFERENCE, ID_COLUMN_TYPE
-from copy import deepcopy
+from wt.provider.db._utils import get_enum_length, insert_or_update
 
 DELIVERABLES_TABLE = Table(
     "deliverables",

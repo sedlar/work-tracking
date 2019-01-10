@@ -640,19 +640,15 @@ components:
         - deliverables
       properties:
         deliverables:
-          type: object
-          required:
-            - deliverables
-          properties:
-            deliverables:
-              type: array
-              items:
-                $ref: "#/components/schemas/Deliverable"
+          type: array
+          items:
+            $ref: "#/components/schemas/Deliverable"
 
     ProjectStatsResponse:
       type: object
       required:
         - project
+        - stats
       properties:
         project:
           $ref: '#/components/schemas/Project'
@@ -663,9 +659,12 @@ components:
       type: object
       required:
         - deliverable
+        - stats
       properties:
         deliverable:
-          $ref: '#/components/schemas/DeliverableWithStats'
+          $ref: '#/components/schemas/Deliverable'
+        stats:
+          $ref: '#/components/schemas/Stats'
 
     IssueStatsResponse:
       type: object
@@ -721,9 +720,9 @@ components:
     DeliverableRequest:
       type: object
       required:
-        - project
+        - deliverable
       properties:
-        project:
+        deliverable:
           $ref: '#/components/schemas/NewDeliverable'
 
     IssueRequest:
@@ -1133,12 +1132,6 @@ components:
         - $ref: '#/components/schemas/SimpleId'
         - $ref: '#/components/schemas/BaseExpenditure'
 
-    DeliverableWithStats:
-      allOf:
-        - $ref: '#/components/schemas/ObjectIdObject'
-        - $ref: '#/components/schemas/NewDeliverable'
-        - $ref: '#/components/schemas/Stats'
-
     IssueWithStats:
       allOf:
         - $ref: '#/components/schemas/ObjectIdObject'
@@ -1170,6 +1163,7 @@ components:
           type: string
           enum:
             - project_does_not_exist
+            - deliverable_does_not_exist
         message:
           type: string
           description: Human readable error message

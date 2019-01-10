@@ -13,6 +13,8 @@ down:
 down-test:
 	docker-compose -f docker-compose.test.yml down
 
+make down-all: down down-test
+
 test: build
 	REMOTE_DEBUGGER=$(REMOTE_DEBUGGER) docker-compose -f docker-compose.test.yml run --rm work-tracking-test pytest tests -v
 

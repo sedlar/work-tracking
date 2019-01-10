@@ -72,7 +72,7 @@ class DbProjectsModel(ProjectsModel, DbModel):
         query = select([PROJECTS_TABLE]).where(PROJECTS_TABLE.c.project_id == project_id)
         result = self._session.execute(query).fetchone()
         if not result:
-            raise ProjectDoesNotExist()
+            raise ProjectDoesNotExist(project_id)
         return self._row_to_project(
             result,
             self._files_model.get_object_files(project_id)
@@ -97,7 +97,7 @@ class DbProjectsModel(ProjectsModel, DbModel):
         query = delete(PROJECTS_TABLE).where(PROJECTS_TABLE.c.project_id == project_id)
         result = self._session.execute(query)
         if not result.rowcount:
-            raise ProjectDoesNotExist()
+            raise ProjectDoesNotExist(project_id)
         mark_changed(self._session)
         self._files_model.set_object_files(project_id, [])
 

@@ -1,4 +1,4 @@
-from wt.common import remove_nones
+from wt.common.serializers import remove_nones
 
 
 def test_remove_nones_empty():

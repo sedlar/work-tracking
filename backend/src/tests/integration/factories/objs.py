@@ -51,7 +51,7 @@ def create_money(amount: Decimal=Decimal("600.50"), currency: Currency=Currency.
     )
 
 
-def create_deliverable(
+def create_bound_deliverable(
         object_id="PRJ-1",
         name="Dummy project",
         status=DeliverableStatus.open,
@@ -62,7 +62,7 @@ def create_deliverable(
 ):
     return BoundDeliverable(
         object_id=ObjectId(object_id),
-        deliverable=Deliverable(
+        deliverable=create_deliverable(
             name=name,
             status=status,
             description=description,
@@ -70,4 +70,22 @@ def create_deliverable(
             date_closed=date_closed,
             deadline=deadline,
         )
+    )
+
+
+def create_deliverable(
+        name="Dummy deliverable",
+        status=DeliverableStatus.open,
+        description="Description deliverable",
+        date_opened=datetime(year=2019, month=1, day=1, hour=10, minute=30, second=5),
+        date_closed=datetime(year=2019, month=1, day=2, hour=10, minute=30, second=5),
+        deadline=datetime(year=2019, month=1, day=3, hour=10, minute=30, second=5),
+):
+    return Deliverable(
+        name=name,
+        status=status,
+        description=description,
+        date_opened=date_opened,
+        date_closed=date_closed,
+        deadline=deadline,
     )

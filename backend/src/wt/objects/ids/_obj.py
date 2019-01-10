@@ -23,6 +23,9 @@ class ObjectId:
             )
         )
 
+    def __repr__(self):
+        return self.object_id
+
     @property
     def project_id(self) -> str:
         return self.object_id.split("-")[0]

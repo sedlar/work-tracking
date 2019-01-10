@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import List, Dict
 
 from sqlalchemy import Table, Column, select, delete, update, insert, String, Integer
@@ -8,12 +9,10 @@ from wt.objects.ids import (
     ObjectId,
     ObjectType,
     ObjectsTrackerModel,
-    ObjectsDoesNotExist
 )
 from wt.provider.db import DbModel, METADATA
-from wt.provider.db._utils import get_enum_length
 from wt.provider.db._columns import PROJECT_ID_COLUMN_REFERENCE, ID_COLUMN_TYPE
-from copy import deepcopy
+from wt.provider.db._utils import get_enum_length
 
 IDS_COUNTER_TABLE = Table(
     "ids_counter",
@@ -57,6 +56,11 @@ class DbIdsCounterModel(IdsCounterModel, DbModel):
         mark_changed(self._session)
         return ObjectId.from_parts(project_id, current_id)
 
+    def drop_project(self, project_id: str):
+        query = delete(IDS_COUNTER_TABLE).where(IDS_COUNTER_TABLE.c.project_id == project_id)
+        self._session.execute(query)
+        mark_changed(self._session)
+
 
 class DbObjectsTrackerModel(ObjectsTrackerModel, DbModel):
     def track_object(self, object_id: ObjectId, object_type: ObjectType):
@@ -82,17 +86,25 @@ class DbObjectsTrackerModel(ObjectsTrackerModel, DbModel):
             )
         )
         result = self._session.execute(query).fetchall()
-        object_ids_map = {
+        return self._result_to_map(result)
+
+    def get_objects_types_by_project(self, project_id: str) -> Dict[ObjectId, ObjectType]:
+        query = select([OBJECTS_TRACKER_TABLE.c.id, OBJECTS_TRACKER_TABLE.c.type])
+        query = query.where(
+            OBJECTS_TRACKER_TABLE.c.project_id == project_id
+        )
+        result = self._session.execute(query).fetchall()
+        return self._result_to_map(result)
+
+    @staticmethod
+    def _result_to_map(result):
+        return {
             ObjectId(row["id"]): ObjectType(row["type"])
             for row
             in result
         }
-        missing_ids = set(object_ids) - set(object_ids_map.keys())
-        if missing_ids:
-            raise ObjectsDoesNotExist(list(missing_ids))
-
-        return object_ids_map
 
     def get_object_type(self, object_id: ObjectId) -> ObjectType:
         types_map = self.get_objects_types([object_id])
-        return types_map[object_id]
+
+        return types_map.get(object_id)

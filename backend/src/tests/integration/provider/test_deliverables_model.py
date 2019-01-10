@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from tests.integration.factories.objs import create_deliverable, create_project
+from tests.integration.factories.objs import create_bound_deliverable, create_project
 from wt.objects.deliverables import DeliverableStatus, DeliverableDoesNotExist
 from wt.objects.ids import ObjectId
 
@@ -10,7 +10,7 @@ from wt.objects.ids import ObjectId
 def test_create_deliverable(deliverables_model, projects_model):
     projects_model.put_project(create_project())
 
-    deliverable = create_deliverable()
+    deliverable = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable)
     saved_deliverable = deliverables_model.get_deliverable(deliverable.object_id)
     assert deliverable == saved_deliverable
@@ -19,10 +19,10 @@ def test_create_deliverable(deliverables_model, projects_model):
 def test_update_deliverable(deliverables_model, projects_model):
     projects_model.put_project(create_project())
 
-    deliverable = create_deliverable()
+    deliverable = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable)
 
-    updated_deliverable = create_deliverable(
+    updated_deliverable = create_bound_deliverable(
         name="Test",
         status=DeliverableStatus.completed,
         description="DESC",
@@ -39,10 +39,10 @@ def test_update_deliverable(deliverables_model, projects_model):
 def test_get_deliverables(deliverables_model, projects_model):
     projects_model.put_project(create_project())
 
-    deliverable1 = create_deliverable()
+    deliverable1 = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable1)
 
-    deliverable2 = create_deliverable(
+    deliverable2 = create_bound_deliverable(
         object_id=deliverable1.object_id.project_id,
         name="Other deliverable"
     )
@@ -56,10 +56,10 @@ def test_get_deliverables_filter_project(deliverables_model, projects_model):
     projects_model.put_project(create_project())
     projects_model.put_project(create_project("AAA"))
 
-    deliverable1 = create_deliverable()
+    deliverable1 = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable1)
 
-    deliverable2 = create_deliverable(
+    deliverable2 = create_bound_deliverable(
         object_id="AAA",
         name="Other deliverable"
     )
@@ -72,7 +72,7 @@ def test_get_deliverables_filter_project(deliverables_model, projects_model):
 def test_delete_deliverable(deliverables_model, projects_model):
     projects_model.put_project(create_project())
 
-    deliverable = create_deliverable()
+    deliverable = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable)
 
     deliverables_model.delete_deliverable(deliverable.object_id)

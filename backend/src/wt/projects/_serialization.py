@@ -1,11 +1,8 @@
-from datetime import datetime
 from decimal import Decimal
-from typing import List, Optional
-
-from dateutil import parser
+from typing import List
 
 from wt.common import Money, Currency
-from wt.common import remove_nones
+from wt.common.serializers import remove_nones, serialize_datetime, deserialize_datetime
 from wt.files import File
 from wt.projects._obj import Project, ProjectStatus
 
@@ -17,9 +14,9 @@ class ProjectSerializer:
                 "id": project.project_id,
                 "name": project.name,
                 "status": project.status.value,
-                "date_opened": self.serialize_datetime(project.date_opened),
-                "date_closed": self.serialize_datetime(project.date_closed),
-                "deadline": self.serialize_datetime(project.deadline),
+                "date_opened": serialize_datetime(project.date_opened),
+                "date_closed": serialize_datetime(project.date_closed),
+                "deadline": serialize_datetime(project.deadline),
                 "hour_rate": self.serialize_money(project.hour_rate),
                 "description": project.description,
                 "goals_and_metrics": project.goals_and_metrics,
@@ -36,12 +33,6 @@ class ProjectSerializer:
             for project
             in projects
         ]
-
-    @staticmethod
-    def serialize_datetime(timestamp: Optional[datetime]) -> Optional[str]:
-        if timestamp is not None:
-            return timestamp.isoformat()
-        return None
 
     @staticmethod
     def serialize_files(files: List[File]) -> List[str]:
@@ -61,9 +52,9 @@ class ProjectDeserializer:
             project_id=project_id,
             name=project["name"],
             status=ProjectStatus(project["status"]),
-            date_opened=self.deserialize_datetime(project["date_opened"]),
-            date_closed=self.deserialize_datetime(project.get("date_closed")),
-            deadline=self.deserialize_datetime(project.get("deadline")),
+            date_opened=deserialize_datetime(project["date_opened"]),
+            date_closed=deserialize_datetime(project.get("date_closed")),
+            deadline=deserialize_datetime(project.get("deadline")),
             hour_rate=self.deserialize_money(project["hour_rate"]),
             description=project["description"],
             goals_and_metrics=project["goals_and_metrics"],
@@ -76,12 +67,6 @@ class ProjectDeserializer:
     @staticmethod
     def deserialize_files(files: List[str]) -> List[File]:
         return [File(file) for file in files]
-
-    @staticmethod
-    def deserialize_datetime(serialized_timestamp: Optional[str]) -> Optional[datetime]:
-        if serialized_timestamp:
-            return parser.parse(serialized_timestamp)
-        return None
 
     @staticmethod
     def deserialize_money(money: dict) -> Money:

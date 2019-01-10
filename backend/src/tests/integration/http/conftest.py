@@ -34,3 +34,13 @@ def authorized_api_request(api_request, user):
             auth={"username": user.username, "password": "password"}
         )
     return func
+
+
+EMPTY_STATS = {
+    "progress": 0,
+    "bilance_cost": {
+        "amount": 0,
+        "currency": "CZK"
+    },
+    "bilance_duration": 0,
+}

@@ -11,7 +11,7 @@ class DeliverablesModel:
     def get_deliverable(self, object_id: ObjectId) -> BoundDeliverable:
         raise NotImplementedError()
 
-    def get_deliverables(self, offset: int, limit: int) -> List[BoundDeliverable]:
+    def get_deliverables(self, project_id: str, offset: int, limit: int) -> List[BoundDeliverable]:
         raise NotImplementedError()
 
     def delete_deliverable(self, object_id: ObjectId):

@@ -1,19 +1,11 @@
 import pytest
 
 from tests.integration.factories.objs import create_project
+from tests.integration.http.conftest import EMPTY_STATS
 from wt.projects import ProjectDoesNotExist
 
 BASE_PROJECTS_URL = "/projects"
 
-
-EMPTY_STATS = {
-    "progress": 0,
-    "bilance_cost": {
-        "amount": 0,
-        "currency": "CZK"
-    },
-    "bilance_duration": 0,
-}
 MINIMAL_SERIALIZED_PROJECT = {
         "date_opened": "2019-01-01T10:30:05",
         "description": "Description",
@@ -76,8 +68,8 @@ def test_put_project(authorized_api_request, get_project, serialized_project, pr
     )
     assert response.status_code == 201
 
-    project = get_project(project.project_id)
-    assert project.__dict__ == project.__dict__
+    loaded_project = get_project(project.project_id)
+    assert loaded_project.__dict__ == project.__dict__
 
 
 def test_put_existing_project(authorized_api_request, get_project):
@@ -93,8 +85,8 @@ def test_put_existing_project(authorized_api_request, get_project):
     )
     assert response.status_code == 201
 
-    project = get_project(FULL_PROJECT.project_id)
-    assert project.__dict__ == project.__dict__
+    loaded_project = get_project(FULL_PROJECT.project_id)
+    assert loaded_project.__dict__ == FULL_PROJECT.__dict__
 
 
 def test_get_missing_project(authorized_api_request):
