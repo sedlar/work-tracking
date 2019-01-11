@@ -1,6 +1,6 @@
 from typing import List
 
-from wt.files._obj import File
+from wt.fields.files._obj import File
 
 
 class FilesModel:

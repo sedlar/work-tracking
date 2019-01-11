@@ -3,7 +3,7 @@ from typing import List
 
 from wt.common import Money, Currency
 from wt.common.serializers import remove_nones, serialize_datetime, deserialize_datetime
-from wt.files import File
+from wt.fields.files import File
 from wt.projects._obj import Project, ProjectStatus
 
 

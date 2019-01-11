@@ -15,7 +15,7 @@ from sqlalchemy import (
 )
 from zope.sqlalchemy import mark_changed
 
-from wt.files import File, FilesModel
+from wt.fields.files import File, FilesModel
 from wt.provider.db import METADATA, DbModel
 from wt.provider.db._columns import ID_COLUMN_TYPE
 

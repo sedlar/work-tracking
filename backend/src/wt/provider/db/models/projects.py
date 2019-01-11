@@ -6,7 +6,7 @@ from sqlalchemy import Table, Column, select, delete, String, DateTime, DECIMAL
 from zope.sqlalchemy import mark_changed
 
 from wt.common import Money, Currency
-from wt.files import FilesModel, File
+from wt.fields.files import FilesModel, File
 from wt.projects import ProjectsModel, Project, ProjectStatus, ProjectDoesNotExist
 from wt.provider.db import DbModel
 from wt.provider.db._columns import PROJECT_ID_COLUMN_TYPE

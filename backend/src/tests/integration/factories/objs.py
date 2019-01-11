@@ -2,7 +2,7 @@ from wt.projects import Project, ProjectStatus
 from wt.objects.deliverables import BoundDeliverable, DeliverableStatus, Deliverable
 from wt.objects.ids import ObjectId
 from datetime import datetime
-from wt.files import File
+from wt.fields.files import File
 from decimal import Decimal
 from wt.common import Money, Currency
 

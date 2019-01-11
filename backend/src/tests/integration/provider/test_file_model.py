@@ -1,4 +1,4 @@
-from wt.files import File
+from wt.fields.files import File
 
 OBJECT_ID = "PRJ-15"
 
