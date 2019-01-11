@@ -1,5 +1,5 @@
 class File:
-    def __init__(self, uri):
+    def __init__(self, uri: str):
         self.uri = uri
 
     def __eq__(self, other):

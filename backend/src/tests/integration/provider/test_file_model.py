@@ -1,4 +1,5 @@
-from wt.fields.files import File
+from wt.fields.files import File, DuplicateFileReceived
+import pytest
 
 OBJECT_ID = "PRJ-15"
 
@@ -41,3 +42,9 @@ def test_add_remove_files(files_model):
 
     saved_files = files_model.get_object_files(OBJECT_ID)
     assert files == saved_files
+
+
+def test_duplicate_files(files_model):
+    files = [File("a"), File("a")]
+    with pytest.raises(DuplicateFileReceived):
+        files_model.set_object_files(OBJECT_ID, files)

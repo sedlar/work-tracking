@@ -5,6 +5,7 @@ from datetime import datetime
 from wt.fields.files import File
 from decimal import Decimal
 from wt.common import Money, Currency
+from wt.fields.links import Link
 
 
 def create_project(
@@ -88,4 +89,16 @@ def create_deliverable(
         date_opened=date_opened,
         date_closed=date_closed,
         deadline=deadline,
+    )
+
+
+def create_link(
+        uri="www.google.com",
+        name="Google",
+        description="Google link",
+):
+    return Link(
+        uri=uri,
+        name=name,
+        description=description,
     )

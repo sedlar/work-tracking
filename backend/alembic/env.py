@@ -7,7 +7,7 @@ from alembic import context
 from sqlalchemy import create_engine
 
 # Load to register tables on metadata
-from wt.provider.db import models
+from wt.provider.db import tables
 from wt.provider.db import METADATA
 
 # this is the Alembic Config object, which provides

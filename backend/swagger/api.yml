@@ -867,6 +867,7 @@ components:
             maxLength: 4096
             description: Descrition of the linked page
           link:
+            type: string
             format: uri
             maxLength: 2048
 
@@ -1164,6 +1165,7 @@ components:
           enum:
             - project_does_not_exist
             - deliverable_does_not_exist
+            - duplicate_object_received
         message:
           type: string
           description: Human readable error message

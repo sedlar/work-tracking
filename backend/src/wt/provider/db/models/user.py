@@ -1,18 +1,11 @@
 from typing import Optional
 
-from sqlalchemy import Table, Column, Integer, String, LargeBinary, insert, select
+from sqlalchemy import insert, select
 from zope.sqlalchemy import mark_changed
 
-from wt.provider.db.provider import METADATA, DbModel
+from wt.provider.db.tables import USER_TABLE
+from wt.provider.db.provider import DbModel
 from wt.user import UserModel, BoundUser, User
-
-USER_TABLE = Table(
-    "users",
-    METADATA,
-    Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("username", String(64), unique=True, nullable=False),
-    Column("password", LargeBinary(256), nullable=False),
-)
 
 
 class DbUserModel(UserModel, DbModel):

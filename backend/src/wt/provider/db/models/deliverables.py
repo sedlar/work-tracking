@@ -1,8 +1,8 @@
 from copy import deepcopy
-from datetime import datetime
 from typing import List
+from datetime import datetime
 
-from sqlalchemy import Table, Column, select, delete, String, DateTime
+from sqlalchemy import select, delete
 from zope.sqlalchemy import mark_changed
 
 from wt.objects.deliverables import DeliverableDoesNotExist
@@ -13,23 +13,9 @@ from wt.objects.deliverables import (
     Deliverable,
 )
 from wt.objects.ids import ObjectId
-from wt.provider.db import METADATA, DbModel
-from wt.provider.db._columns import PROJECT_ID_COLUMN_REFERENCE, ID_COLUMN_TYPE
-from wt.provider.db._utils import get_enum_length, insert_or_update
-
-DELIVERABLES_TABLE = Table(
-    "deliverables",
-    METADATA,
-    Column("object_id", ID_COLUMN_TYPE, primary_key=True),
-    deepcopy(PROJECT_ID_COLUMN_REFERENCE),
-    Column("name", String(128), nullable=False),
-    Column("status", String(get_enum_length(DeliverableStatus)), nullable=False),
-    Column("description", String(), nullable=False),
-    Column("date_opened", DateTime(), nullable=False),
-    Column("date_closed", DateTime(), nullable=True),
-    Column("deadline", DateTime(), nullable=True),
-    Column("created_on", DateTime(), nullable=False),
-)
+from wt.provider.db import DbModel
+from wt.provider.db.tables import DELIVERABLES_TABLE
+from wt.provider.db._utils import insert_or_update
 
 
 class DbDeliverablesModel(DeliverablesModel, DbModel):

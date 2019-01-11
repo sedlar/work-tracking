@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 
 from wt.projects import ProjectSerializer, ProjectDeserializer, ProjectsApi
 from wt.provider.db import session_maker_factory
-from wt.provider.db.models.files import DbFilesModel
+from wt.provider.db.models.fields import DbFilesModel
 from wt.provider.db.models.projects import DbProjectsModel
 from wt.provider.db.models.user import DbUserModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel

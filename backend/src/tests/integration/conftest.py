@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 from wt.app import create_app, setup_debugger_from_env
 from wt.provider.db import METADATA, session_maker_factory
-from wt.provider.db.models.files import DbFilesModel
+from wt.provider.db.models.fields import DbFilesModel, DbLinksModel
 from wt.provider.db.models.projects import DbProjectsModel
 from wt.provider.db.models.deliverables import DbDeliverablesModel
 from wt.provider.db.models.user import DbUserModel
@@ -63,14 +63,17 @@ def debugger():
 
 @fixture(scope="session")
 def user_model(session):
-    user_model = DbUserModel(session)
-    return user_model
+    return DbUserModel(session)
 
 
 @fixture(scope="session")
 def files_model(session):
-    files_model = DbFilesModel(session)
-    return files_model
+    return DbFilesModel(session)
+
+
+@fixture(scope="session")
+def links_model(session):
+    return DbLinksModel(session)
 
 
 @fixture(scope="session")

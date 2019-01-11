@@ -2,35 +2,15 @@ from copy import deepcopy
 from datetime import datetime
 from typing import List
 
-from sqlalchemy import Table, Column, select, delete, String, DateTime, DECIMAL
+from sqlalchemy import select, delete
 from zope.sqlalchemy import mark_changed
 
 from wt.common import Money, Currency
 from wt.fields.files import FilesModel, File
 from wt.projects import ProjectsModel, Project, ProjectStatus, ProjectDoesNotExist
 from wt.provider.db import DbModel
-from wt.provider.db._columns import PROJECT_ID_COLUMN_TYPE
-from wt.provider.db._utils import get_enum_length, insert_or_update
-from wt.provider.db.provider import METADATA
-
-PROJECTS_TABLE = Table(
-    "projects",
-    METADATA,
-    Column("project_id", PROJECT_ID_COLUMN_TYPE, primary_key=True),
-    Column("name", String(128), nullable=False),
-    Column("status", String(get_enum_length(ProjectStatus)), nullable=False),
-    Column("date_opened", DateTime(), nullable=False),
-    Column("date_closed", DateTime(), nullable=True),
-    Column("deadline", DateTime(), nullable=True),
-    Column("hour_rate_amount", DECIMAL(), nullable=True),
-    Column("hour_rate_currency", String(get_enum_length(Currency)), nullable=True),
-    Column("description", String(), nullable=False),
-    Column("limitations_and_restrictions", String(), nullable=False),
-    Column("goals_and_metrics", String(), nullable=False),
-    Column("primary_color", String(7), nullable=False),
-    Column("secondary_color", String(7), nullable=False),
-    Column("created_on", DateTime(), nullable=False),
-)
+from wt.provider.db.tables import PROJECTS_TABLE
+from wt.provider.db._utils import insert_or_update
 
 
 class DbProjectsModel(ProjectsModel, DbModel):

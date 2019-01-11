@@ -18,3 +18,7 @@ class ObjectDoesNotExist(Exception):
     def __init__(self, obj, id_):
         super().__init__()
         self.message = "{obj} '{id}' does not exist.".format(obj=obj, id=id_)
+
+
+class DuplicateObjectReceived(Exception):
+    error_code = "duplicate_object_received"

@@ -1,7 +1,6 @@
-from copy import deepcopy
 from typing import List, Dict
 
-from sqlalchemy import Table, Column, select, delete, update, insert, String, Integer
+from sqlalchemy import select, delete, update, insert
 from zope.sqlalchemy import mark_changed
 
 from wt.objects.ids import (
@@ -10,24 +9,8 @@ from wt.objects.ids import (
     ObjectType,
     ObjectsTrackerModel,
 )
-from wt.provider.db import DbModel, METADATA
-from wt.provider.db._columns import PROJECT_ID_COLUMN_REFERENCE, ID_COLUMN_TYPE
-from wt.provider.db._utils import get_enum_length
-
-IDS_COUNTER_TABLE = Table(
-    "ids_counter",
-    METADATA,
-    Column("project_id", ID_COLUMN_TYPE, primary_key=True),
-    Column("next_id", Integer(), nullable=False),
-)
-
-OBJECTS_TRACKER_TABLE = Table(
-    "objects_tracker",
-    METADATA,
-    Column("id", ID_COLUMN_TYPE, primary_key=True),
-    deepcopy(PROJECT_ID_COLUMN_REFERENCE),
-    Column("type", String(get_enum_length(ObjectType)), nullable=False),
-)
+from wt.provider.db import DbModel
+from wt.provider.db.tables import IDS_COUNTER_TABLE, OBJECTS_TRACKER_TABLE
 
 
 class DbIdsCounterModel(IdsCounterModel, DbModel):
