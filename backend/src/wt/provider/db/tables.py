@@ -43,6 +43,15 @@ LINKS_TABLE = Table(
     Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "uri")
 )
+TAGS_TABLE = Table(
+    "tags",
+    METADATA,
+    Column("id", Integer(), primary_key=True, autoincrement=True),
+    Column("parent_id", ID_COLUMN_TYPE, nullable=False),
+    Column("tag", String(50), index=True, nullable=False),
+    Column("created_on", DateTime(), nullable=False),
+    UniqueConstraint("parent_id", "tag")
+)
 DELIVERABLES_TABLE = Table(
     "deliverables",
     METADATA,
