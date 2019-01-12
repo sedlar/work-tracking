@@ -1,9 +1,10 @@
 from typing import List
 
-from wt.projects._model import ProjectsModel
-from wt.projects._obj import Project
-from wt.objects.ids import IdsCounterModel, ObjectsTrackerModel
-from wt.projects._errors import ProjectHasChildElements
+from wt.entities.projects._model import ProjectsModel
+from wt.entities.projects._obj import Project
+from wt.entities.ids import IdsCounterModel, ObjectsTrackerModel
+from wt.entities.projects._errors import ProjectHasChildElements
+from wt.entities.ids import EntityId
 
 
 class ProjectsApi:
@@ -20,13 +21,13 @@ class ProjectsApi:
     def put_project(self, project: Project):
         self._project_model.put_project(project)
 
-    def get_project(self, project_id: str) -> Project:
+    def get_project(self, project_id: EntityId) -> Project:
         return self._project_model.get_project(project_id)
 
     def get_projects(self, offset: int, limit: int) -> List[Project]:
         return self._project_model.get_projects(offset, limit)
 
-    def delete_project(self, project_id: str):
+    def delete_project(self, project_id: EntityId):
         object_types_map = self._objects_tracker_model.get_objects_types_by_project(project_id)
         if object_types_map:
             raise ProjectHasChildElements(set(object_types_map.values()))

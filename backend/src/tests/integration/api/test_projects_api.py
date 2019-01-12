@@ -1,4 +1,5 @@
 from tests.integration.factories.objs import create_project, create_deliverable
+from wt.entities.ids import EntityId
 
 
 def test_project_recreate_resets_object_ids(projects_api, deliverables_api):
@@ -11,4 +12,4 @@ def test_project_recreate_resets_object_ids(projects_api, deliverables_api):
 
     projects_api.put_project(project)
     deliverable = deliverables_api.create_deliverable(project.project_id, create_deliverable())
-    assert str(deliverable.object_id) == project.project_id + "-1"
+    assert deliverable.object_id == EntityId.from_parts(project.project_id, 1)

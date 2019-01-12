@@ -3,9 +3,9 @@ import pytest
 from tests.integration.factories.objs import create_project, create_deliverable
 from tests.integration.http.conftest import EMPTY_STATS
 from tests.integration.http.test_projects import BASE_PROJECTS_URL
-from wt.objects.deliverables import BoundDeliverable
-from wt.objects.deliverables import DeliverableDoesNotExist
-from wt.objects.ids import ObjectId
+from wt.entities.deliverables import BoundDeliverable
+from wt.entities.deliverables import DeliverableDoesNotExist
+from wt.entities.ids import EntityId
 
 BASE_DELIVERABLES_URL = "/deliverables"
 
@@ -71,9 +71,9 @@ def test_post_deliverable(
     )
     assert response.status_code == 201
 
-    loaded_deliverable = get_deliverable(ObjectId(response.json["id"]))
+    loaded_deliverable = get_deliverable(EntityId(response.json["id"]))
     assert loaded_deliverable.__dict__ == BoundDeliverable(
-        ObjectId("PRJ-1"),
+        EntityId("PRJ-1"),
         deliverable
     ).__dict__
 
@@ -93,9 +93,9 @@ def test_post_existing_deliverable(authorized_api_request, get_deliverable, put_
     )
     assert response.status_code == 201
 
-    loaded_deliverable = get_deliverable(ObjectId(response.json["id"]))
+    loaded_deliverable = get_deliverable(EntityId(response.json["id"]))
     assert loaded_deliverable.__dict__ == BoundDeliverable(
-        ObjectId("PRJ-2"),
+        EntityId("PRJ-2"),
         FULL_DELIVERABLE
     ).__dict__
 
@@ -108,10 +108,10 @@ def test_put_deliverable(authorized_api_request, get_deliverable, put_project):
         get_project_deliverables_url("PRJ"),
         {"deliverable": MINIMAL_SERIALIZED_DELIVERABLE}
     )
-    deliverable_id = ObjectId(response.json["id"])
+    deliverable_id = EntityId(response.json["id"])
     response = authorized_api_request(
         "PUT",
-        get_deliverable_url(deliverable_id.object_id),
+        get_deliverable_url(str(deliverable_id)),
         {"deliverable": FULL_SERIALIZED_DELIVERABLE}
     )
     assert response.status_code == 200

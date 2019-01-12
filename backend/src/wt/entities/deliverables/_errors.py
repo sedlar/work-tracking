@@ -1,9 +1,9 @@
-from wt.objects.ids import ObjectId
 from wt.common.errors import ObjectDoesNotExist, ErrorCodes
+from wt.entities.ids import EntityId
 
 
 class DeliverableDoesNotExist(ObjectDoesNotExist):
     error_code = ErrorCodes.deliverable_does_not_exist
 
-    def __init__(self, object_id: ObjectId):
-        super().__init__("Deliverable", object_id.object_id)
+    def __init__(self, object_id: EntityId):
+        super().__init__("Deliverable", object_id)

@@ -1,6 +1,6 @@
-from wt.projects import Project, ProjectStatus
-from wt.objects.deliverables import BoundDeliverable, DeliverableStatus, Deliverable
-from wt.objects.ids import ObjectId
+from wt.entities.projects import Project, ProjectStatus
+from wt.entities.deliverables import BoundDeliverable, DeliverableStatus, Deliverable
+from wt.entities.ids import EntityId
 from datetime import datetime
 from wt.fields.files import File
 from decimal import Decimal
@@ -30,7 +30,7 @@ def create_project(
         files = [File("File1"), File("File2")]
 
     return Project(
-        project_id=project_id,
+        project_id=EntityId(project_id),
         name=name,
         status=status,
         description=description,
@@ -63,7 +63,7 @@ def create_bound_deliverable(
         deadline=datetime(year=2019, month=1, day=3, hour=10, minute=30, second=5),
 ):
     return BoundDeliverable(
-        object_id=ObjectId(object_id),
+        object_id=EntityId(object_id),
         deliverable=create_deliverable(
             name=name,
             status=status,

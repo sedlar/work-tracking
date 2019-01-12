@@ -2,7 +2,7 @@ import pytest
 
 from tests.integration.factories.objs import create_project
 from tests.integration.http.conftest import EMPTY_STATS
-from wt.projects import ProjectDoesNotExist
+from wt.entities.projects import ProjectDoesNotExist
 
 BASE_PROJECTS_URL = "/projects"
 
@@ -107,7 +107,7 @@ def test_get_project(authorized_api_request, put_project, project, serialized_pr
     response = authorized_api_request("GET", get_project_url(project.project_id))
 
     assert response.status_code == 200
-    assert response.json["project"]["id"] == project.project_id
+    assert response.json["project"]["id"] == str(project.project_id)
     del response.json["project"]["id"]
     assert response.json == {
         "project": serialized_project,
@@ -122,8 +122,8 @@ def test_get_projects(authorized_api_request, put_project):
     response = authorized_api_request("GET", BASE_PROJECTS_URL)
 
     assert response.status_code == 200
-    assert response.json["projects"][0]["id"] == MINIMAL_PROJECT.project_id
-    assert response.json["projects"][1]["id"] == FULL_PROJECT.project_id
+    assert response.json["projects"][0]["id"] == str(MINIMAL_PROJECT.project_id)
+    assert response.json["projects"][1]["id"] == str(FULL_PROJECT.project_id)
     del response.json["projects"][0]["id"]
     del response.json["projects"][1]["id"]
     assert response.json == {"projects": [MINIMAL_SERIALIZED_PROJECT, FULL_SERIALIZED_PROJECT]}
@@ -136,7 +136,7 @@ def test_get_projects_limit(authorized_api_request, put_project):
     response = authorized_api_request("GET", BASE_PROJECTS_URL + "?limit=1")
 
     assert response.status_code == 200
-    assert response.json["projects"][0]["id"] == MINIMAL_PROJECT.project_id
+    assert response.json["projects"][0]["id"] == str(MINIMAL_PROJECT.project_id)
     del response.json["projects"][0]["id"]
     assert response.json == {"projects": [MINIMAL_SERIALIZED_PROJECT]}
 
@@ -148,7 +148,7 @@ def test_get_projects_offset(authorized_api_request, put_project):
     response = authorized_api_request("GET", BASE_PROJECTS_URL + "?offset=1")
 
     assert response.status_code == 200
-    assert response.json["projects"][0]["id"] == FULL_PROJECT.project_id
+    assert response.json["projects"][0]["id"] == str(FULL_PROJECT.project_id)
     del response.json["projects"][0]["id"]
     assert response.json == {"projects": [FULL_SERIALIZED_PROJECT]}
 

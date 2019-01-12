@@ -4,6 +4,7 @@ from typing import List
 
 from wt.fields.files import File
 from wt.common import Money
+from wt.entities.ids import EntityId
 
 
 class ProjectStatus(Enum):
@@ -17,7 +18,7 @@ class Project:
     # pylint: disable=too-many-instance-attributes
     def __init__(
             self,
-            project_id: str,
+            project_id: EntityId,
             name: str,
             status: ProjectStatus,
             description: str,

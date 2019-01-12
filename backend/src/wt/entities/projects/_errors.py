@@ -1,10 +1,11 @@
 from wt.common.errors import ObjectDoesNotExist, ErrorCodes, BadRequest
+from wt.entities.ids import EntityId
 
 
 class ProjectDoesNotExist(ObjectDoesNotExist):
     error_code = ErrorCodes.project_does_not_exist
 
-    def __init__(self, project_id: str):
+    def __init__(self, project_id: EntityId):
         super().__init__("Project", project_id)
 
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from wt.objects.ids import ObjectId
+from wt.entities.ids import EntityId
 
 
 class DeliverableStatus(Enum):
@@ -36,7 +36,7 @@ class Deliverable:
 
 
 class BoundDeliverable(Deliverable):
-    def __init__(self, object_id: ObjectId, deliverable):
+    def __init__(self, object_id: EntityId, deliverable):
         self.object_id = object_id
         super().__init__(
             name=deliverable.name,

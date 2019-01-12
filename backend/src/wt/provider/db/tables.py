@@ -13,9 +13,9 @@ from sqlalchemy import (
 )
 
 from wt.common import Currency
-from wt.objects.deliverables import DeliverableStatus
-from wt.objects.ids import ObjectType
-from wt.projects import ProjectStatus
+from wt.entities.deliverables import DeliverableStatus
+from wt.entities.ids import ObjectType
+from wt.entities.projects import ProjectStatus
 from wt.provider.db import METADATA
 from wt.provider.db._columns import (
     ID_COLUMN_TYPE,

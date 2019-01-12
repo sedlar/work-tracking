@@ -57,10 +57,6 @@ class DbListFieldsModel(DbModel):
         if removed_ids:
             self._remove_items(object_id, removed_ids)
 
-    def _get_object_field_items(self, object_id: str) -> List[FieldItem]:
-        result = self._get_object_items(object_id)
-        return [self._row_to_item(row) for row in result]
-
     def _add_items(self, object_id: str, items: List[FieldItem]):
         now = datetime.now()
         data = [self._item_to_dict(item) for item in items]

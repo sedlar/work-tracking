@@ -3,8 +3,8 @@ from datetime import datetime
 import pytest
 
 from tests.integration.factories.objs import create_bound_deliverable, create_project
-from wt.objects.deliverables import DeliverableStatus, DeliverableDoesNotExist
-from wt.objects.ids import ObjectId
+from wt.entities.deliverables import DeliverableStatus, DeliverableDoesNotExist
+from wt.entities.ids import EntityId
 
 
 def test_create_deliverable(deliverables_model, projects_model):
@@ -48,7 +48,7 @@ def test_get_deliverables(deliverables_model, projects_model):
     )
     deliverables_model.put_deliverable(deliverable2)
 
-    deliverables = deliverables_model.get_deliverables(deliverable1.object_id.project_id, 0, 2)
+    deliverables = deliverables_model.get_deliverables(EntityId(deliverable1.object_id.project_id), 0, 2)
     assert deliverables == [deliverable1, deliverable2]
 
 
@@ -65,7 +65,11 @@ def test_get_deliverables_filter_project(deliverables_model, projects_model):
     )
     deliverables_model.put_deliverable(deliverable2)
 
-    deliverables = deliverables_model.get_deliverables(deliverable1.object_id.project_id, 0, 2)
+    deliverables = deliverables_model.get_deliverables(
+        EntityId(deliverable1.object_id.project_id),
+        0,
+        2
+    )
     assert deliverables == [deliverable1]
 
 
@@ -76,14 +80,14 @@ def test_delete_deliverable(deliverables_model, projects_model):
     deliverables_model.put_deliverable(deliverable)
 
     deliverables_model.delete_deliverable(deliverable.object_id)
-    assert not deliverables_model.get_deliverables(deliverable.object_id.project_id, 0, 1)
+    assert not deliverables_model.get_deliverables(EntityId(deliverable.object_id.project_id), 0, 1)
 
 
 def test_get_no_deliverable(deliverables_model):
     with pytest.raises(DeliverableDoesNotExist):
-        deliverables_model.get_deliverable(ObjectId("ABC-2"))
+        deliverables_model.get_deliverable(EntityId("ABC-2"))
 
 
 def test_delete_no_deliverable(deliverables_model):
     with pytest.raises(DeliverableDoesNotExist):
-        deliverables_model.delete_deliverable(ObjectId("ABC-2"))
+        deliverables_model.delete_deliverable(EntityId("ABC-2"))

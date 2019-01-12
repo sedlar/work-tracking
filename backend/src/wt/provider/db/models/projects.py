@@ -7,10 +7,11 @@ from zope.sqlalchemy import mark_changed
 
 from wt.common import Money, Currency
 from wt.fields.files import FilesModel, File
-from wt.projects import ProjectsModel, Project, ProjectStatus, ProjectDoesNotExist
+from wt.entities.projects import ProjectsModel, Project, ProjectStatus, ProjectDoesNotExist
 from wt.provider.db import DbModel
 from wt.provider.db.tables import PROJECTS_TABLE
 from wt.provider.db._utils import insert_or_update
+from wt.entities.ids import EntityId
 
 
 class DbProjectsModel(ProjectsModel, DbModel):
@@ -34,7 +35,7 @@ class DbProjectsModel(ProjectsModel, DbModel):
             "secondary_color": project.secondary_color,
         }
         insert_data = deepcopy(update_data)
-        insert_data["project_id"] = project.project_id
+        insert_data["project_id"] = project.project_id.full_id
         insert_data["created_on"] = datetime.now()
         self._session.execute(
             insert_or_update(
@@ -46,16 +47,16 @@ class DbProjectsModel(ProjectsModel, DbModel):
         )
         mark_changed(self._session)
 
-        self._files_model.set_object_files(project.project_id, project.files)
+        self._files_model.set_object_files(project.project_id.full_id, project.files)
 
-    def get_project(self, project_id: str):
-        query = select([PROJECTS_TABLE]).where(PROJECTS_TABLE.c.project_id == project_id)
+    def get_project(self, project_id: EntityId):
+        query = select([PROJECTS_TABLE]).where(PROJECTS_TABLE.c.project_id == project_id.full_id)
         result = self._session.execute(query).fetchone()
         if not result:
             raise ProjectDoesNotExist(project_id)
         return self._row_to_project(
             result,
-            self._files_model.get_object_files(project_id)
+            self._files_model.get_object_files(project_id.full_id)
         )
 
     def get_projects(self, offset: int, limit: int):
@@ -73,18 +74,18 @@ class DbProjectsModel(ProjectsModel, DbModel):
             in result
         ]
 
-    def delete_project(self, project_id: str):
-        query = delete(PROJECTS_TABLE).where(PROJECTS_TABLE.c.project_id == project_id)
+    def delete_project(self, project_id: EntityId):
+        query = delete(PROJECTS_TABLE).where(PROJECTS_TABLE.c.project_id == project_id.full_id)
         result = self._session.execute(query)
         if not result.rowcount:
             raise ProjectDoesNotExist(project_id)
         mark_changed(self._session)
-        self._files_model.set_object_files(project_id, [])
+        self._files_model.set_object_files(project_id.full_id, [])
 
     @staticmethod
     def _row_to_project(row: dict, files: List[File]) -> Project:
         return Project(
-            project_id=row["project_id"],
+            project_id=EntityId(row["project_id"]),
             name=row["name"],
             status=ProjectStatus(row["status"]),
             date_opened=row["date_opened"],

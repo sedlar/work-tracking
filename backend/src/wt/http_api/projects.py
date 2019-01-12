@@ -2,15 +2,16 @@ import transaction
 from flask_injector import inject
 
 from wt.http_api._common import handle_errors, DUMMY_STATS
-from wt.projects import ProjectsApi, ProjectDeserializer, ProjectSerializer
-from wt.objects.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
+from wt.entities.projects import ProjectsApi, ProjectDeserializer, ProjectSerializer
+from wt.entities.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
+from wt.entities.ids import EntityId
 
 
 @inject
 @handle_errors
 def get_project(projects_api: ProjectsApi, serializer: ProjectSerializer, project_id):
     with transaction.manager:
-        project = projects_api.get_project(project_id)
+        project = projects_api.get_project(EntityId(project_id))
     serialized_project = serializer.serialize_project(project)
     return {
         "project": serialized_project,
@@ -41,7 +42,7 @@ def put_project(projects_api: ProjectsApi, deserializer: ProjectDeserializer, pr
 @handle_errors
 def delete_project(projects_api: ProjectsApi, project_id):
     with transaction.manager:
-        projects_api.delete_project(project_id)
+        projects_api.delete_project(EntityId(project_id))
     return {}, 200
 
 
@@ -55,7 +56,11 @@ def get_project_deliverables(
         limit
 ):
     with transaction.manager:
-        deliverables = deliverables_api.get_deliverables(project_id, offset=offset, limit=limit)
+        deliverables = deliverables_api.get_deliverables(
+            EntityId(project_id),
+            offset=offset,
+            limit=limit
+        )
     return {"deliverables": serializer.serialize_deliverables(deliverables)}, 200
 
 
@@ -69,8 +74,8 @@ def post_deliverable(
 ):
     deliverable = deserializer.deserialize_deliverable(body["deliverable"])
     with transaction.manager:
-        bound_deliverable = deliverables_api.create_deliverable(project_id, deliverable)
-    return {"id": bound_deliverable.object_id.object_id}, 201
+        bound_deliverable = deliverables_api.create_deliverable(EntityId(project_id), deliverable)
+    return {"id": bound_deliverable.object_id.full_id}, 201
 
 
 def get_project_issues():

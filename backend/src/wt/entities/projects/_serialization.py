@@ -4,14 +4,15 @@ from typing import List
 from wt.common import Money, Currency
 from wt.common.serializers import remove_nones, serialize_datetime, deserialize_datetime
 from wt.fields.files import File
-from wt.projects._obj import Project, ProjectStatus
+from wt.entities.projects._obj import Project, ProjectStatus
+from wt.entities.ids import EntityId
 
 
 class ProjectSerializer:
     def serialize_project(self, project: Project) -> dict:
         return remove_nones(
             {
-                "id": project.project_id,
+                "id": project.project_id.project_id,
                 "name": project.name,
                 "status": project.status.value,
                 "date_opened": serialize_datetime(project.date_opened),
@@ -49,7 +50,7 @@ class ProjectSerializer:
 class ProjectDeserializer:
     def deserialize_project(self, project_id: str, project: dict) -> Project:
         return Project(
-            project_id=project_id,
+            project_id=EntityId(project_id),
             name=project["name"],
             status=ProjectStatus(project["status"]),
             date_opened=deserialize_datetime(project["date_opened"]),

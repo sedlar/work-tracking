@@ -1,4 +1,5 @@
 from enum import Enum
+from wt.entities.ids import EntityId
 
 
 class ErrorCodes(Enum):
@@ -15,9 +16,9 @@ class BadRequest(Exception):
 class ObjectDoesNotExist(Exception):
     error_code = ""
 
-    def __init__(self, obj, id_):
+    def __init__(self, obj, entity_id: EntityId):
         super().__init__()
-        self.message = "{obj} '{id}' does not exist.".format(obj=obj, id=id_)
+        self.message = "{obj} '{id}' does not exist.".format(obj=obj, id=entity_id.full_id)
 
 
 class DuplicateObjectReceived(Exception):

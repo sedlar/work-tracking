@@ -10,12 +10,16 @@ class ObjectType(Enum):
     meeting = "meeting"
 
 
-class ObjectId:
-    def __init__(self, object_id: str):
-        self.object_id = object_id
+class EntityId:
+    def __init__(self, full_id: str):
+        self.full_id = full_id
+        if "-" in full_id:
+            self.project_id = self.full_id.split("-")[0]
+        else:
+            self.project_id = self.full_id
 
     @classmethod
-    def from_parts(cls, project_id: str, object_id: int) -> ObjectId:
+    def from_parts(cls, project_id: str, object_id: int) -> EntityId:
         return cls(
             "{project_id}-{object_id}".format(
                 project_id=project_id,
@@ -24,16 +28,12 @@ class ObjectId:
         )
 
     def __repr__(self):
-        return self.object_id
-
-    @property
-    def project_id(self) -> str:
-        return self.object_id.split("-")[0]
+        return self.full_id
 
     def __eq__(self, other):
-        if isinstance(other, ObjectId):
-            return self.object_id == other.object_id
+        if isinstance(other, EntityId):
+            return self.full_id == other.full_id
         return NotImplemented
 
     def __hash__(self):
-        return hash(self.object_id)
+        return hash(self.full_id)

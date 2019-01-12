@@ -11,8 +11,8 @@ from wt.provider.db.models.projects import DbProjectsModel
 from wt.provider.db.models.deliverables import DbDeliverablesModel
 from wt.provider.db.models.user import DbUserModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
-from wt.objects.deliverables import DeliverablesApi
-from wt.projects import ProjectsApi
+from wt.entities.deliverables import DeliverablesApi
+from wt.entities.projects import ProjectsApi
 from wt.user import add_user
 
 USERNAME = "username"

@@ -1,25 +1,25 @@
-from wt.objects.ids import ObjectId
+from wt.entities.ids import EntityId
 
 
 def test_object_id_project_id():
-    assert ObjectId("ABC-4").project_id == "ABC"
+    assert EntityId("ABC-4").project_id == "ABC"
 
 
 def test_object_id_repr():
-    assert str(ObjectId("EDF-89")) == "EDF-89"
+    assert str(EntityId("EDF-89")) == "EDF-89"
 
 
 def test_object_id_equals():
-    assert ObjectId("JJJ-55") == ObjectId("JJJ-55")
+    assert EntityId("JJJ-55") == EntityId("JJJ-55")
 
 
 def test_object_id_different_project():
-    assert ObjectId("AAA-33") != ObjectId("AAB-33")
+    assert EntityId("AAA-33") != EntityId("AAB-33")
 
 
 def test_object_id_different_object():
-    assert ObjectId("AAA-33") != ObjectId("AAA-34")
+    assert EntityId("AAA-33") != EntityId("AAA-34")
 
 
 def test_object_id_from_parts():
-    assert ObjectId.from_parts("UUU", 44) == ObjectId("UUU-44")
+    assert EntityId.from_parts("UUU", 44) == EntityId("UUU-44")

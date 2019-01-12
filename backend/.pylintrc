@@ -141,7 +141,8 @@ disable=print-statement,
         comprehension-escape,
         missing-docstring,
         too-few-public-methods,
-        fixme
+        fixme,
+        duplicate-code  # It can't be disabled in files => remove when fixed in pylint
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

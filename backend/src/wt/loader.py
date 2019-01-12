@@ -1,15 +1,15 @@
 from sqlalchemy import create_engine
 
-from wt.projects import ProjectSerializer, ProjectDeserializer, ProjectsApi
+from wt.entities.projects import ProjectSerializer, ProjectDeserializer, ProjectsApi
 from wt.provider.db import session_maker_factory
 from wt.provider.db.models.fields import DbFilesModel
 from wt.provider.db.models.projects import DbProjectsModel
 from wt.provider.db.models.user import DbUserModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.provider.db.models.deliverables import DbDeliverablesModel
-from wt.objects.deliverables import DeliverablesApi
+from wt.entities.deliverables import DeliverablesApi
 from wt.user import UserModel
-from wt.objects.deliverables import DeliverableDeserializer, DeliverableSerializer
+from wt.entities.deliverables import DeliverableDeserializer, DeliverableSerializer
 
 
 def configure_with_engine(engine):

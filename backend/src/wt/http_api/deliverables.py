@@ -3,8 +3,8 @@ from flask_injector import inject
 
 from wt.http_api._common import DUMMY_STATS
 from wt.http_api._common import handle_errors
-from wt.objects.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
-from wt.objects.ids import ObjectId
+from wt.entities.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
+from wt.entities.ids import EntityId
 
 
 @inject
@@ -15,7 +15,7 @@ def get_deliverable(
         deliverable_id,
 ):
     with transaction.manager:
-        deliverable = deliverables_api.get_deliverable(ObjectId(deliverable_id))
+        deliverable = deliverables_api.get_deliverable(EntityId(deliverable_id))
 
     return {
         "deliverable": serializer.serialize_deliverable(deliverable),
@@ -47,5 +47,5 @@ def delete_deliverable(
         deliverable_id
 ):
     with transaction.manager:
-        deliverables_api.delete_deliverable(ObjectId(deliverable_id))
+        deliverables_api.delete_deliverable(EntityId(deliverable_id))
     return {}, 200

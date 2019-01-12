@@ -1,8 +1,8 @@
 from typing import List
 
 from wt.common.serializers import remove_nones, serialize_datetime, deserialize_datetime
-from wt.objects.deliverables._obj import Deliverable, BoundDeliverable, DeliverableStatus
-from wt.objects.ids import ObjectId
+from wt.entities.deliverables._obj import Deliverable, BoundDeliverable, DeliverableStatus
+from wt.entities.ids import EntityId
 
 
 class DeliverableSerializer:
@@ -10,7 +10,7 @@ class DeliverableSerializer:
     def serialize_deliverable(deliverable: BoundDeliverable) -> dict:
         return remove_nones(
             {
-                "id": deliverable.object_id.object_id,
+                "id": deliverable.object_id.full_id,
                 "name": deliverable.name,
                 "status": deliverable.status.value,
                 "date_opened": serialize_datetime(deliverable.date_opened),
@@ -46,6 +46,6 @@ class DeliverableDeserializer:
             deliverable: dict
     ) -> BoundDeliverable:
         return BoundDeliverable(
-            object_id=ObjectId(deliverable_id),
+            object_id=EntityId(deliverable_id),
             deliverable=self.deserialize_deliverable(deliverable)
         )
