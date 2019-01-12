@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 from wt.app import create_app, setup_debugger_from_env
 from wt.provider.db import METADATA, session_maker_factory
-from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel
+from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel, DbTasksModel
 from wt.provider.db.models.projects import DbProjectsModel
 from wt.provider.db.models.deliverables import DbDeliverablesModel
 from wt.provider.db.models.user import DbUserModel
@@ -79,6 +79,11 @@ def links_model(session):
 @fixture(scope="session")
 def tags_model(session):
     return DbTagsModel(session)
+
+
+@fixture(scope="session")
+def tasks_model(session):
+    return DbTasksModel(session)
 
 
 @fixture(scope="session")

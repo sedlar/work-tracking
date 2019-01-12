@@ -871,6 +871,21 @@ components:
             format: uri
             maxLength: 2048
 
+    Tasks:
+      type: array
+      items:
+        type: object
+        required:
+          - task
+          - completed
+        properties:
+          task:
+            type: string
+            maxLength: 1024
+            description: Task description
+          completed:
+            type: boolean
+
     NewDeliverable:
       type: object
       required:
@@ -993,6 +1008,8 @@ components:
             type: string
             description: Tag
             maxLength: 50
+        tasks:
+          $ref: "#/components/schemas/Tasks"
 
     BaseTimesheet:
       type: object

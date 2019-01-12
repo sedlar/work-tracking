@@ -12,10 +12,11 @@ from zope.sqlalchemy import mark_changed
 
 from wt.fields.files import DuplicateFileReceived
 from wt.fields.files import File, FilesModel
-from wt.fields.links import Link, LinksModel, DuplicateLinkSent
+from wt.fields.links import Link, LinksModel, DuplicateLinkReceived
 from wt.provider.db import DbModel
-from wt.provider.db.tables import FILES_TABLE, LINKS_TABLE, TAGS_TABLE
+from wt.provider.db.tables import FILES_TABLE, LINKS_TABLE, TAGS_TABLE, TASKS_TABLE
 from wt.fields.tags import Tag, DuplicateTagReceived, TagsModel
+from wt.fields.tasks import Task, DuplicateTaskReceived, TasksModel
 from wt.fields import FieldItem
 
 
@@ -147,7 +148,7 @@ class DbFilesModel(FilesModel, DbListFieldsModel):
 
 
 class DbLinksModel(LinksModel, DbListFieldsModel):
-    duplicate_exception = DuplicateLinkSent
+    duplicate_exception = DuplicateLinkReceived
     table = LINKS_TABLE
     id_column = LINKS_TABLE.c.uri
 
@@ -172,4 +173,31 @@ class DbLinksModel(LinksModel, DbListFieldsModel):
             "uri": item.uri,
             "name": item.name,
             "description": item.description,
+        }
+
+
+class DbTasksModel(TasksModel, DbListFieldsModel):
+    duplicate_exception = DuplicateTaskReceived
+    table = TASKS_TABLE
+    id_column = TASKS_TABLE.c.task
+
+    def set_object_tasks(self, object_id: str, tasks: List[Task]):
+        self._set_object_field_items(object_id, tasks)
+
+    def get_object_tasks(self, object_id: str) -> List[Task]:
+        return self._get_object_items(object_id)
+
+    def _get_item_unique_id(self, item: Task):
+        return item.task
+
+    def _row_to_item(self, row):
+        return Task(
+            task=row["task"],
+            completed=row["completed"],
+        )
+
+    def _item_to_dict(self, item: Task) -> dict:
+        return {
+            "task": item.task,
+            "completed": item.completed,
         }

@@ -9,6 +9,7 @@ from sqlalchemy import (
     UniqueConstraint,
     DECIMAL,
     LargeBinary,
+    Boolean,
 )
 
 from wt.common import Currency
@@ -42,6 +43,16 @@ LINKS_TABLE = Table(
     Column("description", String(4096), nullable=False),
     Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "uri")
+)
+TASKS_TABLE = Table(
+    "tasks",
+    METADATA,
+    Column("id", Integer(), primary_key=True, autoincrement=True),
+    Column("parent_id", ID_COLUMN_TYPE, nullable=False),
+    Column("task", String(1024), nullable=False),
+    Column("completed", Boolean(), nullable=False),
+    Column("created_on", DateTime(), nullable=False),
+    UniqueConstraint("parent_id", "task")
 )
 TAGS_TABLE = Table(
     "tags",

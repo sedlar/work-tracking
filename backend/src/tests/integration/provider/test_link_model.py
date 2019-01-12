@@ -1,6 +1,7 @@
-from tests.integration.factories.objs import create_link
-from wt.fields.links import Link, DuplicateLinkSent
 import pytest
+
+from tests.integration.factories.objs import create_link
+from wt.fields.links import DuplicateLinkReceived
 
 OBJECT_ID = "PRJ-15"
 
@@ -47,5 +48,5 @@ def test_add_remove_links(links_model):
 
 def test_duplicate_links(links_model):
     links = [create_link("a"), create_link("a")]
-    with pytest.raises(DuplicateLinkSent):
+    with pytest.raises(DuplicateLinkReceived):
         links_model.set_object_links(OBJECT_ID, links)

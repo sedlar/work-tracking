@@ -6,6 +6,7 @@ from wt.fields.files import File
 from decimal import Decimal
 from wt.common import Money, Currency
 from wt.fields.links import Link
+from wt.fields.tasks import Task
 
 
 def create_project(
@@ -101,4 +102,14 @@ def create_link(
         uri=uri,
         name=name,
         description=description,
+    )
+
+
+def create_task(
+        task="Implement work tracking api",
+        completed=False,
+):
+    return Task(
+        task=task,
+        completed=completed,
     )
