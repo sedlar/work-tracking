@@ -8,10 +8,12 @@ from wt.fields.files import FileDeserializer, FileSerializer
 from wt.fields.links import LinkSerializer, LinkDeserializer
 from wt.fields.tags import TagSerializer, TagDeserializer
 from wt.fields.tasks import TaskDeserializer, TaskSerializer
+from wt.links import EntityLinksApi
 from wt.provider.db import session_maker_factory
 from wt.provider.db.models.entities import DbProjectsModel, DbDeliverablesModel, DbIssuesModel
 from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel, DbTasksModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
+from wt.provider.db.models.links import DbEntityLinksModel
 from wt.provider.db.models.user import DbUserModel
 from wt.user import UserModel
 
@@ -22,6 +24,7 @@ def configure_with_engine(engine):
         init_serialization(binder)
 
     def init_apis(binder):
+        # pylint: disable=too-many-locals
         session_maker = session_maker_factory(engine)
         user_model = DbUserModel(session_maker)
         files_model = DbFilesModel(session_factory=session_maker)
@@ -57,10 +60,15 @@ def configure_with_engine(engine):
             ids_counter_model=ids_counter_model,
             objects_tracker_model=objects_tracker_model,
         )
+        entity_links_api = EntityLinksApi(
+            entity_links_model=DbEntityLinksModel(session_factory=session_maker),
+            objects_tracker_model=objects_tracker_model,
+        )
         binder.bind(UserModel, user_model)
         binder.bind(ProjectsApi, projects_api)
         binder.bind(DeliverablesApi, deliverables_api)
         binder.bind(IssuesApi, issues_api)
+        binder.bind(EntityLinksApi, entity_links_api)
 
     def init_serialization(binder):
         file_serializer = FileSerializer()

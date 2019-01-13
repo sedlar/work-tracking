@@ -14,6 +14,7 @@ from wt.provider.db.models.links import DbEntityLinksModel
 from wt.entities.deliverables import DeliverablesApi
 from wt.entities.projects import ProjectsApi
 from wt.entities.issues import IssuesApi
+from wt.links import EntityLinksApi
 from wt.user import add_user
 
 USERNAME = "username"
@@ -151,6 +152,14 @@ def issues_api(issues_model, ids_counter_model, objects_tracker_model):
 
 
 @fixture(scope="session")
+def links_api(entity_links_model, objects_tracker_model):
+    return EntityLinksApi(
+        entity_links_model=entity_links_model,
+        objects_tracker_model=objects_tracker_model,
+    )
+
+
+@fixture(scope="session")
 def get_project(projects_api):
     def func(project_id):
         with transaction.manager:
@@ -195,4 +204,12 @@ def post_issue(issues_api):
     def func(project_id, issue):
         with transaction.manager:
             return issues_api.create_issue(project_id, issue)
+    return func
+
+
+@fixture(scope="session")
+def post_link(links_api):
+    def func(entity_id, other_entity_id):
+        with transaction.manager:
+            return links_api.create_link(entity_id, other_entity_id)
     return func

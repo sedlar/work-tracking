@@ -585,7 +585,6 @@ paths:
 
   /links/{object_id}/{other_object_id}:
     put:
-      deprecated: True
       description: |
         Create link between two objects (symmetric)
       operationId: wt.http_api.links.put_link
@@ -605,7 +604,6 @@ paths:
           description: Authorization needed
 
     delete:
-      deprecated: True
       description: |
         Delete link between objects (symetric)
       operationId: wt.http_api.links.delete_link
@@ -1192,6 +1190,11 @@ components:
             - deliverable_does_not_exist
             - issue_does_not_exist
             - duplicate_object_received
+            - link_already_exists
+            - link_does_not_exist
+            - invalid_link_to_itself
+            - invalid_linked_entities
+            - invalid_link_between_projects
         message:
           type: string
           description: Human readable error message
