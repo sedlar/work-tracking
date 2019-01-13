@@ -3,7 +3,7 @@ version: '3'
 services:
   work-tracking-test:
     build:
-      context: ./backend
+      context: api
       dockerfile: ./Dockerfile
     image: work-tracking
     volumes:
