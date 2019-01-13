@@ -2,7 +2,7 @@ from typing import List
 
 from wt.entities.projects._model import ProjectsModel
 from wt.entities.projects._obj import Project
-from wt.ids import IdsCounterModel, ObjectsTrackerModel, EntityId
+from wt.ids import IdsCounterModel, ObjectsTrackerModel, EntityId, ObjectType
 from wt.entities.projects._errors import ProjectHasChildElements
 
 
@@ -18,6 +18,9 @@ class ProjectsApi:
         self._objects_tracker_model = objects_tracker_model
 
     def put_project(self, project: Project):
+        object_type = self._objects_tracker_model.get_object_type(project.project_id)
+        if not object_type:
+            self._objects_tracker_model.track_object(project.project_id, ObjectType.project)
         self._project_model.put_project(project)
 
     def get_project(self, project_id: EntityId) -> Project:
@@ -33,3 +36,4 @@ class ProjectsApi:
 
         self._project_model.delete_project(project_id)
         self._ids_counter_model.drop_project(project_id)
+        self._objects_tracker_model.untrack_object(project_id)

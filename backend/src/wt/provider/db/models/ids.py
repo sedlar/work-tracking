@@ -76,7 +76,10 @@ class DbObjectsTrackerModel(ObjectsTrackerModel, DbModel):
     def get_objects_types_by_project(self, project_id: EntityId) -> Dict[EntityId, ObjectType]:
         query = select([OBJECTS_TRACKER_TABLE.c.id, OBJECTS_TRACKER_TABLE.c.type])
         query = query.where(
-            OBJECTS_TRACKER_TABLE.c.project_id == project_id.project_id
+            OBJECTS_TRACKER_TABLE.c.project_id == project_id.project_id,
+        )
+        query = query.where(
+            OBJECTS_TRACKER_TABLE.c.type != ObjectType.project.value,
         )
         result = self._session.execute(query).fetchall()
         return self._result_to_map(result)

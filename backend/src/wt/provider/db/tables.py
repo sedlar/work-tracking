@@ -22,6 +22,8 @@ from wt.provider.db._columns import (
     ID_COLUMN_TYPE,
     PROJECT_ID_COLUMN_REFERENCE,
     PROJECT_ID_COLUMN_TYPE,
+    OBJECT_ID_COLUMN_REFERENCE,
+    PARENT_ID_COLUMN_REFERENCE,
 )
 from wt.provider.db._utils import get_enum_length
 
@@ -29,7 +31,7 @@ FILES_TABLE = Table(
     "files",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("parent_id", ID_COLUMN_TYPE, nullable=False),
+    deepcopy(PARENT_ID_COLUMN_REFERENCE),
     Column("uri", String(2048), index=True, nullable=False),
     Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "uri")
@@ -38,7 +40,7 @@ LINKS_TABLE = Table(
     "links",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("parent_id", ID_COLUMN_TYPE, nullable=False),
+    deepcopy(PARENT_ID_COLUMN_REFERENCE),
     Column("uri", String(2048), nullable=False),
     Column("name", String(126), nullable=False),
     Column("description", String(4096), nullable=False),
@@ -49,7 +51,7 @@ TASKS_TABLE = Table(
     "tasks",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("parent_id", ID_COLUMN_TYPE, nullable=False),
+    deepcopy(PARENT_ID_COLUMN_REFERENCE),
     Column("task", String(1024), nullable=False),
     Column("completed", Boolean(), nullable=False),
     Column("created_on", DateTime(), nullable=False),
@@ -59,7 +61,7 @@ TAGS_TABLE = Table(
     "tags",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("parent_id", ID_COLUMN_TYPE, nullable=False),
+    deepcopy(PARENT_ID_COLUMN_REFERENCE),
     Column("tag", String(50), index=True, nullable=False),
     Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "tag")
@@ -67,7 +69,7 @@ TAGS_TABLE = Table(
 DELIVERABLES_TABLE = Table(
     "deliverables",
     METADATA,
-    Column("object_id", ID_COLUMN_TYPE, primary_key=True),
+    deepcopy(OBJECT_ID_COLUMN_REFERENCE),
     deepcopy(PROJECT_ID_COLUMN_REFERENCE),
     Column("name", String(128), nullable=False),
     Column("status", String(get_enum_length(DeliverableStatus)), nullable=False),
@@ -111,7 +113,7 @@ PROJECTS_TABLE = Table(
 ISSUES_TABLE = Table(
     "issues",
     METADATA,
-    Column("object_id", ID_COLUMN_TYPE, primary_key=True),
+    deepcopy(OBJECT_ID_COLUMN_REFERENCE),
     deepcopy(PROJECT_ID_COLUMN_REFERENCE),
     Column("name", String(128), nullable=False),
     Column("description", String(), nullable=False),

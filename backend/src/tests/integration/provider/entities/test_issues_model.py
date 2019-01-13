@@ -8,8 +8,8 @@ from wt.ids import EntityId
 from tests.integration.factories.objs import create_task, create_tag, create_file, create_link
 
 
-def test_create_issue(issues_model, projects_model):
-    projects_model.put_project(create_project())
+def test_create_issue(issues_model, put_project):
+    put_project(create_project())
 
     issue = create_bound_issue()
     issues_model.put_issue(issue)
@@ -17,8 +17,8 @@ def test_create_issue(issues_model, projects_model):
     assert issue == saved_issue
 
 
-def test_update_issue(issues_model, projects_model):
-    projects_model.put_project(create_project())
+def test_update_issue(issues_model, put_project):
+    put_project(create_project())
 
     issue = create_bound_issue()
     issues_model.put_issue(issue)
@@ -43,8 +43,8 @@ def test_update_issue(issues_model, projects_model):
     assert updated_issue == saved_issue
 
 
-def test_get_issues(issues_model, projects_model):
-    projects_model.put_project(create_project())
+def test_get_issues(issues_model, put_project):
+    put_project(create_project())
 
     issue1 = create_bound_issue()
     issues_model.put_issue(issue1)
@@ -59,9 +59,9 @@ def test_get_issues(issues_model, projects_model):
     assert issues == [issue1, issue2]
 
 
-def test_get_issues_filter_project(issues_model, projects_model):
-    projects_model.put_project(create_project())
-    projects_model.put_project(create_project("AAA"))
+def test_get_issues_filter_project(issues_model, put_project):
+    put_project(create_project())
+    put_project(create_project("AAA"))
 
     issue1 = create_bound_issue()
     issues_model.put_issue(issue1)
@@ -80,8 +80,8 @@ def test_get_issues_filter_project(issues_model, projects_model):
     assert issues == [issue1]
 
 
-def test_delete_issue(issues_model, projects_model):
-    projects_model.put_project(create_project())
+def test_delete_issue(issues_model, put_project):
+    put_project(create_project())
 
     issue = create_bound_issue()
     issues_model.put_issue(issue)
@@ -90,8 +90,8 @@ def test_delete_issue(issues_model, projects_model):
     assert not issues_model.get_issues(EntityId(issue.object_id.project_id), 0, 1)
 
 
-def test_delete_issue_files(issues_model, projects_model, files_model):
-    projects_model.put_project(create_project())
+def test_delete_issue_files(issues_model, put_project, files_model):
+    put_project(create_project())
 
     issue = create_bound_issue()
     issues_model.put_issue(issue)
@@ -100,8 +100,8 @@ def test_delete_issue_files(issues_model, projects_model, files_model):
     assert not files_model.get_entity_files(issue.object_id)
 
 
-def test_delete_issue_links(issues_model, projects_model, links_model):
-    projects_model.put_project(create_project())
+def test_delete_issue_links(issues_model, put_project, links_model):
+    put_project(create_project())
 
     issue = create_bound_issue()
     issues_model.put_issue(issue)
@@ -111,8 +111,8 @@ def test_delete_issue_links(issues_model, projects_model, links_model):
     assert not links_model.get_entity_links(issue.object_id)
 
 
-def test_delete_issue_tags(issues_model, projects_model, tags_model):
-    projects_model.put_project(create_project())
+def test_delete_issue_tags(issues_model, put_project, tags_model):
+    put_project(create_project())
 
     issue = create_bound_issue()
     issues_model.put_issue(issue)
@@ -122,8 +122,8 @@ def test_delete_issue_tags(issues_model, projects_model, tags_model):
     assert not tags_model.get_entity_tags(issue.object_id)
 
 
-def test_delete_issue_tasks(issues_model, projects_model, tasks_model):
-    projects_model.put_project(create_project())
+def test_delete_issue_tasks(issues_model, put_project, tasks_model):
+    put_project(create_project())
 
     issue = create_bound_issue()
     issues_model.put_issue(issue)

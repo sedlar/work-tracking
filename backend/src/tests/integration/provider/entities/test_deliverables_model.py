@@ -7,8 +7,8 @@ from wt.entities.deliverables import DeliverableStatus, DeliverableDoesNotExist
 from wt.ids import EntityId
 
 
-def test_create_deliverable(deliverables_model, projects_model):
-    projects_model.put_project(create_project())
+def test_create_deliverable(deliverables_model, put_project):
+    put_project(create_project())
 
     deliverable = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable)
@@ -16,8 +16,8 @@ def test_create_deliverable(deliverables_model, projects_model):
     assert deliverable == saved_deliverable
 
 
-def test_update_deliverable(deliverables_model, projects_model):
-    projects_model.put_project(create_project())
+def test_update_deliverable(deliverables_model, put_project):
+    put_project(create_project())
 
     deliverable = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable)
@@ -36,8 +36,8 @@ def test_update_deliverable(deliverables_model, projects_model):
     assert updated_deliverable == saved_deliverable
 
 
-def test_get_deliverables(deliverables_model, projects_model):
-    projects_model.put_project(create_project())
+def test_get_deliverables(deliverables_model, put_project):
+    put_project(create_project())
 
     deliverable1 = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable1)
@@ -52,9 +52,9 @@ def test_get_deliverables(deliverables_model, projects_model):
     assert deliverables == [deliverable1, deliverable2]
 
 
-def test_get_deliverables_filter_project(deliverables_model, projects_model):
-    projects_model.put_project(create_project())
-    projects_model.put_project(create_project("AAA"))
+def test_get_deliverables_filter_project(deliverables_model, put_project):
+    put_project(create_project())
+    put_project(create_project("AAA"))
 
     deliverable1 = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable1)
@@ -73,8 +73,8 @@ def test_get_deliverables_filter_project(deliverables_model, projects_model):
     assert deliverables == [deliverable1]
 
 
-def test_delete_deliverable(deliverables_model, projects_model):
-    projects_model.put_project(create_project())
+def test_delete_deliverable(deliverables_model, put_project):
+    put_project(create_project())
 
     deliverable = create_bound_deliverable()
     deliverables_model.put_deliverable(deliverable)

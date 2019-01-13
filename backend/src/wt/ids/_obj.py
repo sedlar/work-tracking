@@ -4,6 +4,7 @@ from enum import Enum
 
 
 class ObjectType(Enum):
+    project = "project"
     deliverable = "deliverable"
     issue = "issue"
     design = "design"

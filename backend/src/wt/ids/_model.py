@@ -24,5 +24,5 @@ class ObjectsTrackerModel:
     def get_objects_types(self, object_ids: List[EntityId]) -> Dict[EntityId, ObjectType]:
         raise NotImplementedError()
 
-    def get_objects_types_by_project(self, project_id: str) -> Dict[EntityId, ObjectType]:
+    def get_objects_types_by_project(self, project_id: EntityId) -> Dict[EntityId, ObjectType]:
         raise NotImplementedError()

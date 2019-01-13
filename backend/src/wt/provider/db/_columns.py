@@ -10,3 +10,15 @@ PROJECT_ID_COLUMN_REFERENCE = Column(
     nullable=False,
 )
 ID_COLUMN_TYPE = String(15)
+PARENT_ID_COLUMN_REFERENCE = Column(
+    "parent_id",
+    ID_COLUMN_TYPE,
+    index=True,
+    nullable=False,
+)
+OBJECT_ID_COLUMN_REFERENCE = Column(
+    "object_id",
+    ID_COLUMN_TYPE,
+    primary_key=True,
+    nullable=False,
+)
