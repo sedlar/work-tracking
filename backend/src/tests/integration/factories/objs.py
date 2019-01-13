@@ -201,3 +201,13 @@ def create_task(
         task=task,
         completed=completed,
     )
+
+
+def create_file(
+        uri="www.seznam.cz"
+):
+    return File(uri)
+
+
+def create_tag(tag):
+    return Tag(tag)

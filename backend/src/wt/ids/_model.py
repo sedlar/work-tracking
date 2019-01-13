@@ -1,6 +1,6 @@
 from typing import List, Dict, Optional
 
-from wt.ids import EntityId, ObjectType
+from wt.ids._obj import EntityId, ObjectType
 
 
 class IdsCounterModel:

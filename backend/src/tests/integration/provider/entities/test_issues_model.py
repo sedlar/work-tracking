@@ -5,6 +5,7 @@ import pytest
 from tests.integration.factories.objs import create_bound_issue, create_project
 from wt.entities.issues import IssueStatus, IssueDoesNotExist, IssuePriority, IssueType
 from wt.ids import EntityId
+from tests.integration.factories.objs import create_task, create_tag, create_file, create_link
 
 
 def test_create_issue(issues_model, projects_model):
@@ -31,10 +32,10 @@ def test_update_issue(issues_model, projects_model):
         date_opened=datetime(year=2020, month=1, day=1, hour=10, minute=30),
         date_closed=datetime(year=2020, month=1, day=2, hour=10, minute=30),
         deadline=datetime(year=2020, month=1, day=3, hour=10, minute=30),
-        files=[],
-        links=[],
-        tasks=[],
-        tags=[],
+        files=[create_file("file_A"), create_file("file_B")],
+        links=[create_link("link_A"), create_link("link_B")],
+        tasks=[create_task("task_A"), create_task("task_B")],
+        tags=[create_tag("tag_A"), create_tag("tag_B")],
     )
     issues_model.put_issue(updated_issue)
 
@@ -87,6 +88,48 @@ def test_delete_issue(issues_model, projects_model):
 
     issues_model.delete_issue(issue.object_id)
     assert not issues_model.get_issues(EntityId(issue.object_id.project_id), 0, 1)
+
+
+def test_delete_issue_files(issues_model, projects_model, files_model):
+    projects_model.put_project(create_project())
+
+    issue = create_bound_issue()
+    issues_model.put_issue(issue)
+
+    issues_model.delete_issue(issue.object_id)
+    assert not files_model.get_entity_files(issue.object_id)
+
+
+def test_delete_issue_links(issues_model, projects_model, links_model):
+    projects_model.put_project(create_project())
+
+    issue = create_bound_issue()
+    issues_model.put_issue(issue)
+
+    issues_model.delete_issue(issue.object_id)
+    assert not issues_model.get_issues(EntityId(issue.object_id.project_id), 0, 1)
+    assert not links_model.get_entity_links(issue.object_id)
+
+
+def test_delete_issue_tags(issues_model, projects_model, tags_model):
+    projects_model.put_project(create_project())
+
+    issue = create_bound_issue()
+    issues_model.put_issue(issue)
+
+    issues_model.delete_issue(issue.object_id)
+    assert not issues_model.get_issues(EntityId(issue.object_id.project_id), 0, 1)
+    assert not tags_model.get_entity_tags(issue.object_id)
+
+
+def test_delete_issue_tasks(issues_model, projects_model, tasks_model):
+    projects_model.put_project(create_project())
+
+    issue = create_bound_issue()
+    issues_model.put_issue(issue)
+
+    issues_model.delete_issue(issue.object_id)
+    assert not tasks_model.get_entity_tasks(issue.object_id)
 
 
 def test_get_no_issue(issues_model):

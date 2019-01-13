@@ -7,6 +7,7 @@ from tests.integration.factories.objs import create_project, create_money
 from wt.common import Currency
 from wt.ids import EntityId
 from wt.entities.projects import ProjectStatus, ProjectDoesNotExist
+from tests.integration.factories.objs import create_file
 
 
 def test_create_project(projects_model):
@@ -29,7 +30,7 @@ def test_update_project(projects_model):
         hour_rate=create_money(Decimal("800"), Currency.eur),
         primary_color="#343435",
         secondary_color="#a1a1a2",
-        files=[],
+        files=[create_file("AA"), create_file("BB")],
         date_opened=datetime(year=2020, month=1, day=1, hour=10, minute=30),
         date_closed=datetime(year=2020, month=1, day=2, hour=10, minute=30),
         deadline=datetime(year=2020, month=1, day=3, hour=10, minute=30),
