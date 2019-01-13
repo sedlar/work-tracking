@@ -4,6 +4,7 @@ from flask_injector import inject
 from wt.http_api._common import handle_errors, DUMMY_STATS
 from wt.entities.projects import ProjectsApi, ProjectDeserializer, ProjectSerializer
 from wt.entities.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
+from wt.entities.issues import IssueDeserializer, IssueSerializer, IssuesApi
 from wt.ids import EntityId
 
 
@@ -78,9 +79,29 @@ def post_deliverable(
     return {"id": bound_deliverable.object_id.full_id}, 201
 
 
-def get_project_issues():
-    return "NOT IMPLEMENTED", 500
+def get_project_issues(
+        issues_api: IssuesApi,
+        serializer: IssueSerializer,
+        project_id,
+        offset,
+        limit
+):
+    with transaction.manager:
+        issues = issues_api.get_issues(
+            EntityId(project_id),
+            offset=offset,
+            limit=limit
+        )
+    return {"issues": serializer.serialize_issues(issues)}, 200
 
 
-def post_issue():
-    return "NOT IMPLEMENTED", 500
+def post_issue(
+        issues_api: IssuesApi,
+        deserializer: IssueDeserializer,
+        project_id,
+        body,
+):
+    issue = deserializer.deserialize_issue(body["issue"])
+    with transaction.manager:
+        bound_issue = issues_api.create_issue(EntityId(project_id), issue)
+    return {"id": bound_issue.object_id.full_id}, 201

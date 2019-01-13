@@ -42,7 +42,7 @@ LINKS_TABLE = Table(
     Column("id", Integer(), primary_key=True, autoincrement=True),
     deepcopy(PARENT_ID_COLUMN_REFERENCE),
     Column("uri", String(2048), nullable=False),
-    Column("name", String(126), nullable=False),
+    Column("title", String(126), nullable=False),
     Column("description", String(4096), nullable=False),
     Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "uri")

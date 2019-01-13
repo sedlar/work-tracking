@@ -12,6 +12,7 @@ from wt.provider.db.models.user import DbUserModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.entities.deliverables import DeliverablesApi
 from wt.entities.projects import ProjectsApi
+from wt.entities.issues import IssuesApi
 from wt.user import add_user
 
 USERNAME = "username"
@@ -135,6 +136,15 @@ def deliverables_api(deliverables_model, ids_counter_model, objects_tracker_mode
 
 
 @fixture(scope="session")
+def issues_api(issues_model, ids_counter_model, objects_tracker_model):
+    return IssuesApi(
+        issues_model=issues_model,
+        ids_counter_model=ids_counter_model,
+        objects_tracker_model=objects_tracker_model,
+    )
+
+
+@fixture(scope="session")
 def get_project(projects_api):
     def func(project_id):
         with transaction.manager:
@@ -163,4 +173,20 @@ def post_deliverable(deliverables_api):
     def func(project_id, deliverable):
         with transaction.manager:
             return deliverables_api.create_deliverable(project_id, deliverable)
+    return func
+
+
+@fixture(scope="session")
+def get_issue(issues_api):
+    def func(issue_id):
+        with transaction.manager:
+            return issues_api.get_issue(issue_id)
+    return func
+
+
+@fixture(scope="session")
+def post_issue(issues_api):
+    def func(project_id, issue):
+        with transaction.manager:
+            return issues_api.create_issue(project_id, issue)
     return func

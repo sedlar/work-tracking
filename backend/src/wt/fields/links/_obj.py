@@ -1,7 +1,7 @@
 class Link:
-    def __init__(self, uri: str, name: str, description: str):
+    def __init__(self, uri: str, title: str, description: str):
         self.uri = uri
-        self.name = name
+        self.title = title
         self.description = description
 
     def __eq__(self, other):

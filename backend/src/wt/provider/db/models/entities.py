@@ -287,13 +287,19 @@ class DbIssuesModel(IssuesModel, DbEntityModel):
             "date_closed": entity.date_closed,
             "deadline": entity.deadline,
             "external_type": entity.external_type,
-            "hour_rate_amount": entity.hour_rate.amount,
-            "hour_rate_currency": entity.hour_rate.currency.value,
+            "hour_rate_amount": entity.hour_rate.amount if entity.hour_rate else None,
+            "hour_rate_currency": entity.hour_rate.currency.value if entity.hour_rate else None,
             "estimated_duration": entity.estimated_duration
         }
 
     @staticmethod
     def _row_to_entity(row) -> BoundIssue:
+        hour_rate = None
+        if row["hour_rate_amount"] and row["hour_rate_currency"]:
+            hour_rate = Money(
+                amount=row["hour_rate_amount"],
+                currency=Currency(row["hour_rate_currency"]),
+            )
         return BoundIssue(
             object_id=EntityId(row["object_id"]),
             issue=Issue(
@@ -307,10 +313,7 @@ class DbIssuesModel(IssuesModel, DbEntityModel):
                 description=row["description"],
                 external_type=row["external_type"],
                 estimated_duration=row["estimated_duration"],
-                hour_rate=Money(
-                    amount=row["hour_rate_amount"],
-                    currency=Currency(row["hour_rate_currency"]),
-                ),
+                hour_rate=hour_rate,
                 files=[],
                 links=[],
                 tags=[],

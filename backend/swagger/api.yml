@@ -400,6 +400,7 @@ paths:
 
   /timesheets:
     get:
+      deprecated: True
       description: |
         Get timesheets of object
       operationId: wt.http_api.issues.get_issue_timesheets
@@ -429,6 +430,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     post:
+      deprecated: True
       description: |
         Add new timesheet to object
       operationId: wt.http_api.issues.post_issue_timesheet
@@ -463,6 +465,7 @@ paths:
 
   /timesheets/{timesheet_id}:
     delete:
+      deprecated: True
       description: |
         Delete timesheet
       operationId: wt.http_api.timesheets.delete_timesheet
@@ -488,6 +491,7 @@ paths:
 
   /expenditures:
     get:
+      deprecated: True
       description: |
         Get expenditures of object
       operationId: wt.http_api.issues.get_issue_expenditures
@@ -518,6 +522,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
     post:
+      deprecated: True
       description: |
         Add new expenditure to object
       operationId: wt.http_api.issues.post_issue_expenditure
@@ -554,6 +559,7 @@ paths:
 
   /expenditures/{expenditure_id}:
     delete:
+      deprecated: True
       description: |
         Delete expenditure
       operationId: wt.http_api.expenditures.delete_expenditure
@@ -579,6 +585,7 @@ paths:
 
   /links/{object_id}/{other_object_id}:
     put:
+      deprecated: True
       description: |
         Create link between two objects (symmetric)
       operationId: wt.http_api.links.put_link
@@ -598,6 +605,7 @@ paths:
           description: Authorization needed
 
     delete:
+      deprecated: True
       description: |
         Delete link between objects (symetric)
       operationId: wt.http_api.links.delete_link
@@ -672,7 +680,9 @@ components:
         - issue
       properties:
         issue:
-          $ref: '#/components/schemas/IssueWithStats'
+          $ref: '#/components/schemas/Issue'
+        stats:
+          $ref: '#/components/schemas/Stats'
 
     TimesheetsResponse:
       type: object
@@ -856,7 +866,7 @@ components:
         required:
           - title
           - description
-          - link
+          - uri
         properties:
           title:
             type: string
@@ -866,7 +876,7 @@ components:
             type: string
             maxLength: 4096
             description: Descrition of the linked page
-          link:
+          uri:
             type: string
             format: uri
             maxLength: 2048
@@ -929,12 +939,16 @@ components:
       type: object
       required:
         - name
-        - status
         - date_opened
         - description
         - files
         - links
         - tags
+        - tasks
+        - external_type
+        - status
+        - type
+        - priority
       properties:
         name:
           type: string
@@ -953,7 +967,6 @@ components:
             - wontfix
             - archived
           description: Issue status
-          default: new
         type:
           type: string
           enum:
@@ -963,7 +976,6 @@ components:
             - bug
             - education
           description: Issue type
-          default: task
         priority:
           type: string
           enum:
@@ -973,7 +985,6 @@ components:
             - minor
             - trivial
           description: Issue priority
-          default: minor
         date_opened:
           type: string
           format: date
@@ -1153,12 +1164,6 @@ components:
         - $ref: '#/components/schemas/SimpleId'
         - $ref: '#/components/schemas/BaseExpenditure'
 
-    IssueWithStats:
-      allOf:
-        - $ref: '#/components/schemas/ObjectIdObject'
-        - $ref: '#/components/schemas/NewIssue'
-        - $ref: '#/components/schemas/Stats'
-
     ProjectId:
       type: string
       description: Project id in format "^[A-Z]{3,5}$"
@@ -1185,6 +1190,7 @@ components:
           enum:
             - project_does_not_exist
             - deliverable_does_not_exist
+            - issue_does_not_exist
             - duplicate_object_received
         message:
           type: string

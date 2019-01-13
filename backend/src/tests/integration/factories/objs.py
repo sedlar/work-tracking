@@ -152,15 +152,13 @@ def create_issue(
         tasks=None,
         hour_rate=None
 ):
-    if not hour_rate:
-        hour_rate = create_money()
-    if not files:
+    if files is None:
         files = [File("File1"), File("File2")]
-    if not links:
+    if links is None:
         links = [create_link(), create_link("www.zoho.cz", "zoho", "zoho")]
-    if not tags:
+    if tags is None:
         tags = [Tag("X"), Tag("Y")]
-    if not tasks:
+    if tasks is None:
         tasks = [create_task(), create_task("Task", True)]
     return Issue(
         name=name,
@@ -188,7 +186,7 @@ def create_link(
 ):
     return Link(
         uri=uri,
-        name=name,
+        title=name,
         description=description,
     )
 

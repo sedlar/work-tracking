@@ -1,7 +1,10 @@
 from datetime import datetime
+from decimal import Decimal
 from typing import Optional
 
 from dateutil import parser
+
+from wt.common import Money, Currency
 
 
 def remove_nones(response: dict) -> dict:
@@ -24,3 +27,17 @@ def deserialize_datetime(serialized_timestamp: Optional[str]) -> Optional[dateti
     if serialized_timestamp:
         return parser.parse(serialized_timestamp)
     return None
+
+
+def serialize_money(money: Money) -> dict:
+    return {
+        "amount": money.amount,
+        "currency": money.currency.value,
+    }
+
+
+def deserialize_money(money: dict) -> Money:
+    return Money(
+        amount=Decimal(money["amount"]),
+        currency=Currency(money["currency"]),
+    )

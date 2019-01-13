@@ -11,7 +11,7 @@ class IssuesModel:
     def get_issue(self, issue_id: EntityId) -> BoundIssue:
         raise NotImplementedError()
 
-    def get_issues(self, project_id: str, offset: int, limit: int) -> List[BoundIssue]:
+    def get_issues(self, project_id: EntityId, offset: int, limit: int) -> List[BoundIssue]:
         raise NotImplementedError()
 
     def delete_issue(self, issue_id: EntityId):

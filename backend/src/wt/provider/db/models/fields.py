@@ -161,14 +161,14 @@ class DbLinksModel(LinksModel, DbListFieldsModel):
     def _row_to_item(self, row):
         return Link(
             uri=row["uri"],
-            name=row["name"],
+            title=row["title"],
             description=row["description"],
         )
 
     def _item_to_dict(self, item: Link) -> dict:
         return {
             "uri": item.uri,
-            "name": item.name,
+            "title": item.title,
             "description": item.description,
         }
 
