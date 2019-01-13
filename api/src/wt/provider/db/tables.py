@@ -10,6 +10,8 @@ from sqlalchemy import (
     DECIMAL,
     LargeBinary,
     Boolean,
+    ForeignKey,
+    PrimaryKeyConstraint,
 )
 
 from wt.common import Currency
@@ -27,8 +29,8 @@ from wt.provider.db._columns import (
 )
 from wt.provider.db._utils import get_enum_length
 
-FILES_TABLE = Table(
-    "files",
+FIELD_FILES_TABLE = Table(
+    "field_files",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
     deepcopy(PARENT_ID_COLUMN_REFERENCE),
@@ -36,8 +38,8 @@ FILES_TABLE = Table(
     Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "uri")
 )
-LINKS_TABLE = Table(
-    "links",
+FIELD_LINKS_TABLE = Table(
+    "field_links",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
     deepcopy(PARENT_ID_COLUMN_REFERENCE),
@@ -47,8 +49,8 @@ LINKS_TABLE = Table(
     Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "uri")
 )
-TASKS_TABLE = Table(
-    "tasks",
+FIELD_TASKS_TABLE = Table(
+    "field_tasks",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
     deepcopy(PARENT_ID_COLUMN_REFERENCE),
@@ -57,8 +59,8 @@ TASKS_TABLE = Table(
     Column("created_on", DateTime(), nullable=False),
     UniqueConstraint("parent_id", "task")
 )
-TAGS_TABLE = Table(
-    "tags",
+FIELD_TAGS_TABLE = Table(
+    "field_tags",
     METADATA,
     Column("id", Integer(), primary_key=True, autoincrement=True),
     deepcopy(PARENT_ID_COLUMN_REFERENCE),
@@ -135,4 +137,21 @@ USER_TABLE = Table(
     Column("id", Integer(), primary_key=True, autoincrement=True),
     Column("username", String(64), unique=True, nullable=False),
     Column("password", LargeBinary(256), nullable=False),
+)
+ENTITY_LINKS_TABLE = Table(
+    "entity_links",
+    METADATA,
+    Column(
+        "object_id",
+        ID_COLUMN_TYPE,
+        ForeignKey("objects_tracker.id", ondelete="RESTRICT"),
+        nullable=False
+    ),
+    Column(
+        "other_object_id",
+        ID_COLUMN_TYPE,
+        ForeignKey("objects_tracker.id", ondelete="RESTRICT"),
+        nullable=False
+    ),
+    PrimaryKeyConstraint("object_id", "other_object_id"),
 )

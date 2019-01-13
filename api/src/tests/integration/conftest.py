@@ -10,6 +10,7 @@ from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel
 from wt.provider.db.models.entities import DbProjectsModel, DbDeliverablesModel, DbIssuesModel
 from wt.provider.db.models.user import DbUserModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
+from wt.provider.db.models.links import DbEntityLinksModel
 from wt.entities.deliverables import DeliverablesApi
 from wt.entities.projects import ProjectsApi
 from wt.entities.issues import IssuesApi
@@ -115,6 +116,11 @@ def ids_counter_model(session):
 @fixture(scope="session")
 def objects_tracker_model(session):
     return DbObjectsTrackerModel(session)
+
+
+@fixture(scope="session")
+def entity_links_model(session):
+    return DbEntityLinksModel(session)
 
 
 @fixture(scope="session")

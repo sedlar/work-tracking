@@ -14,7 +14,12 @@ from wt.fields.files import DuplicateFileReceived
 from wt.fields.files import File, FilesModel
 from wt.fields.links import Link, LinksModel, DuplicateLinkReceived
 from wt.provider.db import DbModel
-from wt.provider.db.tables import FILES_TABLE, LINKS_TABLE, TAGS_TABLE, TASKS_TABLE
+from wt.provider.db.tables import (
+    FIELD_FILES_TABLE,
+    FIELD_LINKS_TABLE,
+    FIELD_TAGS_TABLE,
+    FIELD_TASKS_TABLE,
+)
 from wt.fields.tags import Tag, DuplicateTagReceived, TagsModel
 from wt.fields.tasks import Task, DuplicateTaskReceived, TasksModel
 from wt.fields import FieldItem
@@ -100,8 +105,8 @@ class DbListFieldsModel(DbModel):
 
 class DbTagsModel(DbListFieldsModel, TagsModel):
     duplicate_exception = DuplicateTagReceived
-    table = TAGS_TABLE
-    id_column = TAGS_TABLE.c.tag
+    table = FIELD_TAGS_TABLE
+    id_column = FIELD_TAGS_TABLE.c.tag
 
     def set_entity_tags(self, entity_id: EntityId, tags: List[Tag]):
         self._set_object_field_items(entity_id, tags)
@@ -123,8 +128,8 @@ class DbTagsModel(DbListFieldsModel, TagsModel):
 
 class DbFilesModel(FilesModel, DbListFieldsModel):
     duplicate_exception = DuplicateFileReceived
-    table = FILES_TABLE
-    id_column = FILES_TABLE.c.uri
+    table = FIELD_FILES_TABLE
+    id_column = FIELD_FILES_TABLE.c.uri
 
     def set_entity_files(self, entity_id: EntityId, files: List[File]):
         self._set_object_field_items(entity_id, files)
@@ -146,8 +151,8 @@ class DbFilesModel(FilesModel, DbListFieldsModel):
 
 class DbLinksModel(LinksModel, DbListFieldsModel):
     duplicate_exception = DuplicateLinkReceived
-    table = LINKS_TABLE
-    id_column = LINKS_TABLE.c.uri
+    table = FIELD_LINKS_TABLE
+    id_column = FIELD_LINKS_TABLE.c.uri
 
     def set_entity_links(self, entity_id: EntityId, links: List[Link]):
         self._set_object_field_items(entity_id, links)
@@ -175,8 +180,8 @@ class DbLinksModel(LinksModel, DbListFieldsModel):
 
 class DbTasksModel(TasksModel, DbListFieldsModel):
     duplicate_exception = DuplicateTaskReceived
-    table = TASKS_TABLE
-    id_column = TASKS_TABLE.c.task
+    table = FIELD_TASKS_TABLE
+    id_column = FIELD_TASKS_TABLE.c.task
 
     def set_entity_tasks(self, entity_id: EntityId, tasks: List[Task]):
         self._set_object_field_items(entity_id, tasks)
