@@ -5,6 +5,7 @@ from wt.entities.ids import EntityId
 class ErrorCodes(Enum):
     project_does_not_exist = "project_does_not_exist"
     project_has_child_elements = "project_has_child_elements"
+    issue_does_not_exist = "issue_does_not_exist"
     deliverable_does_not_exist = "deliverable_does_not_exist"
 
 

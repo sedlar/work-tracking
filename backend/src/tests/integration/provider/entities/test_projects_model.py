@@ -29,7 +29,7 @@ def test_update_project(projects_model):
         hour_rate=create_money(Decimal("800"), Currency.eur),
         primary_color="#343435",
         secondary_color="#a1a1a2",
-        files=None,
+        files=[],
         date_opened=datetime(year=2020, month=1, day=1, hour=10, minute=30),
         date_closed=datetime(year=2020, month=1, day=2, hour=10, minute=30),
         deadline=datetime(year=2020, month=1, day=3, hour=10, minute=30),

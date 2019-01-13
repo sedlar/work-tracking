@@ -15,6 +15,7 @@ from sqlalchemy import (
 from wt.common import Currency
 from wt.entities.deliverables import DeliverableStatus
 from wt.entities.ids import ObjectType
+from wt.entities.issues import IssueType
 from wt.entities.projects import ProjectStatus
 from wt.provider.db import METADATA
 from wt.provider.db._columns import (
@@ -105,6 +106,25 @@ PROJECTS_TABLE = Table(
     Column("goals_and_metrics", String(), nullable=False),
     Column("primary_color", String(7), nullable=False),
     Column("secondary_color", String(7), nullable=False),
+    Column("created_on", DateTime(), nullable=False),
+)
+ISSUES_TABLE = Table(
+    "issues",
+    METADATA,
+    Column("object_id", ID_COLUMN_TYPE, primary_key=True),
+    deepcopy(PROJECT_ID_COLUMN_REFERENCE),
+    Column("name", String(128), nullable=False),
+    Column("description", String(), nullable=False),
+    Column("external_type", String(256), nullable=False),
+    Column("status", String(get_enum_length(IssueType)), nullable=False),
+    Column("priority", String(get_enum_length(IssueType)), nullable=False),
+    Column("type", String(get_enum_length(IssueType)), nullable=False),
+    Column("date_opened", DateTime(), nullable=False),
+    Column("date_closed", DateTime(), nullable=True),
+    Column("deadline", DateTime(), nullable=True),
+    Column("hour_rate_amount", DECIMAL(), nullable=True),
+    Column("hour_rate_currency", String(get_enum_length(Currency)), nullable=True),
+    Column("estimated_duration", DECIMAL(), nullable=True),
     Column("created_on", DateTime(), nullable=False),
 )
 USER_TABLE = Table(

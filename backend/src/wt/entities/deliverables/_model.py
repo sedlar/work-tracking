@@ -8,7 +8,7 @@ class DeliverablesModel:
     def put_deliverable(self, deliverable: BoundDeliverable):
         raise NotImplementedError()
 
-    def get_deliverable(self, object_id: EntityId) -> BoundDeliverable:
+    def get_deliverable(self, deliverable_id: EntityId) -> BoundDeliverable:
         raise NotImplementedError()
 
     def get_deliverables(
@@ -19,5 +19,5 @@ class DeliverablesModel:
     ) -> List[BoundDeliverable]:
         raise NotImplementedError()
 
-    def delete_deliverable(self, object_id: EntityId):
+    def delete_deliverable(self, deliverable_id: EntityId):
         raise NotImplementedError()

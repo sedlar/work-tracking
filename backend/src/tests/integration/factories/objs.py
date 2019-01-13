@@ -1,5 +1,6 @@
 from wt.entities.projects import Project, ProjectStatus
 from wt.entities.deliverables import BoundDeliverable, DeliverableStatus, Deliverable
+from wt.entities.issues import BoundIssue, IssuePriority, IssueType, IssueStatus, Issue
 from wt.entities.ids import EntityId
 from datetime import datetime
 from wt.fields.files import File
@@ -7,6 +8,7 @@ from decimal import Decimal
 from wt.common import Money, Currency
 from wt.fields.links import Link
 from wt.fields.tasks import Task
+from wt.fields.tags import Tag
 
 
 def create_project(
@@ -90,6 +92,92 @@ def create_deliverable(
         date_opened=date_opened,
         date_closed=date_closed,
         deadline=deadline,
+    )
+
+
+def create_bound_issue(
+        object_id="PRJ-1",
+        name="Dummy issue",
+        status=IssueStatus.open,
+        type=IssueType.bug,
+        priority=IssuePriority.critical,
+        description="Description issue",
+        date_opened=datetime(year=2019, month=1, day=1, hour=10, minute=30, second=5),
+        date_closed=datetime(year=2019, month=1, day=2, hour=10, minute=30, second=5),
+        deadline=datetime(year=2019, month=1, day=3, hour=10, minute=30, second=5),
+        estimated_duration=Decimal(10),
+        external_type="external_type",
+        files=None,
+        links=None,
+        tags=None,
+        tasks=None,
+        hour_rate=None
+):
+    return BoundIssue(
+        object_id=EntityId(object_id),
+        issue=create_issue(
+            name=name,
+            status=status,
+            type=type,
+            priority=priority,
+            description=description,
+            date_opened=date_opened,
+            date_closed=date_closed,
+            deadline=deadline,
+            estimated_duration=estimated_duration,
+            external_type=external_type,
+            files=files,
+            links=links,
+            tags=tags,
+            tasks=tasks,
+            hour_rate=hour_rate,
+        )
+    )
+
+
+def create_issue(
+        name="Dummy issue",
+        status=IssueStatus.open,
+        type=IssueType.bug,
+        priority=IssuePriority.critical,
+        description="Description issue",
+        date_opened=datetime(year=2019, month=1, day=1, hour=10, minute=30, second=5),
+        date_closed=datetime(year=2019, month=1, day=2, hour=10, minute=30, second=5),
+        deadline=datetime(year=2019, month=1, day=3, hour=10, minute=30, second=5),
+        estimated_duration=Decimal(10),
+        external_type="external_type",
+        files=None,
+        links=None,
+        tags=None,
+        tasks=None,
+        hour_rate=None
+):
+    if not hour_rate:
+        hour_rate = create_money()
+    if not files:
+        files = [File("File1"), File("File2")]
+    if not links:
+        links = [create_link(), create_link("www.zoho.cz", "zoho", "zoho")]
+    if not tags:
+        tags = [Tag("X"), Tag("Y")]
+    if not tasks:
+        tasks = [create_task(), create_task("Task", True)]
+    return Issue(
+        name=name,
+        status=status,
+        type_=type,
+        priority=priority,
+        description=description,
+        date_opened=date_opened,
+        date_closed=date_closed,
+        deadline=deadline,
+        estimated_duration=estimated_duration,
+        external_type=external_type,
+        files=files,
+        links=links,
+        tags=tags,
+        tasks=tasks,
+        hour_rate=hour_rate,
     )
 
 

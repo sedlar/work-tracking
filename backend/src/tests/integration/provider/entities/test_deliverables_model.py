@@ -43,7 +43,7 @@ def test_get_deliverables(deliverables_model, projects_model):
     deliverables_model.put_deliverable(deliverable1)
 
     deliverable2 = create_bound_deliverable(
-        object_id=deliverable1.object_id.project_id,
+        object_id=deliverable1.object_id.project_id + "-2",
         name="Other deliverable"
     )
     deliverables_model.put_deliverable(deliverable2)

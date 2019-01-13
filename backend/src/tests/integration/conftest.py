@@ -7,8 +7,7 @@ from sqlalchemy import create_engine
 from wt.app import create_app, setup_debugger_from_env
 from wt.provider.db import METADATA, session_maker_factory
 from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel, DbTasksModel
-from wt.provider.db.models.projects import DbProjectsModel
-from wt.provider.db.models.deliverables import DbDeliverablesModel
+from wt.provider.db.models.entities import DbProjectsModel, DbDeliverablesModel, DbIssuesModel
 from wt.provider.db.models.user import DbUserModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.entities.deliverables import DeliverablesApi
@@ -94,6 +93,17 @@ def projects_model(session, files_model):
 @fixture(scope="session")
 def deliverables_model(session, files_model):
     return DbDeliverablesModel(session)
+
+
+@fixture(scope="session")
+def issues_model(session, files_model, links_model, tags_model, tasks_model):
+    return DbIssuesModel(
+        session,
+        files_model=files_model,
+        links_model=links_model,
+        tags_model=tags_model,
+        tasks_model=tasks_model,
+    )
 
 
 @fixture(scope="session")
