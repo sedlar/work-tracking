@@ -5,7 +5,7 @@ import pytest
 
 from tests.integration.factories.objs import create_project, create_money
 from wt.common import Currency
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 from wt.entities.projects import ProjectStatus, ProjectDoesNotExist
 
 
@@ -64,7 +64,7 @@ def test_delete_project_files(projects_model, files_model):
     projects_model.put_project(project)
 
     projects_model.delete_project(project.project_id)
-    assert not files_model.get_object_files(project.project_id.project_id)
+    assert not files_model.get_entity_files(project.project_id)
 
 
 def test_get_no_project(projects_model):

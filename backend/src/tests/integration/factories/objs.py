@@ -1,7 +1,7 @@
 from wt.entities.projects import Project, ProjectStatus
 from wt.entities.deliverables import BoundDeliverable, DeliverableStatus, Deliverable
 from wt.entities.issues import BoundIssue, IssuePriority, IssueType, IssueStatus, Issue
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 from datetime import datetime
 from wt.fields.files import File
 from decimal import Decimal

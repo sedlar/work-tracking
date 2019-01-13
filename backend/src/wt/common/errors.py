@@ -1,5 +1,5 @@
 from enum import Enum
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 class ErrorCodes(Enum):

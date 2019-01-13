@@ -1,7 +1,7 @@
 from typing import List
 
 from wt.entities.projects._obj import Project
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 class ProjectsModel:

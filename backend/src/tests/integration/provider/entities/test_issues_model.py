@@ -4,7 +4,7 @@ import pytest
 
 from tests.integration.factories.objs import create_bound_issue, create_project
 from wt.entities.issues import IssueStatus, IssueDoesNotExist, IssuePriority, IssueType
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 def test_create_issue(issues_model, projects_model):

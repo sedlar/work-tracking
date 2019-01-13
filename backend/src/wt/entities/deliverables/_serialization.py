@@ -2,7 +2,7 @@ from typing import List
 
 from wt.common.serializers import remove_nones, serialize_datetime, deserialize_datetime
 from wt.entities.deliverables._obj import Deliverable, BoundDeliverable, DeliverableStatus
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 class DeliverableSerializer:

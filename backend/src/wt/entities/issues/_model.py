@@ -1,6 +1,6 @@
 from typing import List
 
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 from wt.entities.issues._obj import BoundIssue
 
 

@@ -1,11 +1,12 @@
 from typing import List
 
+from wt.ids import EntityId
 from wt.fields.tags._obj import Tag
 
 
 class TagsModel:
-    def set_object_tags(self, object_id: str, tags: List[Tag]):
+    def set_entity_tags(self, entity_id: EntityId, tags: List[Tag]):
         raise NotImplementedError()
 
-    def get_object_tags(self, object_id: str) -> List[Tag]:
+    def get_entity_tags(self, entity_id: EntityId) -> List[Tag]:
         raise NotImplementedError()

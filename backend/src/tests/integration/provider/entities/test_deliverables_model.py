@@ -4,7 +4,7 @@ import pytest
 
 from tests.integration.factories.objs import create_bound_deliverable, create_project
 from wt.entities.deliverables import DeliverableStatus, DeliverableDoesNotExist
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 def test_create_deliverable(deliverables_model, projects_model):

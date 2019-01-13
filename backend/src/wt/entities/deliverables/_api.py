@@ -1,10 +1,10 @@
 from typing import List
-from wt.entities.ids import EntityId, ObjectType
+from wt.ids import EntityId, ObjectType
 
 from wt.entities.deliverables._model import DeliverablesModel
 from wt.entities.deliverables._obj import Deliverable, BoundDeliverable
 from wt.entities.deliverables._errors import DeliverableDoesNotExist
-from wt.entities.ids import IdsCounterModel, ObjectsTrackerModel
+from wt.ids import IdsCounterModel, ObjectsTrackerModel
 
 
 class DeliverablesApi:

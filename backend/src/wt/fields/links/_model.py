@@ -1,11 +1,12 @@
 from typing import List
 
+from wt.ids import EntityId
 from wt.fields.links._obj import Link
 
 
 class LinksModel:
-    def set_object_links(self, object_id: str, links: List[Link]):
+    def set_entity_links(self, entity_id: EntityId, links: List[Link]):
         raise NotImplementedError()
 
-    def get_object_links(self, object_id: str) -> List[Link]:
+    def get_entity_links(self, entity_id: EntityId) -> List[Link]:
         raise NotImplementedError()

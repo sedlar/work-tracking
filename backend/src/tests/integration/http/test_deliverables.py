@@ -5,7 +5,7 @@ from tests.integration.http.conftest import EMPTY_STATS
 from tests.integration.http.test_projects import BASE_PROJECTS_URL
 from wt.entities.deliverables import BoundDeliverable
 from wt.entities.deliverables import DeliverableDoesNotExist
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 BASE_DELIVERABLES_URL = "/deliverables"
 

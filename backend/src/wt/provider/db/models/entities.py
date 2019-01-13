@@ -13,7 +13,7 @@ from wt.entities.deliverables import (
     Deliverable,
     DeliverableStatus,
 )
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 from wt.entities.issues import (
     IssuesModel,
     Issue,
@@ -105,23 +105,23 @@ class DbProjectsModel(ProjectsModel, DbEntityModel):
 
     def put_project(self, project: Project):
         self._put_entity(project)
-        self._files_model.set_object_files(project.project_id.full_id, project.files)
+        self._files_model.set_entity_files(project.project_id, project.files)
 
     def get_project(self, project_id: EntityId):
         project = self._get_entity(project_id)
-        project.files = self._files_model.get_object_files(project_id.full_id)
+        project.files = self._files_model.get_entity_files(project_id)
         return project
 
     def get_projects(self, offset: int, limit: int):
         projects = self._get_entities(project_id=None, offset=offset, limit=limit)
         # TODO: Refactor to load files for all projects in single query
         for project in projects:
-            project.files = self._files_model.get_object_files(project.project_id.full_id)
+            project.files = self._files_model.get_entity_files(project.project_id)
         return projects
 
     def delete_project(self, project_id: EntityId):
         self._delete_entity(project_id)
-        self._files_model.set_object_files(project_id.full_id, [])
+        self._files_model.set_entity_files(project_id, [])
 
     @staticmethod
     def _get_entity_id(entity):
@@ -195,7 +195,6 @@ class DbDeliverablesModel(DeliverablesModel, DbEntityModel):
     @staticmethod
     def _entity_to_dict(entity):
         return {
-            "object_id": entity.object_id.full_id,
             "project_id": entity.object_id.project_id,
             "name": entity.name,
             "status": entity.status.value,
@@ -242,33 +241,33 @@ class DbIssuesModel(IssuesModel, DbEntityModel):
 
     def put_issue(self, issue: BoundIssue):
         self._put_entity(issue)
-        self._files_model.set_object_files(issue.object_id.full_id, issue.files)
-        self._links_model.set_object_links(issue.object_id.full_id, issue.links)
-        self._tags_model.set_object_tags(issue.object_id.full_id, issue.tags)
-        self._tasks_model.set_object_tasks(issue.object_id.full_id, issue.tasks)
+        self._files_model.set_entity_files(issue.object_id, issue.files)
+        self._links_model.set_entity_links(issue.object_id, issue.links)
+        self._tags_model.set_entity_tags(issue.object_id, issue.tags)
+        self._tasks_model.set_entity_tasks(issue.object_id, issue.tasks)
 
     def delete_issue(self, issue_id: EntityId):
         self._delete_entity(issue_id)
-        self._files_model.set_object_files(issue_id.full_id, [])
-        self._links_model.set_object_links(issue_id.full_id, [])
-        self._tags_model.set_object_tags(issue_id.full_id, [])
-        self._tasks_model.set_object_tasks(issue_id.full_id, [])
+        self._files_model.set_entity_files(issue_id, [])
+        self._links_model.set_entity_links(issue_id, [])
+        self._tags_model.set_entity_tags(issue_id, [])
+        self._tasks_model.set_entity_tasks(issue_id, [])
 
     def get_issue(self, issue_id: EntityId) -> BoundIssue:
         issue = self._get_entity(issue_id)
-        issue.files = self._files_model.get_object_files(issue_id.full_id)
-        issue.links = self._links_model.get_object_links(issue_id.full_id)
-        issue.tags = self._tags_model.get_object_tags(issue_id.full_id)
-        issue.tasks = self._tasks_model.get_object_tasks(issue_id.full_id)
+        issue.files = self._files_model.get_entity_files(issue_id)
+        issue.links = self._links_model.get_entity_links(issue_id)
+        issue.tags = self._tags_model.get_entity_tags(issue_id)
+        issue.tasks = self._tasks_model.get_entity_tasks(issue_id)
         return issue
 
     def get_issues(self, project_id: EntityId, offset: int, limit: int) -> List[BoundIssue]:
         issues = self._get_entities(project_id, offset, limit)
         for issue in issues:
-            issue.files = self._files_model.get_object_files(issue.object_id.full_id)
-            issue.links = self._links_model.get_object_links(issue.object_id.full_id)
-            issue.tags = self._tags_model.get_object_tags(issue.object_id.full_id)
-            issue.tasks = self._tasks_model.get_object_tasks(issue.object_id.full_id)
+            issue.files = self._files_model.get_entity_files(issue.object_id)
+            issue.links = self._links_model.get_entity_links(issue.object_id)
+            issue.tags = self._tags_model.get_entity_tags(issue.object_id)
+            issue.tasks = self._tasks_model.get_entity_tasks(issue.object_id)
         return issues
 
     @staticmethod
@@ -278,7 +277,6 @@ class DbIssuesModel(IssuesModel, DbEntityModel):
     @staticmethod
     def _entity_to_dict(entity):
         return {
-            "object_id": entity.object_id.full_id,
             "project_id": entity.object_id.project_id,
             "name": entity.name,
             "status": entity.status.value,

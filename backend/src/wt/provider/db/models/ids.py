@@ -3,7 +3,7 @@ from typing import List, Dict
 from sqlalchemy import select, delete, update, insert
 from zope.sqlalchemy import mark_changed
 
-from wt.entities.ids import (
+from wt.ids import (
     IdsCounterModel,
     EntityId,
     ObjectType,

@@ -1,4 +1,4 @@
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 PROJECT_ID1 = EntityId("PRJ")
 PROJECT_ID2 = EntityId("GGG")

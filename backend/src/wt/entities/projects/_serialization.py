@@ -5,7 +5,7 @@ from wt.common import Money, Currency
 from wt.common.serializers import remove_nones, serialize_datetime, deserialize_datetime
 from wt.fields.files import File
 from wt.entities.projects._obj import Project, ProjectStatus
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 class ProjectSerializer:

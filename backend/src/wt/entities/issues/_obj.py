@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List, Optional
 from decimal import Decimal
 
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 from wt.fields.files import File
 from wt.common import Money
 from wt.fields.links import Link

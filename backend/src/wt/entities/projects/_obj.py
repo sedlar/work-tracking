@@ -4,7 +4,7 @@ from typing import List
 
 from wt.fields.files import File
 from wt.common import Money
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 class ProjectStatus(Enum):

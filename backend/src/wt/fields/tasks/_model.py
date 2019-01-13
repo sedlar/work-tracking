@@ -1,11 +1,12 @@
 from typing import List
 
+from wt.ids import EntityId
 from wt.fields.tasks._obj import Task
 
 
 class TasksModel:
-    def set_object_tasks(self, object_id: str, tasks: List[Task]):
+    def set_entity_tasks(self, entity_id: EntityId, tasks: List[Task]):
         raise NotImplementedError()
 
-    def get_object_tasks(self, object_id: str) -> List[Task]:
+    def get_entity_tasks(self, entity_id: EntityId) -> List[Task]:
         raise NotImplementedError()

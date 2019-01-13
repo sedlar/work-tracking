@@ -2,9 +2,8 @@ from typing import List
 
 from wt.entities.projects._model import ProjectsModel
 from wt.entities.projects._obj import Project
-from wt.entities.ids import IdsCounterModel, ObjectsTrackerModel
+from wt.ids import IdsCounterModel, ObjectsTrackerModel, EntityId
 from wt.entities.projects._errors import ProjectHasChildElements
-from wt.entities.ids import EntityId
 
 
 class ProjectsApi:

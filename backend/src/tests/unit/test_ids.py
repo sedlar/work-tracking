@@ -1,4 +1,4 @@
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 def test_object_id_project_id():

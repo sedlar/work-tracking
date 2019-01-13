@@ -1,4 +1,4 @@
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 from wt.common.errors import ObjectDoesNotExist, ErrorCodes
 
 

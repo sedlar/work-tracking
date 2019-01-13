@@ -1,5 +1,5 @@
 from tests.integration.factories.objs import create_project, create_deliverable
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 def test_project_recreate_resets_object_ids(projects_api, deliverables_api):

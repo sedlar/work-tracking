@@ -1,7 +1,7 @@
 from typing import List
 
 from wt.entities.deliverables._obj import BoundDeliverable
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 class DeliverablesModel:

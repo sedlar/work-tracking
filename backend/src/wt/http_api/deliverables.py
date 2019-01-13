@@ -4,7 +4,7 @@ from flask_injector import inject
 from wt.http_api._common import DUMMY_STATS
 from wt.http_api._common import handle_errors
 from wt.entities.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
-from wt.entities.ids import EntityId
+from wt.ids import EntityId
 
 
 @inject

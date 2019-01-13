@@ -1,6 +1,5 @@
-from wt.entities.ids import EntityId, ObjectType
 from tests.integration.factories.objs import create_project
-import pytest
+from wt.ids import EntityId, ObjectType
 
 OBJECT_ID1 = "PRJ-23"
 OBJECT_ID2 = "GGG-56"
