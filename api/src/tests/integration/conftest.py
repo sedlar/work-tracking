@@ -208,7 +208,7 @@ def post_issue(issues_api):
 
 
 @fixture(scope="session")
-def post_link(links_api):
+def put_link(links_api):
     def func(entity_id, other_entity_id):
         with transaction.manager:
             return links_api.create_link(entity_id, other_entity_id)

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from wt.entities.deliverables._obj import BoundDeliverable
 from wt.ids import EntityId
@@ -14,6 +14,7 @@ class DeliverablesModel:
     def get_deliverables(
             self,
             project_id: EntityId,
+            related_entity_id: Optional[EntityId],
             offset: int,
             limit: int
     ) -> List[BoundDeliverable]:

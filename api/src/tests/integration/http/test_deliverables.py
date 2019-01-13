@@ -1,6 +1,6 @@
 import pytest
 
-from tests.integration.factories.objs import create_project, create_deliverable
+from tests.integration.factories.objs import create_project, create_deliverable, create_issue
 from tests.integration.http.conftest import EMPTY_STATS
 from tests.integration.http.test_projects import BASE_PROJECTS_URL
 from wt.entities.deliverables import BoundDeliverable
@@ -217,6 +217,33 @@ def test_get_deliverables_offset(authorized_api_request, post_deliverable, put_p
     response = authorized_api_request(
         "GET",
         get_project_deliverables_url(project.project_id) + "?offset=1"
+    )
+
+    assert response.status_code == 200
+    assert response.json["deliverables"][0]["id"] == str(full_bound_deliverable.object_id)
+    del response.json["deliverables"][0]["id"]
+    assert response.json == {"deliverables": [FULL_SERIALIZED_DELIVERABLE]}
+
+
+def test_get_deliverables_filter_related_object(
+        authorized_api_request,
+        post_deliverable,
+        post_issue,
+        put_project,
+        put_link,
+):
+    project = create_project()
+    put_project(project)
+    post_deliverable(project.project_id, MINIMAL_DELIVERABLE)
+    full_bound_deliverable = post_deliverable(project.project_id, FULL_DELIVERABLE)
+    issue = post_issue(project.project_id, create_issue())
+    put_link(issue.object_id, full_bound_deliverable.object_id)
+
+    response = authorized_api_request(
+        "GET",
+        get_project_deliverables_url(project.project_id) + "?related_object_id={id}".format(
+            id=issue.object_id.full_id
+        )
     )
 
     assert response.status_code == 200

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from wt.ids import EntityId, ObjectType
 
 from wt.entities.issues._model import IssuesModel
@@ -41,10 +41,11 @@ class IssuesApi:
     def get_issues(
             self,
             project_id: EntityId,
+            related_entity_id: Optional[EntityId],
             offset: int,
             limit: int
     ) -> List[BoundIssue]:
-        return self._issue_model.get_issues(project_id, offset, limit)
+        return self._issue_model.get_issues(project_id, related_entity_id, offset, limit)
 
     def delete_issue(self, issue_id: EntityId):
         self._issue_model.delete_issue(issue_id)

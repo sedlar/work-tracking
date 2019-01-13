@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from wt.ids import EntityId, ObjectType
 
 from wt.entities.deliverables._model import DeliverablesModel
@@ -41,10 +41,16 @@ class DeliverablesApi:
     def get_deliverables(
             self,
             project_id: EntityId,
+            related_entity_id: Optional[EntityId],
             offset: int,
-            limit: int
+            limit: int,
     ) -> List[BoundDeliverable]:
-        return self._deliverable_model.get_deliverables(project_id, offset, limit)
+        return self._deliverable_model.get_deliverables(
+            project_id,
+            related_entity_id,
+            offset,
+            limit
+        )
 
     def delete_deliverable(self, deliverable_id: EntityId):
         self._deliverable_model.delete_deliverable(deliverable_id)

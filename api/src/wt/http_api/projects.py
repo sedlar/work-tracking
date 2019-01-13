@@ -54,11 +54,14 @@ def get_project_deliverables(
         serializer: DeliverableSerializer,
         project_id,
         offset,
-        limit
+        limit,
+        related_object_id=None,
 ):
+    # pylint: disable=too-many-arguments
     with transaction.manager:
         deliverables = deliverables_api.get_deliverables(
             EntityId(project_id),
+            related_entity_id=EntityId(related_object_id) if related_object_id else None,
             offset=offset,
             limit=limit
         )
@@ -84,13 +87,16 @@ def get_project_issues(
         serializer: IssueSerializer,
         project_id,
         offset,
-        limit
+        limit,
+        related_object_id=None,
 ):
+    # pylint: disable=too-many-arguments
     with transaction.manager:
         issues = issues_api.get_issues(
             EntityId(project_id),
+            related_entity_id=EntityId(related_object_id) if related_object_id else None,
             offset=offset,
-            limit=limit
+            limit=limit,
         )
     return {"issues": serializer.serialize_issues(issues)}, 200
 

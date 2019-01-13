@@ -33,12 +33,12 @@ def test_create_invalid_link(authorized_api_request):
     assert response.status_code == 400
 
 
-def test_delete_link(authorized_api_request, put_project, post_issue, post_link):
+def test_delete_link(authorized_api_request, put_project, post_issue, put_link):
     project = create_project()
     put_project(project)
     issue1 = post_issue(project.project_id, create_issue())
     issue2 = post_issue(project.project_id, create_issue())
-    post_link(issue1.object_id, issue2.object_id)
+    put_link(issue1.object_id, issue2.object_id)
 
     response = authorized_api_request(
         "DELETE",

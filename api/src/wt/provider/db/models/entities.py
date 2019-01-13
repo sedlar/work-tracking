@@ -30,7 +30,12 @@ from wt.fields.tags import TagsModel
 from wt.fields.tasks import TasksModel
 from wt.provider.db import DbModel
 from wt.provider.db._utils import insert_or_update
-from wt.provider.db.tables import PROJECTS_TABLE, DELIVERABLES_TABLE, ISSUES_TABLE
+from wt.provider.db.tables import (
+    PROJECTS_TABLE,
+    DELIVERABLES_TABLE,
+    ISSUES_TABLE,
+    ENTITY_LINKS_TABLE,
+)
 
 
 class DbEntityModel(DbModel):
@@ -60,10 +65,29 @@ class DbEntityModel(DbModel):
             raise self._does_not_exist_error(entity_id)
         return self._row_to_entity(result)
 
-    def _get_entities(self, project_id: Optional[EntityId], offset: int, limit: int):
-        query = select([self._table]).offset(offset)
+    def _get_entities(
+            self,
+            project_id: Optional[EntityId],
+            related_entity_id: Optional[EntityId],
+            offset: int,
+            limit: int,
+    ):
+        table = self._table
+        wheres = []
+        if related_entity_id:
+            table = table.join(
+                ENTITY_LINKS_TABLE, self._id_column == ENTITY_LINKS_TABLE.c.object_id
+            )
+            wheres.append(ENTITY_LINKS_TABLE.c.other_object_id == related_entity_id.full_id)
+        query = select(self._table.columns).select_from(table)
+
         if project_id:
-            query = query.where(self._table.c.project_id == project_id.project_id)
+            wheres.append(self._table.c.project_id == project_id.project_id)
+
+        for where in wheres:
+            query = query.where(where)
+
+        query = query.offset(offset)
         query = query.limit(limit)
         query = query.order_by(self._id_column)
 
@@ -113,7 +137,12 @@ class DbProjectsModel(ProjectsModel, DbEntityModel):
         return project
 
     def get_projects(self, offset: int, limit: int):
-        projects = self._get_entities(project_id=None, offset=offset, limit=limit)
+        projects = self._get_entities(
+            project_id=None,
+            related_entity_id=None,
+            offset=offset,
+            limit=limit,
+        )
         # TODO: Refactor to load files for all projects in single query
         for project in projects:
             project.files = self._files_model.get_entity_files(project.project_id)
@@ -183,10 +212,11 @@ class DbDeliverablesModel(DeliverablesModel, DbEntityModel):
     def get_deliverables(
             self,
             project_id: EntityId,
+            related_entity_id: Optional[EntityId],
             offset: int,
-            limit: int
+            limit: int,
     ) -> List[BoundDeliverable]:
-        return self._get_entities(project_id, offset, limit)
+        return self._get_entities(project_id, related_entity_id, offset, limit)
 
     @staticmethod
     def _get_entity_id(entity):
@@ -261,8 +291,14 @@ class DbIssuesModel(IssuesModel, DbEntityModel):
         issue.tasks = self._tasks_model.get_entity_tasks(issue_id)
         return issue
 
-    def get_issues(self, project_id: EntityId, offset: int, limit: int) -> List[BoundIssue]:
-        issues = self._get_entities(project_id, offset, limit)
+    def get_issues(
+            self,
+            project_id: EntityId,
+            related_entity_id: Optional[EntityId],
+            offset: int,
+            limit: int,
+    ) -> List[BoundIssue]:
+        issues = self._get_entities(project_id, related_entity_id, offset, limit)
         for issue in issues:
             issue.files = self._files_model.get_entity_files(issue.object_id)
             issue.links = self._links_model.get_entity_links(issue.object_id)

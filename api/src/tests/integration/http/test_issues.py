@@ -1,6 +1,11 @@
 import pytest
 
-from tests.integration.factories.objs import create_project, create_issue, create_money
+from tests.integration.factories.objs import (
+    create_project,
+    create_issue,
+    create_money,
+    create_deliverable,
+)
 from tests.integration.http.conftest import EMPTY_STATS
 from tests.integration.http.test_projects import BASE_PROJECTS_URL
 from wt.entities.issues import BoundIssue
@@ -271,6 +276,33 @@ def test_get_issues_offset(authorized_api_request, post_issue, put_project):
     response = authorized_api_request(
         "GET",
         get_project_issues_url(project.project_id) + "?offset=1"
+    )
+
+    assert response.status_code == 200
+    assert response.json["issues"][0]["id"] == str(full_bound_issue.object_id)
+    del response.json["issues"][0]["id"]
+    assert response.json == {"issues": [FULL_SERIALIZED_ISSUE]}
+
+
+def test_get_issues_filter_related_object(
+        authorized_api_request,
+        post_issue,
+        put_project,
+        post_deliverable,
+        put_link
+):
+    project = create_project()
+    put_project(project)
+    post_issue(project.project_id, MINIMAL_ISSUE)
+    full_bound_issue = post_issue(project.project_id, FULL_ISSUE)
+    deliverable = post_deliverable(project.project_id, create_deliverable())
+    put_link(deliverable.object_id, full_bound_issue.object_id)
+
+    response = authorized_api_request(
+        "GET",
+        get_project_issues_url(project.project_id) + "?related_object_id={id}".format(
+            id=deliverable.object_id.full_id
+        )
     )
 
     assert response.status_code == 200

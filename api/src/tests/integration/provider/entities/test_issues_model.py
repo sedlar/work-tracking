@@ -55,7 +55,12 @@ def test_get_issues(issues_model, put_project):
     )
     issues_model.put_issue(issue2)
 
-    issues = issues_model.get_issues(EntityId(issue1.object_id.project_id), 0, 2)
+    issues = issues_model.get_issues(
+        EntityId(issue1.object_id.project_id),
+        related_entity_id=None,
+        offset=0,
+        limit=2
+    )
     assert issues == [issue1, issue2]
 
 
@@ -74,8 +79,9 @@ def test_get_issues_filter_project(issues_model, put_project):
 
     issues = issues_model.get_issues(
         EntityId(issue1.object_id.project_id),
-        0,
-        2
+        related_entity_id=None,
+        offset=0,
+        limit=2
     )
     assert issues == [issue1]
 
@@ -87,7 +93,12 @@ def test_delete_issue(issues_model, put_project):
     issues_model.put_issue(issue)
 
     issues_model.delete_issue(issue.object_id)
-    assert not issues_model.get_issues(EntityId(issue.object_id.project_id), 0, 1)
+    assert not issues_model.get_issues(
+        EntityId(issue.object_id.project_id),
+        related_entity_id=None,
+        offset=0,
+        limit=1
+    )
 
 
 def test_delete_issue_files(issues_model, put_project, files_model):
@@ -107,7 +118,6 @@ def test_delete_issue_links(issues_model, put_project, links_model):
     issues_model.put_issue(issue)
 
     issues_model.delete_issue(issue.object_id)
-    assert not issues_model.get_issues(EntityId(issue.object_id.project_id), 0, 1)
     assert not links_model.get_entity_links(issue.object_id)
 
 
@@ -118,7 +128,6 @@ def test_delete_issue_tags(issues_model, put_project, tags_model):
     issues_model.put_issue(issue)
 
     issues_model.delete_issue(issue.object_id)
-    assert not issues_model.get_issues(EntityId(issue.object_id.project_id), 0, 1)
     assert not tags_model.get_entity_tags(issue.object_id)
 
 

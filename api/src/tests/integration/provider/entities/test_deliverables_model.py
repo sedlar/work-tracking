@@ -48,7 +48,12 @@ def test_get_deliverables(deliverables_model, put_project):
     )
     deliverables_model.put_deliverable(deliverable2)
 
-    deliverables = deliverables_model.get_deliverables(EntityId(deliverable1.object_id.project_id), 0, 2)
+    deliverables = deliverables_model.get_deliverables(
+        EntityId(deliverable1.object_id.project_id),
+        related_entity_id=None,
+        offset=0,
+        limit=2
+    )
     assert deliverables == [deliverable1, deliverable2]
 
 
@@ -67,8 +72,9 @@ def test_get_deliverables_filter_project(deliverables_model, put_project):
 
     deliverables = deliverables_model.get_deliverables(
         EntityId(deliverable1.object_id.project_id),
-        0,
-        2
+        related_entity_id=None,
+        offset=0,
+        limit=2,
     )
     assert deliverables == [deliverable1]
 
@@ -80,7 +86,12 @@ def test_delete_deliverable(deliverables_model, put_project):
     deliverables_model.put_deliverable(deliverable)
 
     deliverables_model.delete_deliverable(deliverable.object_id)
-    assert not deliverables_model.get_deliverables(EntityId(deliverable.object_id.project_id), 0, 1)
+    assert not deliverables_model.get_deliverables(
+        EntityId(deliverable.object_id.project_id),
+        related_entity_id=None,
+        offset=0,
+        limit=1
+    )
 
 
 def test_get_no_deliverable(deliverables_model):
