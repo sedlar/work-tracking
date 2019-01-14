@@ -5,6 +5,7 @@ from wt.entities.issues._model import IssuesModel
 from wt.entities.issues._obj import Issue, BoundIssue
 from wt.entities.issues._errors import IssueDoesNotExist
 from wt.ids import IdsCounterModel, ObjectsTrackerModel
+from wt.links import EntityLinksModel
 
 
 class IssuesApi:
@@ -12,11 +13,13 @@ class IssuesApi:
             self,
             issues_model: IssuesModel,
             ids_counter_model: IdsCounterModel,
-            objects_tracker_model: ObjectsTrackerModel
+            objects_tracker_model: ObjectsTrackerModel,
+            entity_links_model: EntityLinksModel,
     ):
         self._issue_model = issues_model
         self._ids_counter_model = ids_counter_model
         self._objects_tracker_model = objects_tracker_model
+        self._entity_links_model = entity_links_model
 
     def create_issue(
             self,
@@ -48,5 +51,6 @@ class IssuesApi:
         return self._issue_model.get_issues(project_id, related_entity_id, offset, limit)
 
     def delete_issue(self, issue_id: EntityId):
+        self._entity_links_model.delete_links(issue_id)
         self._issue_model.delete_issue(issue_id)
         self._objects_tracker_model.untrack_object(issue_id)

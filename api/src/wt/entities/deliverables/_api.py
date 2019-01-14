@@ -5,6 +5,7 @@ from wt.entities.deliverables._model import DeliverablesModel
 from wt.entities.deliverables._obj import Deliverable, BoundDeliverable
 from wt.entities.deliverables._errors import DeliverableDoesNotExist
 from wt.ids import IdsCounterModel, ObjectsTrackerModel
+from wt.links import EntityLinksModel
 
 
 class DeliverablesApi:
@@ -12,11 +13,13 @@ class DeliverablesApi:
             self,
             deliverables_model: DeliverablesModel,
             ids_counter_model: IdsCounterModel,
-            objects_tracker_model: ObjectsTrackerModel
+            objects_tracker_model: ObjectsTrackerModel,
+            entity_links_model: EntityLinksModel,
     ):
         self._deliverable_model = deliverables_model
         self._ids_counter_model = ids_counter_model
         self._objects_tracker_model = objects_tracker_model
+        self._entity_links_model = entity_links_model
 
     def create_deliverable(
             self,
@@ -53,5 +56,6 @@ class DeliverablesApi:
         )
 
     def delete_deliverable(self, deliverable_id: EntityId):
+        self._entity_links_model.delete_links(deliverable_id)
         self._deliverable_model.delete_deliverable(deliverable_id)
         self._objects_tracker_model.untrack_object(deliverable_id)

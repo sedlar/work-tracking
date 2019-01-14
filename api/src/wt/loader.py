@@ -45,6 +45,7 @@ def configure_with_engine(engine):
             tasks_model=tasks_model,
         )
         objects_tracker_model = DbObjectsTrackerModel(session_factory=session_maker)
+        entity_links_model = DbEntityLinksModel(session_factory=session_maker)
         projects_api = ProjectsApi(
             project_model=projects_model,
             ids_counter_model=ids_counter_model,
@@ -54,14 +55,16 @@ def configure_with_engine(engine):
             deliverables_model=deliverables_model,
             ids_counter_model=ids_counter_model,
             objects_tracker_model=objects_tracker_model,
+            entity_links_model=entity_links_model,
         )
         issues_api = IssuesApi(
             issues_model=issues_model,
             ids_counter_model=ids_counter_model,
             objects_tracker_model=objects_tracker_model,
+            entity_links_model=entity_links_model,
         )
         entity_links_api = EntityLinksApi(
-            entity_links_model=DbEntityLinksModel(session_factory=session_maker),
+            entity_links_model=entity_links_model,
             objects_tracker_model=objects_tracker_model,
         )
         binder.bind(UserModel, user_model)

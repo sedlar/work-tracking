@@ -262,3 +262,23 @@ def test_delete_deliverable(authorized_api_request, post_deliverable, get_delive
 
     with pytest.raises(DeliverableDoesNotExist):
         get_deliverable(bound_deliverable.object_id)
+
+
+def test_delete_deliverable_with_link(
+        authorized_api_request,
+        post_deliverable,
+        get_deliverable,
+        put_project,
+        put_link,
+        post_issue
+):
+    project = create_project()
+    put_project(project)
+    bound_deliverable = post_deliverable(project.project_id, create_deliverable())
+    bound_issue = post_issue(project.project_id, create_issue())
+    put_link(bound_deliverable.object_id, bound_issue.object_id)
+
+    authorized_api_request("DELETE", get_deliverable_url(str(bound_deliverable.object_id)))
+
+    with pytest.raises(DeliverableDoesNotExist):
+        get_deliverable(bound_deliverable.object_id)

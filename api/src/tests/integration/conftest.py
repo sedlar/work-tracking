@@ -134,20 +134,27 @@ def projects_api(projects_model, ids_counter_model, objects_tracker_model):
 
 
 @fixture(scope="session")
-def deliverables_api(deliverables_model, ids_counter_model, objects_tracker_model):
+def deliverables_api(
+        deliverables_model,
+        ids_counter_model,
+        objects_tracker_model,
+        entity_links_model
+):
     return DeliverablesApi(
         deliverables_model=deliverables_model,
         ids_counter_model=ids_counter_model,
         objects_tracker_model=objects_tracker_model,
+        entity_links_model=entity_links_model,
     )
 
 
 @fixture(scope="session")
-def issues_api(issues_model, ids_counter_model, objects_tracker_model):
+def issues_api(issues_model, ids_counter_model, objects_tracker_model, entity_links_model):
     return IssuesApi(
         issues_model=issues_model,
         ids_counter_model=ids_counter_model,
         objects_tracker_model=objects_tracker_model,
+        entity_links_model=entity_links_model,
     )
 
 

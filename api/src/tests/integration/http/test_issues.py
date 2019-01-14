@@ -321,3 +321,16 @@ def test_delete_issue(authorized_api_request, post_issue, get_issue, put_project
 
     with pytest.raises(IssueDoesNotExist):
         get_issue(bound_issue.object_id)
+
+
+def test_delete_issue_with_links(authorized_api_request, post_issue, get_issue, put_project, put_link):
+    project = create_project()
+    put_project(project)
+    bound_issue1 = post_issue(project.project_id, create_issue())
+    bound_issue2 = post_issue(project.project_id, create_issue())
+    put_link(bound_issue1.object_id, bound_issue2.object_id)
+
+    authorized_api_request("DELETE", get_issue_url(str(bound_issue1.object_id)))
+
+    with pytest.raises(IssueDoesNotExist):
+        get_issue(bound_issue1.object_id)
