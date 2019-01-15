@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import Enum
 
 
-class ObjectType(Enum):
+class EntityType(Enum):
     project = "project"
     deliverable = "deliverable"
     issue = "issue"
@@ -11,7 +11,27 @@ class ObjectType(Enum):
     meeting = "meeting"
 
 
-class EntityId:
+class SimpleEntityType(Enum):
+    timesheet = "ts"
+    expenditure = "ex"
+
+
+class BaseId:
+    full_id = None
+
+    def __repr__(self):
+        return self.full_id
+
+    def __eq__(self, other):
+        if isinstance(other, BaseId):
+            return self.full_id == other.full_id
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(self.full_id)
+
+
+class EntityId(BaseId):
     def __init__(self, full_id: str):
         self.full_id = full_id
         if "-" in full_id:
@@ -28,13 +48,15 @@ class EntityId:
             )
         )
 
-    def __repr__(self):
-        return self.full_id
 
-    def __eq__(self, other):
-        if isinstance(other, EntityId):
-            return self.full_id == other.full_id
-        return NotImplemented
+class SimpleId(BaseId):
+    def __init__(self, object_type: SimpleEntityType, simple_id: int):
+        self.object_type = object_type
+        self.simple_id = simple_id
 
-    def __hash__(self):
-        return hash(self.full_id)
+    @property
+    def full_id(self):
+        return "{object_type}-{id}".format(
+            object_type=self.object_type.value,
+            id=self.simple_id,
+        )

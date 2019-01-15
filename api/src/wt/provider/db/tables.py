@@ -16,7 +16,7 @@ from sqlalchemy import (
 
 from wt.common import Currency
 from wt.entities.deliverables import DeliverableStatus
-from wt.ids import ObjectType
+from wt.ids import EntityType
 from wt.entities.issues import IssueType
 from wt.entities.projects import ProjectStatus
 from wt.provider.db import METADATA
@@ -28,6 +28,7 @@ from wt.provider.db._columns import (
     PARENT_ID_COLUMN_REFERENCE,
 )
 from wt.provider.db._utils import get_enum_length
+from wt.costs.expenditures import ExpenditureStatus, ExpenditureType
 
 FIELD_FILES_TABLE = Table(
     "field_files",
@@ -92,7 +93,7 @@ OBJECTS_TRACKER_TABLE = Table(
     METADATA,
     Column("id", ID_COLUMN_TYPE, primary_key=True),
     deepcopy(PROJECT_ID_COLUMN_REFERENCE),
-    Column("type", String(get_enum_length(ObjectType)), nullable=False),
+    Column("type", String(get_enum_length(EntityType)), nullable=False),
 )
 PROJECTS_TABLE = Table(
     "projects",
@@ -154,4 +155,30 @@ ENTITY_LINKS_TABLE = Table(
         nullable=False
     ),
     PrimaryKeyConstraint("object_id", "other_object_id"),
+)
+TIMESHEETS_TABLE = Table(
+    "timesheets",
+    METADATA,
+    Column("id", Integer(), primary_key=True, autoincrement=True),
+    deepcopy(PARENT_ID_COLUMN_REFERENCE),
+    Column("description", String(256), nullable=False),
+    Column("duration", DECIMAL(), nullable=False),
+    Column("date_opened", DateTime(), nullable=False),
+    Column("created_on", DateTime(), nullable=False),
+)
+EXPENDITURES_TABLE = Table(
+    "expenditures",
+    METADATA,
+    Column("id", Integer(), primary_key=True, autoincrement=True),
+    deepcopy(PARENT_ID_COLUMN_REFERENCE),
+    Column("description", String(), nullable=False),
+    Column("name", String(256), nullable=False),
+    Column("date_opened", DateTime(), nullable=False),
+    Column("date_closed", DateTime(), nullable=True),
+    Column("deadline", DateTime(), nullable=True),
+    Column("status", String(get_enum_length(ExpenditureStatus)), nullable=True),
+    Column("type", String(get_enum_length(ExpenditureType)), nullable=True),
+    Column("cost_amount", DECIMAL(), nullable=True),
+    Column("cost_currency", String(get_enum_length(Currency)), nullable=True),
+    Column("created_on", DateTime(), nullable=False),
 )

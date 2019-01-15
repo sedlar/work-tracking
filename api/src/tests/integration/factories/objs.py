@@ -9,6 +9,8 @@ from wt.common import Money, Currency
 from wt.fields.links import Link
 from wt.fields.tasks import Task
 from wt.fields.tags import Tag
+from wt.costs.timesheets import Timesheet
+from wt.costs.expenditures import Expenditure, ExpenditureStatus, ExpenditureType
 
 
 def create_project(
@@ -209,3 +211,45 @@ def create_file(
 
 def create_tag(tag):
     return Tag(tag)
+
+
+def create_timesheet(
+        description="Timesheet description",
+        date_opened=datetime(year=2002, month=3, day=13),
+        duration=Decimal(15.5),
+
+):
+    return Timesheet(
+        description=description,
+        date_opened=date_opened,
+        duration=duration,
+    )
+
+
+def create_expenditure(
+        name="Expenditure name",
+        description="Expenditure description",
+        status=ExpenditureStatus.approved,
+        type_=ExpenditureType.freelance,
+        date_opened=datetime(2005, 4, 8),
+        date_closed=datetime(2005, 4, 9),
+        deadline=datetime(2005, 4, 10),
+        files=None,
+        cost=None,
+):
+    if files is None:
+        files = [create_file("ExpFile1"), create_file("ExpFile2")]
+    if not cost:
+        cost = create_money()
+
+    return Expenditure(
+        name=name,
+        description=description,
+        status=status,
+        type_=type_,
+        date_opened=date_opened,
+        date_closed=date_closed,
+        deadline=deadline,
+        files=files,
+        cost=cost,
+    )

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from wt.ids import EntityId, ObjectType
+from wt.ids import EntityId, EntityType
 
 from wt.entities.issues._model import IssuesModel
 from wt.entities.issues._obj import Issue, BoundIssue
@@ -29,12 +29,12 @@ class IssuesApi:
         issue_id = self._ids_counter_model.get_new_id(project_id)
         bound_issue = BoundIssue(issue_id, issue)
         self._issue_model.put_issue(bound_issue)
-        self._objects_tracker_model.track_object(issue_id, ObjectType.issue)
+        self._objects_tracker_model.track_object(issue_id, EntityType.issue)
         return bound_issue
 
     def edit_issue(self, issue: BoundIssue):
         object_type = self._objects_tracker_model.get_object_type(issue.object_id)
-        if object_type != ObjectType.issue:
+        if object_type != EntityType.issue:
             raise IssueDoesNotExist(issue.object_id)
         self._issue_model.put_issue(issue)
 

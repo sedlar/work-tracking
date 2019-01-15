@@ -23,7 +23,7 @@ from wt.provider.db.tables import (
 from wt.fields.tags import Tag, DuplicateTagReceived, TagsModel
 from wt.fields.tasks import Task, DuplicateTaskReceived, TasksModel
 from wt.fields import FieldItem
-from wt.ids import EntityId
+from wt.ids import BaseId
 
 
 class DbListFieldsModel(DbModel):
@@ -63,7 +63,7 @@ class DbListFieldsModel(DbModel):
         if removed_ids:
             self._remove_items(entity_id, removed_ids)
 
-    def _add_items(self, entity_id: EntityId, items: List[FieldItem]):
+    def _add_items(self, entity_id: BaseId, items: List[FieldItem]):
         now = datetime.now()
         data = [self._item_to_dict(item) for item in items]
         for item in data:
@@ -74,7 +74,7 @@ class DbListFieldsModel(DbModel):
         self._session.execute(add_query)
         mark_changed(self._session)
 
-    def _remove_items(self, entity_id: EntityId, removed_item_ids: Set[str]):
+    def _remove_items(self, entity_id: BaseId, removed_item_ids: Set[str]):
         remove_query = delete(self.table).where(
             and_(
                 self.table.c.parent_id == entity_id.full_id,
@@ -108,10 +108,10 @@ class DbTagsModel(DbListFieldsModel, TagsModel):
     table = FIELD_TAGS_TABLE
     id_column = FIELD_TAGS_TABLE.c.tag
 
-    def set_entity_tags(self, entity_id: EntityId, tags: List[Tag]):
+    def set_entity_tags(self, entity_id: BaseId, tags: List[Tag]):
         self._set_object_field_items(entity_id, tags)
 
-    def get_entity_tags(self, entity_id: EntityId) -> List[Tag]:
+    def get_entity_tags(self, entity_id: BaseId) -> List[Tag]:
         return self._get_object_items(entity_id)
 
     def _get_item_unique_id(self, item: Tag):
@@ -131,10 +131,10 @@ class DbFilesModel(FilesModel, DbListFieldsModel):
     table = FIELD_FILES_TABLE
     id_column = FIELD_FILES_TABLE.c.uri
 
-    def set_entity_files(self, entity_id: EntityId, files: List[File]):
+    def set_entity_files(self, entity_id: BaseId, files: List[File]):
         self._set_object_field_items(entity_id, files)
 
-    def get_entity_files(self, entity_id: EntityId):
+    def get_entity_files(self, entity_id: BaseId):
         return self._get_object_items(entity_id)
 
     def _get_item_unique_id(self, item: File):
@@ -154,10 +154,10 @@ class DbLinksModel(LinksModel, DbListFieldsModel):
     table = FIELD_LINKS_TABLE
     id_column = FIELD_LINKS_TABLE.c.uri
 
-    def set_entity_links(self, entity_id: EntityId, links: List[Link]):
+    def set_entity_links(self, entity_id: BaseId, links: List[Link]):
         self._set_object_field_items(entity_id, links)
 
-    def get_entity_links(self, entity_id: EntityId):
+    def get_entity_links(self, entity_id: BaseId):
         return self._get_object_items(entity_id)
 
     def _get_item_unique_id(self, item: Link):
@@ -183,10 +183,10 @@ class DbTasksModel(TasksModel, DbListFieldsModel):
     table = FIELD_TASKS_TABLE
     id_column = FIELD_TASKS_TABLE.c.task
 
-    def set_entity_tasks(self, entity_id: EntityId, tasks: List[Task]):
+    def set_entity_tasks(self, entity_id: BaseId, tasks: List[Task]):
         self._set_object_field_items(entity_id, tasks)
 
-    def get_entity_tasks(self, entity_id: EntityId) -> List[Task]:
+    def get_entity_tasks(self, entity_id: BaseId) -> List[Task]:
         return self._get_object_items(entity_id)
 
     def _get_item_unique_id(self, item: Task):

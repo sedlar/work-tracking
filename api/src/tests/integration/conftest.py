@@ -11,6 +11,7 @@ from wt.provider.db.models.entities import DbProjectsModel, DbDeliverablesModel,
 from wt.provider.db.models.user import DbUserModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.provider.db.models.links import DbEntityLinksModel
+from wt.provider.db.models.costs import DbTimesheetsModel, DbExpendituresModel
 from wt.entities.deliverables import DeliverablesApi
 from wt.entities.projects import ProjectsApi
 from wt.entities.issues import IssuesApi
@@ -122,6 +123,16 @@ def objects_tracker_model(session):
 @fixture(scope="session")
 def entity_links_model(session):
     return DbEntityLinksModel(session)
+
+
+@fixture(scope="session")
+def timesheets_model(session):
+    return DbTimesheetsModel(session)
+
+
+@fixture(scope="session")
+def expenditures_model(session, files_model):
+    return DbExpendituresModel(session, files_model)
 
 
 @fixture(scope="session")

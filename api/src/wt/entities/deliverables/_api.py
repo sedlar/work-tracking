@@ -1,5 +1,5 @@
 from typing import List, Optional
-from wt.ids import EntityId, ObjectType
+from wt.ids import EntityId, EntityType
 
 from wt.entities.deliverables._model import DeliverablesModel
 from wt.entities.deliverables._obj import Deliverable, BoundDeliverable
@@ -29,12 +29,12 @@ class DeliverablesApi:
         deliverable_id = self._ids_counter_model.get_new_id(project_id)
         bound_deliverable = BoundDeliverable(deliverable_id, deliverable)
         self._deliverable_model.put_deliverable(bound_deliverable)
-        self._objects_tracker_model.track_object(deliverable_id, ObjectType.deliverable)
+        self._objects_tracker_model.track_object(deliverable_id, EntityType.deliverable)
         return bound_deliverable
 
     def edit_deliverable(self, deliverable: BoundDeliverable):
         object_type = self._objects_tracker_model.get_object_type(deliverable.object_id)
-        if object_type != ObjectType.deliverable:
+        if object_type != EntityType.deliverable:
             raise DeliverableDoesNotExist(deliverable.object_id)
         self._deliverable_model.put_deliverable(deliverable)
 

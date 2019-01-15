@@ -1,4 +1,4 @@
-from wt.ids import EntityId, ObjectsTrackerModel, ObjectType
+from wt.ids import EntityId, ObjectsTrackerModel, EntityType
 from wt.links._errors import InvalidLinkedEntities, InvalidLinkToItself, InvalidLinkBetweenProjects
 from wt.links._model import EntityLinksModel
 from wt.common.errors import ObjectDoesNotExist
@@ -6,8 +6,8 @@ from wt.common.errors import ObjectDoesNotExist
 
 class EntityLinksApi:
     _valid_link_types = [
-        {ObjectType.issue},
-        {ObjectType.issue, ObjectType.deliverable},
+        {EntityType.issue},
+        {EntityType.issue, EntityType.deliverable},
     ]
 
     def __init__(

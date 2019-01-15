@@ -2,7 +2,7 @@ from typing import List
 
 from wt.entities.projects._model import ProjectsModel
 from wt.entities.projects._obj import Project
-from wt.ids import IdsCounterModel, ObjectsTrackerModel, EntityId, ObjectType
+from wt.ids import IdsCounterModel, ObjectsTrackerModel, EntityId, EntityType
 from wt.entities.projects._errors import ProjectHasChildElements
 
 
@@ -20,7 +20,7 @@ class ProjectsApi:
     def put_project(self, project: Project):
         object_type = self._objects_tracker_model.get_object_type(project.project_id)
         if not object_type:
-            self._objects_tracker_model.track_object(project.project_id, ObjectType.project)
+            self._objects_tracker_model.track_object(project.project_id, EntityType.project)
         self._project_model.put_project(project)
 
     def get_project(self, project_id: EntityId) -> Project:

@@ -6,7 +6,7 @@ from zope.sqlalchemy import mark_changed
 from wt.ids import (
     IdsCounterModel,
     EntityId,
-    ObjectType,
+    EntityType,
     ObjectsTrackerModel,
 )
 from wt.provider.db import DbModel
@@ -48,7 +48,7 @@ class DbIdsCounterModel(IdsCounterModel, DbModel):
 
 
 class DbObjectsTrackerModel(ObjectsTrackerModel, DbModel):
-    def track_object(self, object_id: EntityId, object_type: ObjectType):
+    def track_object(self, object_id: EntityId, object_type: EntityType):
         query = insert(OBJECTS_TRACKER_TABLE).values(
             id=object_id.full_id,
             project_id=object_id.project_id,
@@ -63,7 +63,7 @@ class DbObjectsTrackerModel(ObjectsTrackerModel, DbModel):
         self._session.execute(query)
         mark_changed(self._session)
 
-    def get_objects_types(self, object_ids: List[EntityId]) -> Dict[EntityId, ObjectType]:
+    def get_objects_types(self, object_ids: List[EntityId]) -> Dict[EntityId, EntityType]:
         query = select([OBJECTS_TRACKER_TABLE.c.id, OBJECTS_TRACKER_TABLE.c.type])
         query = query.where(
             OBJECTS_TRACKER_TABLE.c.id.in_(
@@ -73,13 +73,13 @@ class DbObjectsTrackerModel(ObjectsTrackerModel, DbModel):
         result = self._session.execute(query).fetchall()
         return self._result_to_map(result)
 
-    def get_objects_types_by_project(self, project_id: EntityId) -> Dict[EntityId, ObjectType]:
+    def get_objects_types_by_project(self, project_id: EntityId) -> Dict[EntityId, EntityType]:
         query = select([OBJECTS_TRACKER_TABLE.c.id, OBJECTS_TRACKER_TABLE.c.type])
         query = query.where(
             OBJECTS_TRACKER_TABLE.c.project_id == project_id.project_id,
         )
         query = query.where(
-            OBJECTS_TRACKER_TABLE.c.type != ObjectType.project.value,
+            OBJECTS_TRACKER_TABLE.c.type != EntityType.project.value,
         )
         result = self._session.execute(query).fetchall()
         return self._result_to_map(result)
@@ -87,12 +87,12 @@ class DbObjectsTrackerModel(ObjectsTrackerModel, DbModel):
     @staticmethod
     def _result_to_map(result):
         return {
-            EntityId(row["id"]): ObjectType(row["type"])
+            EntityId(row["id"]): EntityType(row["type"])
             for row
             in result
         }
 
-    def get_object_type(self, object_id: EntityId) -> ObjectType:
+    def get_object_type(self, object_id: EntityId) -> EntityType:
         types_map = self.get_objects_types([object_id])
 
         return types_map.get(object_id)
