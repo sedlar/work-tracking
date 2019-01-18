@@ -7,7 +7,7 @@ from wt.costs.expenditures import BoundExpenditure
 from wt.ids import EntityId
 
 BASE_EXPENDITURE_URL = "/expenditures"
-MINIMAL_EXPENDITURE_REQUEST = {
+MINIMAL_SERIALIZED_EXPENDITURE_REQUEST = {
     "name": "Expenditure name",
     "description": "Expenditure description",
     "status": "approved",
@@ -19,7 +19,7 @@ MINIMAL_EXPENDITURE_REQUEST = {
         "currency": "CZK",
     }
 }
-FULL_EXPENDITURE_REQUEST = {
+FULL_SERIALIZED_EXPENDITURE_REQUEST = {
     "name": "Expenditure name",
     "description": "Expenditure description",
     "status": "approved",
@@ -43,14 +43,14 @@ FULL_EXPENDITURE = create_expenditure()
 
 def create_minimal_expenditure_body(parent_id):
     return {
-        **MINIMAL_EXPENDITURE_REQUEST,
+        **MINIMAL_SERIALIZED_EXPENDITURE_REQUEST,
         "parent_id": parent_id.full_id
     }
 
 
 def create_full_expenditure_body(parent_id):
     return {
-        **FULL_EXPENDITURE_REQUEST,
+        **FULL_SERIALIZED_EXPENDITURE_REQUEST,
         "parent_id": parent_id.full_id
     }
 
@@ -59,7 +59,12 @@ def get_expenditure_url(simple_id):
     return BASE_EXPENDITURE_URL + "/" + str(simple_id)
 
 
-def test_post_minimal_expenditure(put_project, post_issue, authorized_api_request, get_expenditures):
+def test_post_minimal_expenditure(
+        put_project,
+        post_issue,
+        authorized_api_request,
+        get_expenditures
+):
     project = create_project()
     put_project(project)
     bound_issue = post_issue(project.project_id, create_issue())
@@ -131,7 +136,7 @@ def test_get_minimal_expenditures(
     assert response.status_code == 200
     assert len(response.json["expenditures"]) == 1
     assert response.json["expenditures"][0] == {
-        **MINIMAL_EXPENDITURE_REQUEST,
+        **MINIMAL_SERIALIZED_EXPENDITURE_REQUEST,
         "id": bound_expenditure.simple_id.simple_id
     }
 
@@ -153,7 +158,7 @@ def test_get_full_expenditures(
     assert response.status_code == 200
     assert len(response.json["expenditures"]) == 1
     assert response.json["expenditures"][0] == {
-        **FULL_EXPENDITURE_REQUEST,
+        **FULL_SERIALIZED_EXPENDITURE_REQUEST,
         "id": bound_expenditure.simple_id.simple_id
     }
 
@@ -163,7 +168,10 @@ def test_get_expenditures_offset(post_expenditure, authorized_api_request, post_
     put_project(project)
     bound_issue = post_issue(project.project_id, create_issue())
     post_expenditure(bound_issue.object_id, create_expenditure())
-    bound_expenditure = post_expenditure(bound_issue.object_id, create_expenditure(description="offset"))
+    bound_expenditure = post_expenditure(
+        bound_issue.object_id,
+        create_expenditure(description="offset")
+    )
     response = authorized_api_request(
         "GET",
         BASE_EXPENDITURE_URL + "?object_id=" + str(bound_issue.object_id) + "&offset=1",
@@ -177,7 +185,10 @@ def test_get_expenditures_limit(post_expenditure, authorized_api_request, post_i
     project = create_project()
     put_project(project)
     bound_issue = post_issue(project.project_id, create_issue())
-    bound_expenditure = post_expenditure(bound_issue.object_id, create_expenditure(description="limit"))
+    bound_expenditure = post_expenditure(
+        bound_issue.object_id,
+        create_expenditure(description="limit")
+    )
     post_expenditure(bound_issue.object_id, create_expenditure())
     response = authorized_api_request(
         "GET",
@@ -188,7 +199,11 @@ def test_get_expenditures_limit(post_expenditure, authorized_api_request, post_i
     assert response.json["expenditures"][0]["description"] == bound_expenditure.description
 
 
-def test_create_expenditure_for_invalid_entity(authorized_api_request, post_deliverable, put_project):
+def test_create_expenditure_for_invalid_entity(
+        authorized_api_request,
+        post_deliverable,
+        put_project
+):
     project = create_project()
     put_project(project)
     bound_deliverable = post_deliverable(project.project_id, create_deliverable())

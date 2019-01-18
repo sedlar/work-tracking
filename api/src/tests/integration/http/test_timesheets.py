@@ -7,7 +7,7 @@ from wt.costs.timesheets import BoundTimesheet
 from wt.ids import EntityId
 
 BASE_TIMESHEET_URL = "/timesheets"
-TIMESHEET = {
+SERIALIZED_TIMESHEET = {
     "date_opened": "2002-03-13T00:00:00Z",
     "description": "Timesheet description",
     "duration": 15.5,
@@ -16,7 +16,7 @@ TIMESHEET = {
 
 def create_timesheet_body(parent_id):
     return {
-        **TIMESHEET,
+        **SERIALIZED_TIMESHEET,
         "parent_id": parent_id.full_id
     }
 
@@ -79,7 +79,7 @@ def test_get_timesheets(
     assert response.status_code == 200
     assert len(response.json["timesheets"]) == 1
     assert response.json["timesheets"][0] == {
-        **TIMESHEET,
+        **SERIALIZED_TIMESHEET,
         "id": bound_timesheet.simple_id.simple_id
     }
 
