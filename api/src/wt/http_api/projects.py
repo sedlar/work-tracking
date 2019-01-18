@@ -23,7 +23,6 @@ def get_project(projects_api: ProjectsApi, serializer: ProjectsSerializer, proje
 @inject
 @handle_errors
 def get_projects(projects_api: ProjectsApi, serializer: ProjectsSerializer, offset, limit):
-    # pylint: disable=unused-argument
     with transaction.manager:
         projects = projects_api.get_projects(offset, limit)
     serialized_projects = serializer.serialize_projects(projects)
@@ -82,6 +81,8 @@ def post_deliverable(
     return {"id": bound_deliverable.object_id.full_id}, 201
 
 
+@inject
+@handle_errors
 def get_project_issues(
         issues_api: IssuesApi,
         serializer: IssuesSerializer,
@@ -101,6 +102,8 @@ def get_project_issues(
     return {"issues": serializer.serialize_issues(issues)}, 200
 
 
+@inject
+@handle_errors
 def post_issue(
         issues_api: IssuesApi,
         deserializer: IssuesDeserializer,

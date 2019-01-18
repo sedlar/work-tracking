@@ -282,3 +282,12 @@ def test_delete_deliverable_with_link(
 
     with pytest.raises(DeliverableDoesNotExist):
         get_deliverable(bound_deliverable.object_id)
+
+
+def test_create_deliverable_for_non_existing_project(authorized_api_request):
+    response = authorized_api_request(
+        "POST",
+        get_project_deliverables_url("PRJ"),
+        {"deliverable": MINIMAL_SERIALIZED_DELIVERABLE}
+    )
+    assert response.status_code == 404

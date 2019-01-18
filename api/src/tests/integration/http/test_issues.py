@@ -368,3 +368,12 @@ def test_delete_issue_with_expenditures(
     request = authorized_api_request("DELETE", get_issue_url(str(bound_issue.object_id)))
     assert request.status_code == 200
     assert not get_expenditures(bound_issue.object_id)
+
+
+def test_create_issue_for_non_existing_project(authorized_api_request):
+    response = authorized_api_request(
+        "POST",
+        get_project_issues_url("PRJ"),
+        {"issue": MINIMAL_SERIALIZED_ISSUE}
+    )
+    assert response.status_code == 404

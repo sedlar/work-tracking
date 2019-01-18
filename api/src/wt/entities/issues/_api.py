@@ -1,13 +1,14 @@
 from typing import List, Optional
-from wt.ids import EntityId, EntityType
 
+from wt.costs.expenditures import ExpendituresModel
+from wt.costs.timesheets import TimesheetsModel
+from wt.entities.issues._errors import IssueDoesNotExist
 from wt.entities.issues._model import IssuesModel
 from wt.entities.issues._obj import Issue, BoundIssue
-from wt.entities.issues._errors import IssueDoesNotExist
+from wt.entities.projects import ProjectDoesNotExist
+from wt.ids import EntityId, EntityType
 from wt.ids import IdsCounterModel, ObjectsTrackerModel
 from wt.links import EntityLinksModel
-from wt.costs.timesheets import TimesheetsModel
-from wt.costs.expenditures import ExpendituresModel
 
 
 class IssuesApi:
@@ -33,6 +34,9 @@ class IssuesApi:
             project_id: EntityId,
             issue: Issue
     ) -> BoundIssue:
+        object_type = self._objects_tracker_model.get_object_type(project_id)
+        if object_type != EntityType.project:
+            raise ProjectDoesNotExist(project_id)
         issue_id = self._ids_counter_model.get_new_id(project_id)
         bound_issue = BoundIssue(issue_id, issue)
         self._issue_model.put_issue(bound_issue)
