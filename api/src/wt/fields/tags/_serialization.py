@@ -2,7 +2,7 @@ from typing import List
 from wt.fields.tags._obj import Tag
 
 
-class TagSerializer:
+class TagsSerializer:
     @staticmethod
     def serialize_tag(tag: Tag) -> str:
         return tag.tag
@@ -14,7 +14,7 @@ class TagSerializer:
         ]
 
 
-class TagDeserializer:
+class TagsDeserializer:
     @staticmethod
     def deserialize_tag(tag: str) -> Tag:
         return Tag(tag)

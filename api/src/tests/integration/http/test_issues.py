@@ -5,6 +5,8 @@ from tests.integration.factories.objs import (
     create_issue,
     create_money,
     create_deliverable,
+    create_timesheet,
+    create_expenditure,
 )
 from tests.integration.http.conftest import EMPTY_STATS
 from tests.integration.http.test_projects import BASE_PROJECTS_URL
@@ -334,3 +336,35 @@ def test_delete_issue_with_links(authorized_api_request, post_issue, get_issue, 
 
     with pytest.raises(IssueDoesNotExist):
         get_issue(bound_issue1.object_id)
+
+
+def test_delete_issue_with_timesheets(
+        post_timesheet,
+        authorized_api_request,
+        post_issue,
+        put_project,
+        get_timesheets
+):
+    project = create_project()
+    put_project(project)
+    bound_issue = post_issue(project.project_id, create_issue())
+    post_timesheet(bound_issue.object_id, create_timesheet())
+    request = authorized_api_request("DELETE", get_issue_url(str(bound_issue.object_id)))
+    assert request.status_code == 200
+    assert not get_timesheets(bound_issue.object_id)
+
+
+def test_delete_issue_with_expenditures(
+        post_expenditure,
+        authorized_api_request,
+        post_issue,
+        put_project,
+        get_expenditures
+):
+    project = create_project()
+    put_project(project)
+    bound_issue = post_issue(project.project_id, create_issue())
+    post_expenditure(bound_issue.object_id, create_expenditure())
+    request = authorized_api_request("DELETE", get_issue_url(str(bound_issue.object_id)))
+    assert request.status_code == 200
+    assert not get_expenditures(bound_issue.object_id)

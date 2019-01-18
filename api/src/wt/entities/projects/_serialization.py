@@ -3,12 +3,12 @@ from typing import List
 from wt.common.serializers import remove_nones, serialize_datetime, deserialize_datetime, \
     serialize_money, deserialize_money
 from wt.entities.projects._obj import Project, ProjectStatus
-from wt.fields.files import FileDeserializer, FileSerializer
+from wt.fields.files import FilesDeserializer, FilesSerializer
 from wt.ids import EntityId
 
 
-class ProjectSerializer:
-    def __init__(self, files_serializer: FileSerializer):
+class ProjectsSerializer:
+    def __init__(self, files_serializer: FilesSerializer):
         self._files_serializer = files_serializer
 
     def serialize_project(self, project: Project) -> dict:
@@ -38,8 +38,8 @@ class ProjectSerializer:
         ]
 
 
-class ProjectDeserializer:
-    def __init__(self, files_deserializer: FileDeserializer):
+class ProjectsDeserializer:
+    def __init__(self, files_deserializer: FilesDeserializer):
         self._files_deserializer = files_deserializer
 
     def deserialize_project(self, project_id: str, project: dict) -> Project:

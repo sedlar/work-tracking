@@ -2,15 +2,15 @@ import transaction
 from flask_injector import inject
 
 from wt.http_api._common import handle_errors, DUMMY_STATS
-from wt.entities.projects import ProjectsApi, ProjectDeserializer, ProjectSerializer
+from wt.entities.projects import ProjectsApi, ProjectsDeserializer, ProjectsSerializer
 from wt.entities.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
-from wt.entities.issues import IssueDeserializer, IssueSerializer, IssuesApi
+from wt.entities.issues import IssuesDeserializer, IssuesSerializer, IssuesApi
 from wt.ids import EntityId
 
 
 @inject
 @handle_errors
-def get_project(projects_api: ProjectsApi, serializer: ProjectSerializer, project_id):
+def get_project(projects_api: ProjectsApi, serializer: ProjectsSerializer, project_id):
     with transaction.manager:
         project = projects_api.get_project(EntityId(project_id))
     serialized_project = serializer.serialize_project(project)
@@ -22,7 +22,7 @@ def get_project(projects_api: ProjectsApi, serializer: ProjectSerializer, projec
 
 @inject
 @handle_errors
-def get_projects(projects_api: ProjectsApi, serializer: ProjectSerializer, offset, limit):
+def get_projects(projects_api: ProjectsApi, serializer: ProjectsSerializer, offset, limit):
     # pylint: disable=unused-argument
     with transaction.manager:
         projects = projects_api.get_projects(offset, limit)
@@ -32,7 +32,7 @@ def get_projects(projects_api: ProjectsApi, serializer: ProjectSerializer, offse
 
 @inject
 @handle_errors
-def put_project(projects_api: ProjectsApi, deserializer: ProjectDeserializer, project_id, body):
+def put_project(projects_api: ProjectsApi, deserializer: ProjectsDeserializer, project_id, body):
     project = deserializer.deserialize_project(project_id, body["project"])
     with transaction.manager:
         projects_api.put_project(project)
@@ -84,7 +84,7 @@ def post_deliverable(
 
 def get_project_issues(
         issues_api: IssuesApi,
-        serializer: IssueSerializer,
+        serializer: IssuesSerializer,
         project_id,
         offset,
         limit,
@@ -103,7 +103,7 @@ def get_project_issues(
 
 def post_issue(
         issues_api: IssuesApi,
-        deserializer: IssueDeserializer,
+        deserializer: IssuesDeserializer,
         project_id,
         body,
 ):

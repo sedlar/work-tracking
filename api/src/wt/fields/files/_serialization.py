@@ -2,7 +2,7 @@ from typing import List
 from wt.fields.files._obj import File
 
 
-class FileSerializer:
+class FilesSerializer:
     @staticmethod
     def serialize_file(file: File):
         return file.uri
@@ -14,7 +14,7 @@ class FileSerializer:
         ]
 
 
-class FileDeserializer:
+class FilesDeserializer:
     @staticmethod
     def deserialize_file(file) -> File:
         return File(file)

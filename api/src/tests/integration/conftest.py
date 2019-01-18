@@ -17,6 +17,8 @@ from wt.entities.projects import ProjectsApi
 from wt.entities.issues import IssuesApi
 from wt.links import EntityLinksApi
 from wt.user import add_user
+from wt.costs.timesheets import TimesheetsApi
+from wt.costs.expenditures import ExpendituresApi
 
 USERNAME = "username"
 PASSWORD = "password"
@@ -160,12 +162,21 @@ def deliverables_api(
 
 
 @fixture(scope="session")
-def issues_api(issues_model, ids_counter_model, objects_tracker_model, entity_links_model):
+def issues_api(
+        issues_model,
+        ids_counter_model,
+        objects_tracker_model,
+        entity_links_model,
+        timesheets_model,
+        expenditures_model
+):
     return IssuesApi(
         issues_model=issues_model,
         ids_counter_model=ids_counter_model,
         objects_tracker_model=objects_tracker_model,
         entity_links_model=entity_links_model,
+        timesheets_model=timesheets_model,
+        expenditures_model=expenditures_model,
     )
 
 
@@ -174,6 +185,22 @@ def links_api(entity_links_model, objects_tracker_model):
     return EntityLinksApi(
         entity_links_model=entity_links_model,
         objects_tracker_model=objects_tracker_model,
+    )
+
+
+@fixture(scope="session")
+def timesheets_api(objects_tracker_model, timesheets_model):
+    return TimesheetsApi(
+        objects_tracker_model=objects_tracker_model,
+        timesheets_model=timesheets_model,
+    )
+
+
+@fixture(scope="session")
+def expenditures_api(objects_tracker_model, expenditures_model):
+    return ExpendituresApi(
+        objects_tracker_model=objects_tracker_model,
+        expenditures_model=expenditures_model,
     )
 
 
@@ -230,4 +257,36 @@ def put_link(links_api):
     def func(entity_id, other_entity_id):
         with transaction.manager:
             return links_api.create_link(entity_id, other_entity_id)
+    return func
+
+
+@fixture(scope="session")
+def post_timesheet(timesheets_api):
+    def func(object_id, timesheet):
+        with transaction.manager:
+            return timesheets_api.create_timesheet(object_id, timesheet)
+    return func
+
+
+@fixture(scope="session")
+def get_timesheets(timesheets_api):
+    def func(object_id, offset=0, limit=1):
+        with transaction.manager:
+            return timesheets_api.get_timesheets(object_id, offset, limit)
+    return func
+
+
+@fixture(scope="session")
+def post_expenditure(expenditures_api):
+    def func(object_id, timesheet):
+        with transaction.manager:
+            return expenditures_api.create_expenditure(object_id, timesheet)
+    return func
+
+
+@fixture(scope="session")
+def get_expenditures(expenditures_api):
+    def func(object_id, offset=0, limit=1):
+        with transaction.manager:
+            return expenditures_api.get_expenditures(object_id, offset, limit)
     return func

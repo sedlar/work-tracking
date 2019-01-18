@@ -402,7 +402,7 @@ paths:
     get:
       description: |
         Get timesheets of object
-      operationId: wt.http_api.issues.get_issue_timesheets
+      operationId: wt.http_api.timesheets.get_timesheets
       parameters:
         - $ref: '#/components/parameters/queryObjectId'
         - $ref: '#/components/parameters/offset'
@@ -431,7 +431,7 @@ paths:
     post:
       description: |
         Add new timesheet to object
-      operationId: wt.http_api.issues.post_issue_timesheet
+      operationId: wt.http_api.timesheets.post_timesheet
       requestBody:
         description: Issue to put
         required: true
@@ -490,7 +490,7 @@ paths:
     get:
       description: |
         Get expenditures of object
-      operationId: wt.http_api.issues.get_issue_expenditures
+      operationId: wt.http_api.expenditures.get_expenditures
       parameters:
         - $ref: '#/components/parameters/queryObjectId'
         - $ref: '#/components/parameters/offset'
@@ -520,9 +520,7 @@ paths:
     post:
       description: |
         Add new expenditure to object
-      operationId: wt.http_api.issues.post_issue_expenditure
-      parameters:
-        - $ref: '#/components/parameters/pathIssueId'
+      operationId: wt.http_api.expenditures.post_expenditure
       requestBody:
         description: Issue to put
         required: true
@@ -867,7 +865,7 @@ components:
           description:
             type: string
             maxLength: 4096
-            description: Descrition of the linked page
+            description: Description of the linked page
           uri:
             type: string
             format: uri
@@ -1064,6 +1062,7 @@ components:
         - description
         - status
         - type
+        - cost
       properties:
         name:
           type: string
@@ -1150,12 +1149,12 @@ components:
 
     Timesheet:
       allOf:
-        - $ref: '#/components/schemas/SimpleId'
+        - $ref: '#/components/schemas/SimpleIdObject'
         - $ref: '#/components/schemas/BaseTimesheet'
 
     Expenditure:
       allOf:
-        - $ref: '#/components/schemas/SimpleId'
+        - $ref: '#/components/schemas/SimpleIdObject'
         - $ref: '#/components/schemas/BaseExpenditure'
 
     ProjectId:
@@ -1191,6 +1190,8 @@ components:
             - invalid_link_to_itself
             - invalid_linked_entities
             - invalid_link_between_projects
+            - invalid_parent_type
+            - object_does_not_exist
         message:
           type: string
           description: Human readable error message

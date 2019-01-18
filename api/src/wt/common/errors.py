@@ -1,5 +1,5 @@
 from enum import Enum
-from wt.ids import EntityId
+from wt.ids import EntityId, EntityType
 
 
 class ErrorCodes(Enum):
@@ -12,6 +12,9 @@ class ErrorCodes(Enum):
     invalid_link_to_itself = "invalid_link_to_itself"
     invalid_linked_entities = "invalid_linked_entities"
     invalid_link_between_projects = "invalid_link_between_projects"
+    duplicate_object_received = "duplicate_object_received"
+    invalid_parent_type = "invalid_parent_type"
+    object_does_not_exist = "object_does_not_exist"
 
 
 class BadRequest(Exception):
@@ -19,8 +22,8 @@ class BadRequest(Exception):
     message = ""
 
 
-class ObjectDoesNotExist(Exception):
-    error_code = ""
+class ObjectDoesNotExist(BadRequest):
+    error_code = ErrorCodes.object_does_not_exist
 
     def __init__(self, obj, entity_id: EntityId):
         super().__init__()
@@ -28,4 +31,12 @@ class ObjectDoesNotExist(Exception):
 
 
 class DuplicateObjectReceived(Exception):
-    error_code = "duplicate_object_received"
+    error_code = ErrorCodes.duplicate_object_received
+
+
+class InvalidParentType(BadRequest):
+    error_code = ErrorCodes.invalid_parent_type
+
+    def __init__(self, parent_type: EntityType):
+        super().__init__()
+        self.message = "Parent object cant't be {type}".format(type=parent_type.value)

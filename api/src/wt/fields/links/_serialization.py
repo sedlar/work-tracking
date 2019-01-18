@@ -18,7 +18,7 @@ class LinkSerializer:
         ]
 
 
-class LinkDeserializer:
+class LinksDeserializer:
     @staticmethod
     def deserialize_link(link: dict) -> Link:
         return Link(

@@ -1,15 +1,25 @@
 from sqlalchemy import create_engine
 
-from wt.entities.deliverables import DeliverableDeserializer, DeliverableSerializer
-from wt.entities.deliverables import DeliverablesApi
-from wt.entities.issues import IssueSerializer, IssueDeserializer, IssuesApi
-from wt.entities.projects import ProjectSerializer, ProjectDeserializer, ProjectsApi
-from wt.fields.files import FileDeserializer, FileSerializer
-from wt.fields.links import LinkSerializer, LinkDeserializer
-from wt.fields.tags import TagSerializer, TagDeserializer
-from wt.fields.tasks import TaskDeserializer, TaskSerializer
+from wt.costs.expenditures import (
+    ExpendituresSerializer,
+    ExpendituresDeserializer,
+    ExpendituresApi,
+)
+from wt.costs.timesheets import (
+    TimesheetsSerializer,
+    TimesheetsDeserializer,
+    TimesheetsApi,
+)
+from wt.entities.deliverables import DeliverableDeserializer, DeliverableSerializer, DeliverablesApi
+from wt.entities.issues import IssuesSerializer, IssuesDeserializer, IssuesApi
+from wt.entities.projects import ProjectsSerializer, ProjectsDeserializer, ProjectsApi
+from wt.fields.files import FilesDeserializer, FilesSerializer
+from wt.fields.links import LinkSerializer, LinksDeserializer
+from wt.fields.tags import TagsSerializer, TagsDeserializer
+from wt.fields.tasks import TasksDeserializer, TasksSerializer
 from wt.links import EntityLinksApi
 from wt.provider.db import session_maker_factory
+from wt.provider.db.models.costs import DbTimesheetsModel, DbExpendituresModel
 from wt.provider.db.models.entities import DbProjectsModel, DbDeliverablesModel, DbIssuesModel
 from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel, DbTasksModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
@@ -19,6 +29,7 @@ from wt.user import UserModel
 
 
 def configure_with_engine(engine):
+    # pylint: disable=too-many-statements
     def configure(binder):
         init_apis(binder)
         init_serialization(binder)
@@ -37,6 +48,11 @@ def configure_with_engine(engine):
         )
         ids_counter_model = DbIdsCounterModel(session_factory=session_maker)
         deliverables_model = DbDeliverablesModel(session_factory=session_maker)
+        timesheets_model = DbTimesheetsModel(session_factory=session_maker)
+        expenditures_model = DbExpendituresModel(
+            session_factory=session_maker,
+            files_model=files_model,
+        )
         issues_model = DbIssuesModel(
             session_factory=session_maker,
             files_model=files_model,
@@ -62,46 +78,68 @@ def configure_with_engine(engine):
             ids_counter_model=ids_counter_model,
             objects_tracker_model=objects_tracker_model,
             entity_links_model=entity_links_model,
+            timesheets_model=timesheets_model,
+            expenditures_model=expenditures_model,
         )
         entity_links_api = EntityLinksApi(
             entity_links_model=entity_links_model,
             objects_tracker_model=objects_tracker_model,
+        )
+        timesheets_api = TimesheetsApi(
+            objects_tracker_model=objects_tracker_model,
+            timesheets_model=timesheets_model,
+        )
+        expenditures_api = ExpendituresApi(
+            objects_tracker_model=objects_tracker_model,
+            expenditures_model=expenditures_model,
         )
         binder.bind(UserModel, user_model)
         binder.bind(ProjectsApi, projects_api)
         binder.bind(DeliverablesApi, deliverables_api)
         binder.bind(IssuesApi, issues_api)
         binder.bind(EntityLinksApi, entity_links_api)
+        binder.bind(TimesheetsApi, timesheets_api)
+        binder.bind(ExpendituresApi, expenditures_api)
 
     def init_serialization(binder):
-        file_serializer = FileSerializer()
-        link_serializer = LinkSerializer()
-        tag_serializer = TagSerializer()
-        task_serializer = TaskSerializer()
-        project_serializer = ProjectSerializer(file_serializer)
-        issue_serializer = IssueSerializer(
-            files_serializer=file_serializer,
-            links_serializer=link_serializer,
-            tags_serializer=tag_serializer,
-            tasks_serializer=task_serializer,
+        files_serializer = FilesSerializer()
+        links_serializer = LinkSerializer()
+        tags_serializer = TagsSerializer()
+        tasks_serializer = TasksSerializer()
+        projects_serializer = ProjectsSerializer(files_serializer)
+        issues_serializer = IssuesSerializer(
+            files_serializer=files_serializer,
+            links_serializer=links_serializer,
+            tags_serializer=tags_serializer,
+            tasks_serializer=tasks_serializer,
         )
-        file_deserializer = FileDeserializer()
-        link_deserializer = LinkDeserializer()
-        tag_deserializer = TagDeserializer()
-        task_deserializer = TaskDeserializer()
-        project_deserializer = ProjectDeserializer(file_deserializer)
-        issue_deserializer = IssueDeserializer(
-            files_deserializer=file_deserializer,
-            links_deserializer=link_deserializer,
-            tags_deserializer=tag_deserializer,
-            tasks_deserializer=task_deserializer,
+        files_deserializer = FilesDeserializer()
+        links_deserializer = LinksDeserializer()
+        tags_deserializer = TagsDeserializer()
+        tasks_deserializer = TasksDeserializer()
+        projects_deserializer = ProjectsDeserializer(files_deserializer)
+        issue_deserializer = IssuesDeserializer(
+            files_deserializer=files_deserializer,
+            links_deserializer=links_deserializer,
+            tags_deserializer=tags_deserializer,
+            tasks_deserializer=tasks_deserializer,
         )
-        binder.bind(ProjectDeserializer, project_deserializer)
-        binder.bind(ProjectSerializer, project_serializer)
+        expenditures_serializer = ExpendituresSerializer(
+            files_serializer=files_serializer
+        )
+        expenditures_deserializer = ExpendituresDeserializer(
+            files_deserializer=files_deserializer
+        )
+        binder.bind(ProjectsDeserializer, projects_deserializer)
+        binder.bind(ProjectsSerializer, projects_serializer)
         binder.bind(DeliverableDeserializer, DeliverableDeserializer())
         binder.bind(DeliverableSerializer, DeliverableSerializer())
-        binder.bind(IssueSerializer, issue_serializer)
-        binder.bind(IssueDeserializer, issue_deserializer)
+        binder.bind(IssuesSerializer, issues_serializer)
+        binder.bind(IssuesDeserializer, issue_deserializer)
+        binder.bind(TimesheetsSerializer, TimesheetsSerializer())
+        binder.bind(TimesheetsDeserializer, TimesheetsDeserializer())
+        binder.bind(ExpendituresSerializer, expenditures_serializer)
+        binder.bind(ExpendituresDeserializer, expenditures_deserializer)
 
     return configure
 

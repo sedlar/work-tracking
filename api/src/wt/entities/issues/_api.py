@@ -6,6 +6,8 @@ from wt.entities.issues._obj import Issue, BoundIssue
 from wt.entities.issues._errors import IssueDoesNotExist
 from wt.ids import IdsCounterModel, ObjectsTrackerModel
 from wt.links import EntityLinksModel
+from wt.costs.timesheets import TimesheetsModel
+from wt.costs.expenditures import ExpendituresModel
 
 
 class IssuesApi:
@@ -15,11 +17,16 @@ class IssuesApi:
             ids_counter_model: IdsCounterModel,
             objects_tracker_model: ObjectsTrackerModel,
             entity_links_model: EntityLinksModel,
+            timesheets_model: TimesheetsModel,
+            expenditures_model: ExpendituresModel,
     ):
+        # pylint: disable=too-many-arguments
         self._issue_model = issues_model
         self._ids_counter_model = ids_counter_model
         self._objects_tracker_model = objects_tracker_model
         self._entity_links_model = entity_links_model
+        self._timesheets_model = timesheets_model
+        self._expenditures_model = expenditures_model
 
     def create_issue(
             self,
@@ -51,6 +58,8 @@ class IssuesApi:
         return self._issue_model.get_issues(project_id, related_entity_id, offset, limit)
 
     def delete_issue(self, issue_id: EntityId):
+        self._timesheets_model.delete_entity_timesheets(issue_id)
+        self._expenditures_model.delete_entity_expenditures(issue_id)
         self._entity_links_model.delete_links(issue_id)
         self._issue_model.delete_issue(issue_id)
         self._objects_tracker_model.untrack_object(issue_id)

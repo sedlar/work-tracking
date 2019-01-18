@@ -2,7 +2,7 @@ from typing import List
 from wt.fields.tasks._obj import Task
 
 
-class TaskSerializer:
+class TasksSerializer:
     @staticmethod
     def serialize_task(task: Task) -> dict:
         return {
@@ -17,7 +17,7 @@ class TaskSerializer:
         ]
 
 
-class TaskDeserializer:
+class TasksDeserializer:
     @staticmethod
     def deserialize_task(task: dict) -> Task:
         return Task(

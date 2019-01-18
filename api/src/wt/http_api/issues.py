@@ -3,7 +3,7 @@ from flask_injector import inject
 
 from wt.http_api._common import DUMMY_STATS
 from wt.http_api._common import handle_errors
-from wt.entities.issues import IssueSerializer, IssueDeserializer, IssuesApi
+from wt.entities.issues import IssuesSerializer, IssuesDeserializer, IssuesApi
 from wt.ids import EntityId
 
 
@@ -11,7 +11,7 @@ from wt.ids import EntityId
 @handle_errors
 def get_issue(
         issues_api: IssuesApi,
-        serializer: IssueSerializer,
+        serializer: IssuesSerializer,
         issue_id,
 ):
     with transaction.manager:
@@ -27,7 +27,7 @@ def get_issue(
 @handle_errors
 def put_issue(
         issues_api: IssuesApi,
-        deserializer: IssueDeserializer,
+        deserializer: IssuesDeserializer,
         issue_id,
         body,
 ):
@@ -49,19 +49,3 @@ def delete_issue(
     with transaction.manager:
         issues_api.delete_issue(EntityId(issue_id))
     return {}, 200
-
-
-def get_issue_timesheets():
-    return "NOT IMPLEMENTED", 500
-
-
-def get_issue_expenditures():
-    return "NOT IMPLEMENTED", 500
-
-
-def post_issue_timesheet():
-    return "NOT IMPLEMENTED", 500
-
-
-def post_issue_expenditure():
-    return "NOT IMPLEMENTED", 500

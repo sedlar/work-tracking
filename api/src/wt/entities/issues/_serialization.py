@@ -8,20 +8,20 @@ from wt.common.serializers import (
     serialize_money,
 )
 from wt.entities.issues._obj import Issue, BoundIssue, IssueStatus, IssuePriority, IssueType
-from wt.fields.files import FileSerializer, FileDeserializer
-from wt.fields.links import LinkSerializer, LinkDeserializer
-from wt.fields.tags import TagSerializer, TagDeserializer
-from wt.fields.tasks import TaskSerializer, TaskDeserializer
+from wt.fields.files import FilesSerializer, FilesDeserializer
+from wt.fields.links import LinkSerializer, LinksDeserializer
+from wt.fields.tags import TagsSerializer, TagsDeserializer
+from wt.fields.tasks import TasksSerializer, TasksDeserializer
 from wt.ids import EntityId
 
 
-class IssueSerializer:
+class IssuesSerializer:
     def __init__(
             self,
-            files_serializer: FileSerializer,
+            files_serializer: FilesSerializer,
             links_serializer: LinkSerializer,
-            tags_serializer: TagSerializer,
-            tasks_serializer: TaskSerializer,
+            tags_serializer: TagsSerializer,
+            tasks_serializer: TasksSerializer,
     ):
         self._files_serializer = files_serializer
         self._links_serializer = links_serializer
@@ -58,13 +58,13 @@ class IssueSerializer:
         ]
 
 
-class IssueDeserializer:
+class IssuesDeserializer:
     def __init__(
             self,
-            files_deserializer: FileDeserializer,
-            links_deserializer: LinkDeserializer,
-            tags_deserializer: TagDeserializer,
-            tasks_deserializer: TaskDeserializer,
+            files_deserializer: FilesDeserializer,
+            links_deserializer: LinksDeserializer,
+            tags_deserializer: TagsDeserializer,
+            tasks_deserializer: TasksDeserializer,
     ):
         self._files_deserializer = files_deserializer
         self._links_deserializer = links_deserializer
