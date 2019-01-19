@@ -1,22 +1,33 @@
 import transaction
 from flask_injector import inject
 
-from wt.http_api._common import handle_errors, DUMMY_STATS
-from wt.entities.projects import ProjectsApi, ProjectsDeserializer, ProjectsSerializer
 from wt.entities.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
 from wt.entities.issues import IssuesDeserializer, IssuesSerializer, IssuesApi
+from wt.entities.projects import ProjectsApi, ProjectsDeserializer, ProjectsSerializer
+from wt.http_api._common import handle_errors
 from wt.ids import EntityId
+from wt.statistics import StatisticsSerializer, StatisticsApi
 
 
 @inject
 @handle_errors
-def get_project(projects_api: ProjectsApi, serializer: ProjectsSerializer, project_id):
+def get_project(
+        projects_api: ProjectsApi,
+        statistics_api: StatisticsApi,
+        serializer: ProjectsSerializer,
+        statistics_serializer: StatisticsSerializer,
+        project_id
+):
+    project_id = EntityId(project_id)
     with transaction.manager:
-        project = projects_api.get_project(EntityId(project_id))
+        project = projects_api.get_project(project_id)
+        statistics = statistics_api.get_project_statistics(project_id)
+
     serialized_project = serializer.serialize_project(project)
+    serialized_statistics = statistics_serializer.serialize_statistics(statistics)
     return {
         "project": serialized_project,
-        "stats": DUMMY_STATS,
+        "stats": serialized_statistics,
     }, 200
 
 

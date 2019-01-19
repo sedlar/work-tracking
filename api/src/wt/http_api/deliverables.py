@@ -1,26 +1,30 @@
 import transaction
 from flask_injector import inject
 
-from wt.http_api._common import DUMMY_STATS
-from wt.http_api._common import handle_errors
 from wt.entities.deliverables import DeliverableSerializer, DeliverableDeserializer, DeliverablesApi
+from wt.http_api._common import handle_errors
 from wt.ids import EntityId
+from wt.statistics import StatisticsSerializer, StatisticsApi
 
 
 @inject
 @handle_errors
 def get_deliverable(
         deliverables_api: DeliverablesApi,
+        statistics_api: StatisticsApi,
         serializer: DeliverableSerializer,
+        statistics_serializer: StatisticsSerializer,
         deliverable_id,
 ):
+    deliverable_id = EntityId(deliverable_id)
     with transaction.manager:
-        deliverable = deliverables_api.get_deliverable(EntityId(deliverable_id))
+        deliverable = deliverables_api.get_deliverable(deliverable_id)
+        statistics = statistics_api.get_deliverable_statistics(deliverable_id)
 
     return {
-        "deliverable": serializer.serialize_deliverable(deliverable),
-        "stats": DUMMY_STATS,
-    }, 200
+               "deliverable": serializer.serialize_deliverable(deliverable),
+               "stats": statistics_serializer.serialize_statistics(statistics),
+           }, 200
 
 
 @inject

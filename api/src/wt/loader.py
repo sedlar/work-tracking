@@ -27,6 +27,7 @@ from wt.provider.db.models.links import DbEntityLinksModel
 from wt.provider.db.models.user import DbUserModel
 from wt.user import UserModel
 from wt.entities import EntityManager
+from wt.statistics import StatisticsSerializer, StatisticsApi
 
 
 def configure_with_engine(engine):
@@ -96,6 +97,8 @@ def configure_with_engine(engine):
             objects_tracker_model=objects_tracker_model,
             expenditures_model=expenditures_model,
         )
+        statistics_api = StatisticsApi()
+
         binder.bind(UserModel, user_model)
         binder.bind(ProjectsApi, projects_api)
         binder.bind(DeliverablesApi, deliverables_api)
@@ -103,6 +106,7 @@ def configure_with_engine(engine):
         binder.bind(EntityLinksApi, entity_links_api)
         binder.bind(TimesheetsApi, timesheets_api)
         binder.bind(ExpendituresApi, expenditures_api)
+        binder.bind(StatisticsApi, statistics_api)
 
     def init_serialization(binder):
         files_serializer = FilesSerializer()
@@ -143,6 +147,7 @@ def configure_with_engine(engine):
         binder.bind(TimesheetsDeserializer, TimesheetsDeserializer())
         binder.bind(ExpendituresSerializer, expenditures_serializer)
         binder.bind(ExpendituresDeserializer, expenditures_deserializer)
+        binder.bind(StatisticsSerializer, StatisticsSerializer())
 
     return configure
 
