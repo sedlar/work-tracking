@@ -22,7 +22,6 @@ from wt.entities.projects import ProjectStatus
 from wt.provider.db import METADATA
 from wt.provider.db._columns import (
     ID_COLUMN_TYPE,
-    PROJECT_ID_COLUMN_REFERENCE,
     PROJECT_ID_COLUMN_TYPE,
     OBJECT_ID_COLUMN_REFERENCE,
     PARENT_ID_COLUMN_REFERENCE,
@@ -73,7 +72,13 @@ DELIVERABLES_TABLE = Table(
     "deliverables",
     METADATA,
     deepcopy(OBJECT_ID_COLUMN_REFERENCE),
-    deepcopy(PROJECT_ID_COLUMN_REFERENCE),
+    Column(
+        "project_id",
+        PROJECT_ID_COLUMN_TYPE,
+        ForeignKey("projects.project_id", ondelete="RESTRICT"),
+        index=True,
+        nullable=False,
+    ),
     Column("name", String(128), nullable=False),
     Column("status", String(get_enum_length(DeliverableStatus)), nullable=False),
     Column("description", String(), nullable=False),
@@ -92,7 +97,12 @@ OBJECTS_TRACKER_TABLE = Table(
     "objects_tracker",
     METADATA,
     Column("id", ID_COLUMN_TYPE, primary_key=True),
-    deepcopy(PROJECT_ID_COLUMN_REFERENCE),
+    Column(
+        "project_id",
+        PROJECT_ID_COLUMN_TYPE,
+        index=True,
+        nullable=False,
+    ),
     Column("type", String(get_enum_length(EntityType)), nullable=False),
 )
 PROJECTS_TABLE = Table(
@@ -117,7 +127,13 @@ ISSUES_TABLE = Table(
     "issues",
     METADATA,
     deepcopy(OBJECT_ID_COLUMN_REFERENCE),
-    deepcopy(PROJECT_ID_COLUMN_REFERENCE),
+    Column(
+        "project_id",
+        PROJECT_ID_COLUMN_TYPE,
+        ForeignKey("projects.project_id", ondelete="RESTRICT"),
+        index=True,
+        nullable=False,
+    ),
     Column("name", String(128), nullable=False),
     Column("description", String(), nullable=False),
     Column("external_type", String(256), nullable=False),
