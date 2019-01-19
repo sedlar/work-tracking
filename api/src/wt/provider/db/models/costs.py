@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import insert, delete, select
 from zope.sqlalchemy import mark_changed
@@ -41,14 +41,23 @@ class BaseCostsModel(DbModel):
         self._session.execute(query)
         mark_changed(self._session)
 
-    def _get_costs(self, entity_id: EntityId, offset: int, limit: int):
+    def _get_costs(
+            self,
+            entity_id: EntityId,
+            offset: Optional[int] = None,
+            limit: Optional[int] = None
+    ):
         query = (
             select([self._table])
             .where(self._table.c.parent_id == entity_id.full_id)
             .order_by(self._table.c.created_on)
-            .offset(offset)
-            .limit(limit)
         )
+        if offset is not None:
+            query = query.offset(offset)
+
+        if limit is not None:
+            query = query.limit(limit)
+
         result = self._session.execute(query)
         return [
             self._row_to_cost(row)
@@ -119,6 +128,9 @@ class DbExpendituresModel(BaseCostsModel, ExpendituresModel):
         self._delete_cost(expenditure_id)
 
     def delete_entity_expenditures(self, entity_id: EntityId):
+        expenditures = self._get_costs(entity_id)
+        for expenditure in expenditures:
+            self._files_model.set_entity_files(expenditure.simple_id, [])
         self._delete_entity_costs(entity_id)
 
     def get_expenditures(

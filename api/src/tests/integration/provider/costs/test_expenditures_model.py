@@ -49,6 +49,15 @@ def test_delete_entity_expenditures(expenditures_model):
     assert not expenditures_model.get_expenditures(ENTITY_ID, 0, 1)
 
 
+def test_delete_entity_expenditures_files(expenditures_model, files_model):
+    expenditure = create_expenditure()
+    bound_expenditure = expenditures_model.create_expenditure(ENTITY_ID, expenditure)
+    expenditures_model.delete_entity_expenditures(ENTITY_ID)
+
+    assert not expenditures_model.get_expenditures(ENTITY_ID, 0, 1)
+    assert not files_model.get_entity_files(bound_expenditure.simple_id)
+
+
 def test_list_expenditures_offset(expenditures_model):
     expenditure = create_expenditure()
     expenditures_model.create_expenditure(ENTITY_ID, expenditure)
