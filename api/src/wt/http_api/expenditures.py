@@ -13,10 +13,11 @@ from wt.http_api._common import handle_errors
 def post_expenditure(
         deserializer: ExpendituresDeserializer,
         expenditures_api: ExpendituresApi,
-        body
+        body,
+        object_id,
 ):
     expenditure = deserializer.deserialize_expenditure(body["expenditure"])
-    entity_id = EntityId(body["expenditure"]["parent_id"])
+    entity_id = EntityId(object_id)
     with transaction.manager:
         bound_expenditure = expenditures_api.create_expenditure(entity_id, expenditure)
     return {"id": bound_expenditure.simple_id.simple_id}, 201

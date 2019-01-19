@@ -6,7 +6,7 @@ from tests.integration.factories.objs import (
 from wt.costs.timesheets import BoundTimesheet
 from wt.ids import EntityId
 
-BASE_TIMESHEET_URL = "/timesheets"
+BASE_TIMESHEET_URL = "/timesheets/"
 SERIALIZED_TIMESHEET = {
     "date_opened": "2002-03-13T00:00:00Z",
     "description": "Timesheet description",
@@ -14,15 +14,8 @@ SERIALIZED_TIMESHEET = {
 }
 
 
-def create_timesheet_body(parent_id):
-    return {
-        **SERIALIZED_TIMESHEET,
-        "parent_id": parent_id.full_id
-    }
-
-
-def get_timesheet_url(simple_id):
-    return BASE_TIMESHEET_URL + "/" + str(simple_id)
+def get_timesheet_url(base_id):
+    return BASE_TIMESHEET_URL + str(base_id)
 
 
 def test_post_timesheet(put_project, post_issue, authorized_api_request, get_timesheets):
@@ -31,8 +24,8 @@ def test_post_timesheet(put_project, post_issue, authorized_api_request, get_tim
     bound_issue = post_issue(project.project_id, create_issue())
     response = authorized_api_request(
         "POST",
-        BASE_TIMESHEET_URL,
-        {"timesheet": create_timesheet_body(bound_issue.object_id)}
+        get_timesheet_url(bound_issue.object_id),
+        {"timesheet": SERIALIZED_TIMESHEET}
     )
     assert response.status_code == 201
     timesheets = get_timesheets(bound_issue.object_id)
@@ -74,7 +67,7 @@ def test_get_timesheets(
     bound_timesheet = post_timesheet(bound_issue.object_id, create_timesheet())
     response = authorized_api_request(
         "GET",
-        BASE_TIMESHEET_URL + "?object_id=" + str(bound_issue.object_id),
+        get_timesheet_url(bound_issue.object_id),
     )
     assert response.status_code == 200
     assert len(response.json["timesheets"]) == 1
@@ -92,7 +85,7 @@ def test_get_timesheets_offset(post_timesheet, authorized_api_request, post_issu
     bound_timesheet = post_timesheet(bound_issue.object_id, create_timesheet(description="offset"))
     response = authorized_api_request(
         "GET",
-        BASE_TIMESHEET_URL + "?object_id=" + str(bound_issue.object_id) + "&offset=1",
+        get_timesheet_url(bound_issue.object_id) + "?offset=1",
     )
     assert response.status_code == 200
     assert len(response.json["timesheets"]) == 1
@@ -107,7 +100,7 @@ def test_get_timesheets_limit(post_timesheet, authorized_api_request, post_issue
     post_timesheet(bound_issue.object_id, create_timesheet())
     response = authorized_api_request(
         "GET",
-        BASE_TIMESHEET_URL + "?object_id=" + str(bound_issue.object_id) + "&limit=1",
+        get_timesheet_url(bound_issue.object_id) + "?limit=1",
     )
     assert response.status_code == 200
     assert len(response.json["timesheets"]) == 1
@@ -120,8 +113,8 @@ def test_create_timesheet_for_invalid_entity(authorized_api_request, post_delive
     bound_deliverable = post_deliverable(project.project_id, create_deliverable())
     response = authorized_api_request(
         "POST",
-        BASE_TIMESHEET_URL,
-        {"timesheet": create_timesheet_body(bound_deliverable.object_id)}
+        get_timesheet_url(bound_deliverable.object_id),
+        {"timesheet": SERIALIZED_TIMESHEET}
     )
     assert response.status_code == 400
     assert response.json["code"] == "invalid_parent_type"
@@ -130,8 +123,8 @@ def test_create_timesheet_for_invalid_entity(authorized_api_request, post_delive
 def test_create_timesheet_non_existing_entity(authorized_api_request):
     response = authorized_api_request(
         "POST",
-        BASE_TIMESHEET_URL,
-        {"timesheet": create_timesheet_body(EntityId("ABC-1"))}
+        get_timesheet_url(EntityId("ABC-1")),
+        {"timesheet": SERIALIZED_TIMESHEET}
     )
     assert response.status_code == 404
     assert response.json["code"] == "object_does_not_exist"

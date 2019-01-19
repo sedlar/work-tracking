@@ -6,9 +6,14 @@ from wt.http_api._common import handle_errors
 
 
 @handle_errors
-def post_timesheet(deserializer: TimesheetsDeserializer, timesheets_api: TimesheetsApi, body):
+def post_timesheet(
+        deserializer: TimesheetsDeserializer,
+        timesheets_api: TimesheetsApi,
+        body,
+        object_id
+):
     timesheet = deserializer.deserialize_timesheet(body["timesheet"])
-    entity_id = EntityId(body["timesheet"]["parent_id"])
+    entity_id = EntityId(object_id)
     with transaction.manager:
         bound_timesheet = timesheets_api.create_timesheet(entity_id, timesheet)
     return {"id": bound_timesheet.simple_id.simple_id}, 201

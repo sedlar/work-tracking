@@ -398,13 +398,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /timesheets:
+  /timesheets/{object_id}:
     get:
       description: |
         Get timesheets of object
       operationId: wt.http_api.timesheets.get_timesheets
       parameters:
-        - $ref: '#/components/parameters/queryObjectId'
+        - $ref: '#/components/parameters/pathObjectId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -432,6 +432,8 @@ paths:
       description: |
         Add new timesheet to object
       operationId: wt.http_api.timesheets.post_timesheet
+      parameters:
+        - $ref: '#/components/parameters/pathObjectId'
       requestBody:
         description: Issue to put
         required: true
@@ -486,13 +488,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /expenditures:
+  /expenditures/{object_id}:
     get:
       description: |
         Get expenditures of object
       operationId: wt.http_api.expenditures.get_expenditures
       parameters:
-        - $ref: '#/components/parameters/queryObjectId'
+        - $ref: '#/components/parameters/pathObjectId'
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
       responses:
@@ -521,6 +523,8 @@ paths:
       description: |
         Add new expenditure to object
       operationId: wt.http_api.expenditures.post_expenditure
+      parameters:
+        - $ref: '#/components/parameters/pathObjectId'
       requestBody:
         description: Issue to put
         required: true
@@ -1047,21 +1051,11 @@ components:
 
     NewTimesheet:
       allOf:
-        - $ref: "#/components/schemas/ParentObjectId"
         - $ref: "#/components/schemas/BaseTimesheet"
 
     NewExpenditure:
       allOf:
-        - $ref: "#/components/schemas/ParentObjectId"
         - $ref: "#/components/schemas/BaseExpenditure"
-
-    ParentObjectId:
-      type: object
-      required:
-        - parent_id
-      properties:
-        parent_id:
-          $ref: "#/components/schemas/ObjectId"
 
     BaseExpenditure:
       type: object
