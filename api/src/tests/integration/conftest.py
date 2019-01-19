@@ -5,20 +5,21 @@ from pytest import fixture
 from sqlalchemy import create_engine
 
 from wt.app import create_app, setup_debugger_from_env
+from wt.costs.expenditures import ExpendituresApi
+from wt.costs.timesheets import TimesheetsApi
+from wt.entities import EntityManager
+from wt.entities.deliverables import DeliverablesApi
+from wt.entities.issues import IssuesApi
+from wt.entities.projects import ProjectsApi
+from wt.links import EntityLinksApi
 from wt.provider.db import METADATA, session_maker_factory
-from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel, DbTasksModel
+from wt.provider.db.models.costs import DbTimesheetsModel, DbExpendituresModel
 from wt.provider.db.models.entities import DbProjectsModel, DbDeliverablesModel, DbIssuesModel
-from wt.provider.db.models.user import DbUserModel
+from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel, DbTasksModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.provider.db.models.links import DbEntityLinksModel
-from wt.provider.db.models.costs import DbTimesheetsModel, DbExpendituresModel
-from wt.entities.deliverables import DeliverablesApi
-from wt.entities.projects import ProjectsApi
-from wt.entities.issues import IssuesApi
-from wt.links import EntityLinksApi
+from wt.provider.db.models.user import DbUserModel
 from wt.user import add_user
-from wt.costs.timesheets import TimesheetsApi
-from wt.costs.expenditures import ExpendituresApi
 
 USERNAME = "username"
 PASSWORD = "password"
@@ -138,6 +139,14 @@ def expenditures_model(session, files_model):
 
 
 @fixture(scope="session")
+def entity_manager(ids_counter_model, objects_tracker_model):
+    return EntityManager(
+        ids_counter_model=ids_counter_model,
+        objects_tracker_model=objects_tracker_model,
+    )
+
+
+@fixture(scope="session")
 def projects_api(projects_model, ids_counter_model, objects_tracker_model):
     return ProjectsApi(
         project_model=projects_model,
@@ -149,14 +158,12 @@ def projects_api(projects_model, ids_counter_model, objects_tracker_model):
 @fixture(scope="session")
 def deliverables_api(
         deliverables_model,
-        ids_counter_model,
-        objects_tracker_model,
+        entity_manager,
         entity_links_model
 ):
     return DeliverablesApi(
         deliverables_model=deliverables_model,
-        ids_counter_model=ids_counter_model,
-        objects_tracker_model=objects_tracker_model,
+        entity_manager=entity_manager,
         entity_links_model=entity_links_model,
     )
 
@@ -164,16 +171,14 @@ def deliverables_api(
 @fixture(scope="session")
 def issues_api(
         issues_model,
-        ids_counter_model,
-        objects_tracker_model,
+        entity_manager,
         entity_links_model,
         timesheets_model,
         expenditures_model
 ):
     return IssuesApi(
         issues_model=issues_model,
-        ids_counter_model=ids_counter_model,
-        objects_tracker_model=objects_tracker_model,
+        entity_manager=entity_manager,
         entity_links_model=entity_links_model,
         timesheets_model=timesheets_model,
         expenditures_model=expenditures_model,

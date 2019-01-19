@@ -26,6 +26,7 @@ from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.provider.db.models.links import DbEntityLinksModel
 from wt.provider.db.models.user import DbUserModel
 from wt.user import UserModel
+from wt.entities import EntityManager
 
 
 def configure_with_engine(engine):
@@ -62,6 +63,10 @@ def configure_with_engine(engine):
         )
         objects_tracker_model = DbObjectsTrackerModel(session_factory=session_maker)
         entity_links_model = DbEntityLinksModel(session_factory=session_maker)
+        entity_manager = EntityManager(
+            ids_counter_model=ids_counter_model,
+            objects_tracker_model=objects_tracker_model,
+        )
         projects_api = ProjectsApi(
             project_model=projects_model,
             ids_counter_model=ids_counter_model,
@@ -69,14 +74,12 @@ def configure_with_engine(engine):
         )
         deliverables_api = DeliverablesApi(
             deliverables_model=deliverables_model,
-            ids_counter_model=ids_counter_model,
-            objects_tracker_model=objects_tracker_model,
+            entity_manager=entity_manager,
             entity_links_model=entity_links_model,
         )
         issues_api = IssuesApi(
             issues_model=issues_model,
-            ids_counter_model=ids_counter_model,
-            objects_tracker_model=objects_tracker_model,
+            entity_manager=entity_manager,
             entity_links_model=entity_links_model,
             timesheets_model=timesheets_model,
             expenditures_model=expenditures_model,
