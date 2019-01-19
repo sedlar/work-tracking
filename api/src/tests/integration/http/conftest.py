@@ -38,9 +38,18 @@ def authorized_api_request(api_request, user):
 
 EMPTY_STATS = {
     "progress": 0,
-    "bilance_cost": {
+    "estimated_duration": 0,
+    "estimated_cost": {
         "amount": 0,
-        "currency": "CZK"
+        "currency": "CZK",
     },
-    "bilance_duration": 0,
+    "burned_duration": 0,
+    "burned_cost": {
+        "amount": 0,
+        "currency": "CZK",
+    },
+    "burned_expenditures_cost": {
+        "amount": 0,
+        "currency": "CZK",
+    },
 }

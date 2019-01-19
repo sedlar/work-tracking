@@ -25,8 +25,17 @@ def handle_errors(func):
 
 DUMMY_STATS = {
     "progress": 0,
-    "bilance_duration": 0,
-    "bilance_cost": {
+    "estimated_duration": 0,
+    "estimated_cost": {
+        "amount": 0,
+        "currency": "CZK",
+    },
+    "burned_duration": 0,
+    "burned_cost": {
+        "amount": 0,
+        "currency": "CZK",
+    },
+    "burned_expenditures_cost": {
         "amount": 0,
         "currency": "CZK",
     },

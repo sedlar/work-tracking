@@ -697,16 +697,26 @@ components:
       type: object
       required:
         - progress
-        - bilance_duration
-        - bilance_cost
+        - estimated_cost
+        - estimated_duration
+        - burned_cost
+        - burned_duration
+        - burned_expenditures_cost
       properties:
         progress:
           type: number
-          description: Whatever this is
-        bilance_duration:
+          description: Percents of burned time out of estimated
+        estimated_duration:
           type: number
-          description: burned time - estimated time in hours
-        bilance_cost:
+          description: Estimated time
+        estimated_cost:
+          $ref: "#/components/schemas/Money"
+        burned_duration:
+          type: number
+          description: Burned time
+        burned_cost:
+          $ref: "#/components/schemas/Money"
+        burned_expenditures_cost:
           $ref: "#/components/schemas/Money"
 
     ProjectRequest:
