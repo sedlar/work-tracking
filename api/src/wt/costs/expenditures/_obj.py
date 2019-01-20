@@ -9,7 +9,7 @@ from wt.ids import SimpleId
 class ExpenditureStatus(Enum):
     submitted = "submitted"
     approved = "approved"
-    reimbudes = "reimbudes"
+    refund = "refund"
 
 
 class ExpenditureType(Enum):

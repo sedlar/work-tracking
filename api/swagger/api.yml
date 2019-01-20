@@ -1092,7 +1092,7 @@ components:
           enum:
             - submitted
             - approved
-            - reimbudes
+            - refund
           description: Expenditure status
         type:
           type: string
