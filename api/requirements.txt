@@ -1,5 +1,6 @@
 Flask==1.0.2
 Flask-Injector==0.11.0
+flask-cors==3.0.7
 connexion[swagger-ui]==2.2.0
 alembic==1.0.5
 SQLAlchemy==1.2.15

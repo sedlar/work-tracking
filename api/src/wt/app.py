@@ -3,6 +3,7 @@ import os
 import sys
 
 import connexion
+from flask_cors import CORS
 from flask_injector import FlaskInjector
 
 from wt.commands.add_user import command_add_user
@@ -42,6 +43,7 @@ def create_app(engine):
     app = connexion.App(__name__, specification_dir="/app/swagger")
     app.add_api('api.yml', strict_validation=True, validate_responses=True)
     FlaskInjector(app=app.app, modules=[configure_with_engine(engine)])
+    CORS(app.app)
     return app
 
 
