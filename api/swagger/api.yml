@@ -1125,8 +1125,6 @@ components:
           description: Currency of the money
           enum:
             - CZK
-            - EUR
-            - USD
         amount:
           type: number
           description: Amount of the money

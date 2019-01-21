@@ -27,7 +27,7 @@ def test_update_project(projects_model):
         description="DESC",
         limitations_and_restrictions="Limitations and Restrictions2",
         goals_and_metrics="Goals and Metrics2",
-        hour_rate=create_money(Decimal("800"), Currency.eur),
+        hour_rate=create_money(Decimal("800"), Currency.czk),
         primary_color="#343435",
         secondary_color="#a1a1a2",
         files=[create_file("AA"), create_file("BB")],

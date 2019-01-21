@@ -4,8 +4,6 @@ from enum import Enum
 
 class Currency(Enum):
     czk = "CZK"
-    eur = "EUR"
-    usd = "USD"
 
 
 class Money:
