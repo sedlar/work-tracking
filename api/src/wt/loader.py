@@ -10,6 +10,7 @@ from wt.costs.timesheets import (
     TimesheetsDeserializer,
     TimesheetsApi,
 )
+from wt.entities import EntityManager
 from wt.entities.deliverables import DeliverableDeserializer, DeliverableSerializer, DeliverablesApi
 from wt.entities.issues import IssuesSerializer, IssuesDeserializer, IssuesApi
 from wt.entities.projects import ProjectsSerializer, ProjectsDeserializer, ProjectsApi
@@ -24,10 +25,10 @@ from wt.provider.db.models.entities import DbProjectsModel, DbDeliverablesModel,
 from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel, DbTasksModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.provider.db.models.links import DbEntityLinksModel
+from wt.provider.db.models.statistics import DbStatisticsModel
 from wt.provider.db.models.user import DbUserModel
+from wt.statistics import StatisticsSerializer, StatisticsApi, StatisticsCalculator
 from wt.user import UserModel
-from wt.entities import EntityManager
-from wt.statistics import StatisticsSerializer, StatisticsApi
 
 
 def configure_with_engine(engine):
@@ -64,6 +65,7 @@ def configure_with_engine(engine):
         )
         objects_tracker_model = DbObjectsTrackerModel(session_factory=session_maker)
         entity_links_model = DbEntityLinksModel(session_factory=session_maker)
+        statistics_model = DbStatisticsModel(session_factory=session_maker)
         entity_manager = EntityManager(
             ids_counter_model=ids_counter_model,
             objects_tracker_model=objects_tracker_model,
@@ -97,7 +99,10 @@ def configure_with_engine(engine):
             objects_tracker_model=objects_tracker_model,
             expenditures_model=expenditures_model,
         )
-        statistics_api = StatisticsApi()
+        statistics_api = StatisticsApi(
+            statistics_model=statistics_model,
+            statistics_calculator=StatisticsCalculator(),
+        )
 
         binder.bind(UserModel, user_model)
         binder.bind(ProjectsApi, projects_api)

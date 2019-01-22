@@ -1,7 +1,7 @@
 import pytest
 
 from tests.integration.factories.objs import create_project, create_deliverable, create_issue
-from tests.integration.http.conftest import EMPTY_STATS
+from tests.integration.http.conftest import MINIMAL_EMPTY_STATS
 from tests.integration.http.test_projects import BASE_PROJECTS_URL
 from wt.entities.deliverables import BoundDeliverable
 from wt.entities.deliverables import DeliverableDoesNotExist
@@ -165,7 +165,7 @@ def test_get_deliverable(
     del response.json["deliverable"]["id"]
     assert response.json == {
         "deliverable": serialized_deliverable,
-        "stats": EMPTY_STATS,
+        "stats": MINIMAL_EMPTY_STATS,
     }
 
 

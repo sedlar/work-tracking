@@ -22,9 +22,9 @@ def get_deliverable(
         statistics = statistics_api.get_deliverable_statistics(deliverable_id)
 
     return {
-               "deliverable": serializer.serialize_deliverable(deliverable),
-               "stats": statistics_serializer.serialize_statistics(statistics),
-           }, 200
+        "deliverable": serializer.serialize_deliverable(deliverable),
+        "stats": statistics_serializer.serialize_statistics(statistics),
+    }, 200
 
 
 @inject

@@ -19,12 +19,12 @@ def get_issue(
     issue_id = EntityId(issue_id)
     with transaction.manager:
         issue = issues_api.get_issue(issue_id)
-        statistics = statistics_api.get_deliverable_statistics(issue_id)
+        statistics = statistics_api.get_entity_statistics(issue_id)
 
     return {
-               "issue": serializer.serialize_issue(issue),
-               "stats": statistics_serializer.serialize_statistics(statistics),
-           }, 200
+        "issue": serializer.serialize_issue(issue),
+        "stats": statistics_serializer.serialize_statistics(statistics),
+    }, 200
 
 
 @inject

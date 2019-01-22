@@ -36,11 +36,28 @@ def authorized_api_request(api_request, user):
     return func
 
 
-EMPTY_STATS = {
-    "progress": 0,
+MINIMAL_EMPTY_STATS = {
     "estimated_duration": 0,
     "estimated_cost": {
         "amount": 0,
+        "currency": "CZK",
+    },
+    "burned_duration": 0,
+    "burned_cost": {
+        "amount": 0,
+        "currency": "CZK",
+    },
+    "burned_expenditures_cost": {
+        "amount": 0,
+        "currency": "CZK",
+    },
+}
+FULL_EMPTY_STATS = {
+    "progress": 0,
+    "overall_progress": 0,
+    "estimated_duration": 10,
+    "estimated_cost": {
+        "amount": 6005,
         "currency": "CZK",
     },
     "burned_duration": 0,

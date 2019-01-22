@@ -700,7 +700,6 @@ components:
     Stats:
       type: object
       required:
-        - progress
         - estimated_cost
         - estimated_duration
         - burned_cost
@@ -710,6 +709,9 @@ components:
         progress:
           type: number
           description: Percents of burned time out of estimated
+        overall_progress:
+          type: number
+          description: Percents of burned time out of estimated including overtimes
         estimated_duration:
           type: number
           description: Estimated time
@@ -1253,13 +1255,6 @@ components:
       name: related_object_id
       description: Filter by related object id
       required: false
-      schema:
-        $ref: "#/components/schemas/ObjectId"
-    queryObjectId:
-      in: query
-      name: object_id
-      description: Filter by object
-      required: true
       schema:
         $ref: "#/components/schemas/ObjectId"
     offset:

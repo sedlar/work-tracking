@@ -8,7 +8,7 @@ from tests.integration.factories.objs import (
     create_timesheet,
     create_expenditure,
 )
-from tests.integration.http.conftest import EMPTY_STATS
+from tests.integration.http.conftest import MINIMAL_EMPTY_STATS, FULL_EMPTY_STATS
 from tests.integration.http.test_projects import BASE_PROJECTS_URL
 from wt.entities.issues import BoundIssue
 from wt.entities.issues import IssueDoesNotExist, IssueStatus, IssueType, IssuePriority
@@ -198,10 +198,10 @@ def test_get_missing_issue(authorized_api_request):
 
 
 @pytest.mark.parametrize(
-    "issue,serialized_issue",
+    "issue,serialized_issue,serialized_stats",
     [
-        [FULL_ISSUE, FULL_SERIALIZED_ISSUE,],
-        [MINIMAL_ISSUE, MINIMAL_SERIALIZED_ISSUE,],
+        [FULL_ISSUE, FULL_SERIALIZED_ISSUE, FULL_EMPTY_STATS],
+        [MINIMAL_ISSUE, MINIMAL_SERIALIZED_ISSUE, MINIMAL_EMPTY_STATS],
     ]
 )
 def test_get_issue(
@@ -209,7 +209,8 @@ def test_get_issue(
         post_issue,
         issue,
         serialized_issue,
-        put_project
+        serialized_stats,
+        put_project,
 ):
     project = create_project()
     put_project(project)
@@ -226,7 +227,7 @@ def test_get_issue(
     del response.json["issue"]["id"]
     assert response.json == {
         "issue": serialized_issue,
-        "stats": EMPTY_STATS,
+        "stats": serialized_stats,
     }
 
 

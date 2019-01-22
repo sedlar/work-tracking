@@ -1,7 +1,7 @@
 import pytest
 
 from tests.integration.factories.objs import create_project
-from tests.integration.http.conftest import EMPTY_STATS
+from tests.integration.http.conftest import MINIMAL_EMPTY_STATS
 from wt.entities.projects import ProjectDoesNotExist
 
 BASE_PROJECTS_URL = "/projects"
@@ -111,7 +111,7 @@ def test_get_project(authorized_api_request, put_project, project, serialized_pr
     del response.json["project"]["id"]
     assert response.json == {
         "project": serialized_project,
-        "stats": EMPTY_STATS,
+        "stats": MINIMAL_EMPTY_STATS,
     }
 
 

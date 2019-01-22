@@ -19,6 +19,8 @@ from wt.provider.db.models.fields import DbFilesModel, DbLinksModel, DbTagsModel
 from wt.provider.db.models.ids import DbIdsCounterModel, DbObjectsTrackerModel
 from wt.provider.db.models.links import DbEntityLinksModel
 from wt.provider.db.models.user import DbUserModel
+from wt.provider.db.models.statistics import DbStatisticsModel
+from wt.statistics import StatisticsCalculator, StatisticsApi
 from wt.user import add_user
 
 USERNAME = "username"
@@ -139,6 +141,11 @@ def expenditures_model(session, files_model):
 
 
 @fixture(scope="session")
+def statistics_model(session):
+    return DbStatisticsModel(session)
+
+
+@fixture(scope="session")
 def entity_manager(ids_counter_model, objects_tracker_model):
     return EntityManager(
         ids_counter_model=ids_counter_model,
@@ -207,6 +214,19 @@ def expenditures_api(objects_tracker_model, expenditures_model):
         objects_tracker_model=objects_tracker_model,
         expenditures_model=expenditures_model,
     )
+
+
+@fixture(scope="session")
+def statistics_api(statistics_model, statistics_calculator):
+    return StatisticsApi(
+        statistics_model=statistics_model,
+        statistics_calculator=statistics_calculator,
+    )
+
+
+@fixture(scope="session")
+def statistics_calculator():
+    return StatisticsCalculator()
 
 
 @fixture(scope="session")
