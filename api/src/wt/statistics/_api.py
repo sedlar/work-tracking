@@ -21,16 +21,23 @@ class StatisticsCalculator:
 
     @staticmethod
     def _compute_progress(entity_statistics: List[EntityStatistics]) -> Optional[Decimal]:
-        if any(statistic for statistic in entity_statistics if statistic.estimated_duration):
-            return sum(
-                min(
-                    statistic.estimated_duration,
-                    statistic.burned_duration
-                ) / statistic.estimated_duration
-                for statistic
-                in entity_statistics
-                if statistic.estimated_duration
+        burned_duration = Decimal(0)
+        estimated_duration = Decimal(0)
+        estimated_statistics = (
+            statistic
+            for statistic
+            in entity_statistics
+            if statistic.estimated_duration is not None
+        )
+        for statistic in estimated_statistics:
+            burned_duration += min(
+                statistic.estimated_duration,
+                statistic.burned_duration
             )
+            estimated_duration += statistic.estimated_duration
+
+        if estimated_duration:
+            return burned_duration / estimated_duration
         return None
 
     def _compute_overall_progress(

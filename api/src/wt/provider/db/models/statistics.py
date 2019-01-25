@@ -113,7 +113,10 @@ class DbStatisticsModel(StatisticsModel, DbModel):
 
     def _get_burned_time(self, entity_ids: List[str]):
         query = select(
-            [func.sum(TIMESHEETS_TABLE.c.duration).label("burned_duration")]
+            [
+                TIMESHEETS_TABLE.c.parent_id,
+                func.sum(TIMESHEETS_TABLE.c.duration).label("burned_duration"),
+            ]
         ).group_by(
             TIMESHEETS_TABLE.c.parent_id
         ).where(
@@ -128,7 +131,10 @@ class DbStatisticsModel(StatisticsModel, DbModel):
 
     def _get_expenditure_costs(self, entity_ids: List[str]):
         query = select(
-            [func.sum(EXPENDITURES_TABLE.c.cost_amount).label("expenditure_costs")]
+            [
+                EXPENDITURES_TABLE.c.parent_id,
+                func.sum(EXPENDITURES_TABLE.c.cost_amount).label("expenditure_costs"),
+            ]
         ).group_by(
             EXPENDITURES_TABLE.c.parent_id
         ).where(
