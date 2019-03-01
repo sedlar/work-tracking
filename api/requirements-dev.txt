@@ -1,5 +1,5 @@
-pytest==4.0.2
-pytest-cov==2.6.0
+pytest==4.3.0
+pytest-cov==2.6.1
 pytest-flask==0.14.0
-pylint==2.2.2
+pylint==2.3.0
 pydevd==1.4.0
