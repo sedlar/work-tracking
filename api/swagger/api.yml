@@ -125,11 +125,11 @@ paths:
         - $ref: '#/components/parameters/limit'
       responses:
         '200':
-          description: Project
+          description: Project deliverables
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectDeliverablesResponse'
+                $ref: '#/components/schemas/DeliverablesResponse'
         '400':
           description: Bad request
           content:
@@ -197,11 +197,11 @@ paths:
         - $ref: '#/components/parameters/limit'
       responses:
         '200':
-          description: Project
+          description: Project issues
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectIssuesResponse'
+                $ref: '#/components/schemas/IssuesResponse'
         '400':
           description: Bad request
           content:
@@ -253,6 +253,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /deliverables:
+    get:
+      description: |
+        Get deliverables
+      tags:
+        - deliverables
+      operationId: wt.http_api.deliverables.get_deliverables
+      parameters:
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: List of deliverables
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliverablesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
 
   /deliverables/{deliverable_id}:
     get:
@@ -341,6 +367,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /issues:
+    get:
+      description: |
+        Get issues
+      tags:
+        - projects
+        - issues
+      operationId: wt.http_api.issues.get_issues
+      parameters:
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Project issues
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authorization needed
 
   /issues/{issue_id}:
     get:
@@ -674,7 +727,7 @@ paths:
 
 components:
   schemas:
-    ProjectIssuesResponse:
+    IssuesResponse:
       type: object
       required:
         - issues
@@ -684,7 +737,7 @@ components:
           items:
             $ref: "#/components/schemas/Issue"
 
-    ProjectDeliverablesResponse:
+    DeliverablesResponse:
       type: object
       required:
         - deliverables

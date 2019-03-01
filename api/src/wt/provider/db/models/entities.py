@@ -211,7 +211,7 @@ class DbDeliverablesModel(DeliverablesModel, DbEntityModel):
 
     def get_deliverables(
             self,
-            project_id: EntityId,
+            project_id: Optional[EntityId],
             related_entity_id: Optional[EntityId],
             offset: int,
             limit: int,
@@ -293,7 +293,7 @@ class DbIssuesModel(IssuesModel, DbEntityModel):
 
     def get_issues(
             self,
-            project_id: EntityId,
+            project_id: Optional[EntityId],
             related_entity_id: Optional[EntityId],
             offset: int,
             limit: int,

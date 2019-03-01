@@ -42,7 +42,7 @@ class DeliverablesApi:
 
     def get_deliverables(
             self,
-            project_id: EntityId,
+            project_id: Optional[EntityId],
             related_entity_id: Optional[EntityId],
             offset: int,
             limit: int,
