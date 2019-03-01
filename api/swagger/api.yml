@@ -373,7 +373,6 @@ paths:
       description: |
         Get issues
       tags:
-        - projects
         - issues
       operationId: wt.http_api.issues.get_issues
       parameters:
