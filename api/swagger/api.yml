@@ -15,6 +15,8 @@ paths:
     get:
       description: |
         Get info about project
+      tags:
+        - projects
       operationId: wt.http_api.projects.get_project
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
@@ -34,6 +36,8 @@ paths:
     put:
       description: |
         Create or update project
+      tags:
+        - projects
       operationId: wt.http_api.projects.put_project
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
@@ -64,6 +68,8 @@ paths:
     delete:
       description: |
         Delete project
+      tags:
+        - projects
       operationId: wt.http_api.projects.delete_project
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
@@ -82,6 +88,8 @@ paths:
     get:
       description: |
         Get projects
+      tags:
+        - projects
       operationId: wt.http_api.projects.get_projects
       parameters:
         - $ref: '#/components/parameters/offset'
@@ -106,6 +114,9 @@ paths:
     get:
       description: |
         Get project deliverables
+      tags:
+        - projects
+        - deliverables
       operationId: wt.http_api.projects.get_project_deliverables
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
@@ -136,6 +147,9 @@ paths:
     post:
       description: |
         Create new deliverable under given project
+      tags:
+        - projects
+        - deliverables
       operationId: wt.http_api.projects.post_deliverable
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
@@ -172,6 +186,9 @@ paths:
     get:
       description: |
         Get issues of project
+      tags:
+        - projects
+        - issues
       operationId: wt.http_api.projects.get_project_issues
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
@@ -202,6 +219,9 @@ paths:
     post:
       description: |
         Create new issue under given project
+      tags:
+        - projects
+        - issues
       operationId: wt.http_api.projects.post_issue
       parameters:
         - $ref: '#/components/parameters/pathProjectId'
@@ -238,6 +258,8 @@ paths:
     get:
       description: |
         Get info about deliverable
+      tags:
+        - deliverables
       operationId: wt.http_api.deliverables.get_deliverable
       parameters:
         - $ref: '#/components/parameters/pathDeliverableId'
@@ -265,6 +287,8 @@ paths:
     put:
       description: |
         Update deliverable (not create)
+      tags:
+        - deliverables
       operationId: wt.http_api.deliverables.put_deliverable
       parameters:
         - $ref: '#/components/parameters/pathDeliverableId'
@@ -295,6 +319,8 @@ paths:
     delete:
       description: |
         Delete deliverable
+      tags:
+        - deliverables
       operationId: wt.http_api.deliverables.delete_deliverable
       parameters:
         - $ref: '#/components/parameters/pathDeliverableId'
@@ -320,6 +346,8 @@ paths:
     get:
       description: |
         Get info about issue
+      tags:
+        - issues
       operationId: wt.http_api.issues.get_issue
       parameters:
         - $ref: '#/components/parameters/pathIssueId'
@@ -347,6 +375,8 @@ paths:
     put:
       description: |
         Update issue (not create)
+      tags:
+        - issues
       operationId: wt.http_api.issues.put_issue
       parameters:
         - $ref: '#/components/parameters/pathIssueId'
@@ -377,6 +407,8 @@ paths:
     delete:
       description: |
         Delete issue
+      tags:
+        - issues
       operationId: wt.http_api.issues.delete_issue
       parameters:
         - $ref: '#/components/parameters/pathIssueId'
@@ -402,6 +434,8 @@ paths:
     get:
       description: |
         Get timesheets of object
+      tags:
+        - timesheets
       operationId: wt.http_api.timesheets.get_timesheets
       parameters:
         - $ref: '#/components/parameters/pathObjectId'
@@ -431,6 +465,8 @@ paths:
     post:
       description: |
         Add new timesheet to object
+      tags:
+        - timesheets
       operationId: wt.http_api.timesheets.post_timesheet
       parameters:
         - $ref: '#/components/parameters/pathObjectId'
@@ -467,6 +503,8 @@ paths:
     delete:
       description: |
         Delete timesheet
+      tags:
+        - timesheets
       operationId: wt.http_api.timesheets.delete_timesheet
       parameters:
         - $ref: '#/components/parameters/pathTimesheetId'
@@ -492,6 +530,8 @@ paths:
     get:
       description: |
         Get expenditures of object
+      tags:
+        - expenditures
       operationId: wt.http_api.expenditures.get_expenditures
       parameters:
         - $ref: '#/components/parameters/pathObjectId'
@@ -522,6 +562,8 @@ paths:
     post:
       description: |
         Add new expenditure to object
+      tags:
+        - expenditures
       operationId: wt.http_api.expenditures.post_expenditure
       parameters:
         - $ref: '#/components/parameters/pathObjectId'
@@ -558,6 +600,8 @@ paths:
     delete:
       description: |
         Delete expenditure
+      tags:
+        - expenditures
       operationId: wt.http_api.expenditures.delete_expenditure
       parameters:
         - $ref: '#/components/parameters/pathExpenditureId'
@@ -583,6 +627,8 @@ paths:
     put:
       description: |
         Create link between two objects (symmetric)
+      tags:
+        - links
       operationId: wt.http_api.links.put_link
       parameters:
         - $ref: '#/components/parameters/pathObjectId'
@@ -602,6 +648,8 @@ paths:
     delete:
       description: |
         Delete link between objects (symetric)
+      tags:
+        - links
       operationId: wt.http_api.links.delete_link
       parameters:
         - $ref: '#/components/parameters/pathObjectId'
