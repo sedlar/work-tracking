@@ -1,3 +1,5 @@
+from typing import Union
+
 import pytest
 
 from tests.integration.factories.objs import create_project, create_deliverable, create_issue
@@ -29,7 +31,7 @@ MINIMAL_DELIVERABLE = create_deliverable(date_closed=None, deadline=None)
 FULL_DELIVERABLE = create_deliverable()
 
 
-def get_project_deliverables_url(project_id: str):
+def get_project_deliverables_url(project_id: Union[str, EntityId]):
     return "{base_project}/{project_id}{base}".format(
         project_id=project_id,
         base=BASE_DELIVERABLES_URL,
@@ -37,7 +39,7 @@ def get_project_deliverables_url(project_id: str):
     )
 
 
-def get_deliverable_url(deliverable_id: str):
+def get_deliverable_url(deliverable_id: Union[str, EntityId]):
     return "{base}/{deliverable_id}".format(
         deliverable_id=deliverable_id,
         base=BASE_DELIVERABLES_URL,
@@ -169,13 +171,20 @@ def test_get_deliverable(
     }
 
 
-def test_get_deliverables(authorized_api_request, post_deliverable, put_project):
+@pytest.mark.parametrize(
+    "url",
+    (
+        get_project_deliverables_url(create_project().project_id),
+        BASE_DELIVERABLES_URL,
+    )
+)
+def test_get_deliverables(authorized_api_request, post_deliverable, put_project, url):
     project = create_project()
     put_project(project)
     minimal_bound_deliverable = post_deliverable(project.project_id, MINIMAL_DELIVERABLE)
     full_bound_deliverable = post_deliverable(project.project_id, FULL_DELIVERABLE)
 
-    response = authorized_api_request("GET", get_project_deliverables_url(project.project_id))
+    response = authorized_api_request("GET", url)
 
     assert response.status_code == 200
     assert response.json["deliverables"][0]["id"] == str(minimal_bound_deliverable.object_id)
@@ -191,7 +200,14 @@ def test_get_deliverables(authorized_api_request, post_deliverable, put_project)
     }
 
 
-def test_get_deliverables_limit(authorized_api_request, post_deliverable, put_project):
+@pytest.mark.parametrize(
+    "url",
+    (
+            get_project_deliverables_url(create_project().project_id),
+            BASE_DELIVERABLES_URL,
+    )
+)
+def test_get_deliverables_limit(authorized_api_request, post_deliverable, put_project, url):
     project = create_project()
     put_project(project)
     minimal_bound_deliverable = post_deliverable(project.project_id, MINIMAL_DELIVERABLE)
@@ -199,7 +215,7 @@ def test_get_deliverables_limit(authorized_api_request, post_deliverable, put_pr
 
     response = authorized_api_request(
         "GET",
-        get_project_deliverables_url(project.project_id) + "?limit=1"
+        url + "?limit=1"
     )
 
     assert response.status_code == 200
@@ -208,7 +224,14 @@ def test_get_deliverables_limit(authorized_api_request, post_deliverable, put_pr
     assert response.json == {"deliverables": [MINIMAL_SERIALIZED_DELIVERABLE]}
 
 
-def test_get_deliverables_offset(authorized_api_request, post_deliverable, put_project):
+@pytest.mark.parametrize(
+    "url",
+    (
+            get_project_deliverables_url(create_project().project_id),
+            BASE_DELIVERABLES_URL,
+    )
+)
+def test_get_deliverables_offset(authorized_api_request, post_deliverable, put_project, url):
     project = create_project()
     put_project(project)
     post_deliverable(project.project_id, MINIMAL_DELIVERABLE)
@@ -216,7 +239,7 @@ def test_get_deliverables_offset(authorized_api_request, post_deliverable, put_p
 
     response = authorized_api_request(
         "GET",
-        get_project_deliverables_url(project.project_id) + "?offset=1"
+        url + "?offset=1"
     )
 
     assert response.status_code == 200

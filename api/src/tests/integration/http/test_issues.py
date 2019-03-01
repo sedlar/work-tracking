@@ -1,3 +1,5 @@
+from typing import Union
+
 import pytest
 
 from tests.integration.factories.objs import (
@@ -89,7 +91,7 @@ FULL_ISSUE = create_issue(
 )
 
 
-def get_project_issues_url(project_id: str):
+def get_project_issues_url(project_id: Union[str, EntityId]):
     return "{base_project}/{project_id}{base}".format(
         project_id=project_id,
         base=BASE_ISSUES_URL,
@@ -97,7 +99,7 @@ def get_project_issues_url(project_id: str):
     )
 
 
-def get_issue_url(issue_id: str):
+def get_issue_url(issue_id: Union[str, EntityId]):
     return "{base}/{issue_id}".format(
         issue_id=issue_id,
         base=BASE_ISSUES_URL,
@@ -231,13 +233,20 @@ def test_get_issue(
     }
 
 
-def test_get_issues(authorized_api_request, post_issue, put_project):
+@pytest.mark.parametrize(
+    "url",
+    (
+            get_project_issues_url(create_project().project_id),
+            BASE_ISSUES_URL,
+    )
+)
+def test_get_issues(authorized_api_request, post_issue, put_project, url):
     project = create_project()
     put_project(project)
     minimal_bound_issue = post_issue(project.project_id, MINIMAL_ISSUE)
     full_bound_issue = post_issue(project.project_id, FULL_ISSUE)
 
-    response = authorized_api_request("GET", get_project_issues_url(project.project_id))
+    response = authorized_api_request("GET", url)
 
     assert response.status_code == 200
     assert response.json["issues"][0]["id"] == str(minimal_bound_issue.object_id)
@@ -253,7 +262,14 @@ def test_get_issues(authorized_api_request, post_issue, put_project):
     }
 
 
-def test_get_issues_limit(authorized_api_request, post_issue, put_project):
+@pytest.mark.parametrize(
+    "url",
+    (
+            get_project_issues_url(create_project().project_id),
+            BASE_ISSUES_URL,
+    )
+)
+def test_get_issues_limit(authorized_api_request, post_issue, put_project, url):
     project = create_project()
     put_project(project)
     minimal_bound_issue = post_issue(project.project_id, MINIMAL_ISSUE)
@@ -261,7 +277,7 @@ def test_get_issues_limit(authorized_api_request, post_issue, put_project):
 
     response = authorized_api_request(
         "GET",
-        get_project_issues_url(project.project_id) + "?limit=1"
+        url + "?limit=1"
     )
 
     assert response.status_code == 200
@@ -270,7 +286,14 @@ def test_get_issues_limit(authorized_api_request, post_issue, put_project):
     assert response.json == {"issues": [MINIMAL_SERIALIZED_ISSUE]}
 
 
-def test_get_issues_offset(authorized_api_request, post_issue, put_project):
+@pytest.mark.parametrize(
+    "url",
+    (
+            get_project_issues_url(create_project().project_id),
+            BASE_ISSUES_URL,
+    )
+)
+def test_get_issues_offset(authorized_api_request, post_issue, put_project, url):
     project = create_project()
     put_project(project)
     post_issue(project.project_id, MINIMAL_ISSUE)
@@ -278,7 +301,7 @@ def test_get_issues_offset(authorized_api_request, post_issue, put_project):
 
     response = authorized_api_request(
         "GET",
-        get_project_issues_url(project.project_id) + "?offset=1"
+        url + "?offset=1"
     )
 
     assert response.status_code == 200

@@ -9,6 +9,25 @@ from wt.statistics import StatisticsSerializer, StatisticsApi
 
 @inject
 @handle_errors
+def get_deliverables(
+        deliverables_api: DeliverablesApi,
+        serializer: DeliverableSerializer,
+        offset,
+        limit,
+):
+    # pylint: disable=too-many-arguments
+    with transaction.manager:
+        deliverables = deliverables_api.get_deliverables(
+            project_id=None,
+            related_entity_id=None,
+            offset=offset,
+            limit=limit
+        )
+    return {"deliverables": serializer.serialize_deliverables(deliverables)}, 200
+
+
+@inject
+@handle_errors
 def get_deliverable(
         deliverables_api: DeliverablesApi,
         statistics_api: StatisticsApi,

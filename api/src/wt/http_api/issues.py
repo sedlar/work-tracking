@@ -9,6 +9,25 @@ from wt.statistics import StatisticsSerializer, StatisticsApi
 
 @inject
 @handle_errors
+def get_issues(
+        issues_api: IssuesApi,
+        serializer: IssuesSerializer,
+        offset,
+        limit,
+):
+    # pylint: disable=too-many-arguments
+    with transaction.manager:
+        issues = issues_api.get_issues(
+            project_id=None,
+            related_entity_id=None,
+            offset=offset,
+            limit=limit,
+        )
+    return {"issues": serializer.serialize_issues(issues)}, 200
+
+
+@inject
+@handle_errors
 def get_issue(
         issues_api: IssuesApi,
         statistics_api: StatisticsApi,
